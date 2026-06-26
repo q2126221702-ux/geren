@@ -1,0 +1,28 @@
+{
+  "quizzes": [
+    {
+      "id": "profinet",
+      "title": "Profinet工业以太网测验",
+      "file": "Profinet工业以太网测验_20260626_185300.json",
+      "count": 25
+    },
+    {
+      "id": "opc",
+      "title": "OPC规范",
+      "file": "OPC规范_20260626_185227.json",
+      "count": 24
+    },
+    {
+      "id": "modbus",
+      "title": "MODBUS协议及应用",
+      "file": "MODBUS协议及应用_20260626_185238.json",
+      "count": 15
+    },
+    {
+      "id": "serial",
+      "title": "串口及应用",
+      "file": "串口及应用_20260626_185247.json",
+      "count": 15
+    }
+  ]
+}

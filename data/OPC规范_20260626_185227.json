@@ -1,0 +1,346 @@
+{
+  "title": "OPC规范",
+  "exported_at": "2026-06-26T18:52:27.495920",
+  "questions": [
+    {
+      "sort": 1,
+      "type": "单选题",
+      "title": "OPC UA首次发布的时间是（ ）",
+      "options": [
+        "1996年",
+        "2004年",
+        "2006年",
+        "2012年"
+      ],
+      "correct_answer": "C. 2006年",
+      "your_answer": "C. 2006年",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 2,
+      "type": "单选题",
+      "title": "下列哪项是OPC Classic与OPC UA的本质区别（ ）",
+      "options": [
+        "能否处理实时数据",
+        "是否支持历史数据访问",
+        "是否依赖特定操作系统",
+        "能否实现客户端-服务器通信"
+      ],
+      "correct_answer": "C. 是否依赖特定操作系统",
+      "your_answer": "C. 是否依赖特定操作系统",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 3,
+      "type": "单选题",
+      "title": "关于OPC协议描述错误的是（）",
+      "options": [
+        "OPC协议具有高效性、可靠性、开放性、可互操作性",
+        "OPC规范规定了同步通讯和异步通讯两种通讯方式",
+        "同步通讯适用于OPC客户程序较多，数据量较大时的场合",
+        "同步通讯和异步通讯相比，异步通讯的效率更高"
+      ],
+      "correct_answer": "C. 同步通讯适用于OPC客户程序较多，数据量较大时的场合",
+      "your_answer": "C. 同步通讯适用于OPC客户程序较多，数据量较大时的场合",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 4,
+      "type": "单选题",
+      "title": "客户程序对服务器进行数据存取时是以（ ）为单位进行的",
+      "options": [
+        "组对象",
+        "服务器对象",
+        "客户对象",
+        "项对象"
+      ],
+      "correct_answer": "A. 组对象",
+      "your_answer": "A. 组对象",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 5,
+      "type": "单选题",
+      "title": "下列哪项不属于OPC UA的核心优势（ ）",
+      "options": [
+        "平台独立性",
+        "依赖Windows系统",
+        "高安全性",
+        "复杂信息建模能力"
+      ],
+      "correct_answer": "B. 依赖Windows系统",
+      "your_answer": "B. 依赖Windows系统",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 6,
+      "type": "单选题",
+      "title": "OPC UA成为IEC标准后，其核心作用是（ ）",
+      "options": [
+        "仅用于Windows系统的数据交换",
+        "实现不同操作系统和制造商设备间的数据交互",
+        "替代所有工业通信协议",
+        "仅用于物联网设备通信"
+      ],
+      "correct_answer": "B. 实现不同操作系统和制造商设备间的数据交互",
+      "your_answer": "B. 实现不同操作系统和制造商设备间的数据交互",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 7,
+      "type": "单选题",
+      "title": "基于Client/Server模式的OPC技术可以用（ ）描述。",
+      "options": [
+        "OPC.COM.DA",
+        "OPC.COM.DX",
+        "OPC.XML.DA",
+        "OPC.NET.DA"
+      ],
+      "correct_answer": "A. OPC.COM.DA",
+      "your_answer": "A. OPC.COM.DA",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 8,
+      "type": "单选题",
+      "title": "OPC规范最初开发的时间是( )",
+      "options": [
+        "20世纪80年代中期",
+        "20世纪90年代中期",
+        "21世纪初",
+        "21世纪10年代中期"
+      ],
+      "correct_answer": "B. 20世纪90年代中期",
+      "your_answer": "B. 20世纪90年代中期",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 9,
+      "type": "单选题",
+      "title": "OPC UA 与传统 OPC 的主要区别在于：",
+      "options": [
+        "支持实时通信",
+        "跨平台兼容性",
+        "使用 DCOM 协议",
+        "仅支持串口通信"
+      ],
+      "correct_answer": "B. 跨平台兼容性",
+      "your_answer": "B. 跨平台兼容性",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 10,
+      "type": "多选题",
+      "title": "OPC规范的核心价值体现在（ ）",
+      "options": [
+        "实现不同厂商设备间的数据互通",
+        "减少系统集成成本",
+        "提高数据传输的安全性和可靠性",
+        "替代所有工业通信协议"
+      ],
+      "correct_answer": "0,1,2",
+      "your_answer": "0,1,2",
+      "score": "7.0",
+      "full_score": 7.0
+    },
+    {
+      "sort": 11,
+      "type": "多选题",
+      "title": "OPC数据存取服务器主要由以下（ ）组成",
+      "options": [
+        "服务器对象（Server）",
+        "组对象（Group）",
+        "客户对象（Client）",
+        "项对象（Item）"
+      ],
+      "correct_answer": "0,1,3",
+      "your_answer": "0,1,3",
+      "score": "7.0",
+      "full_score": 7.0
+    },
+    {
+      "sort": 12,
+      "type": "多选题",
+      "title": "OPC服务器中数据项的属性包括（ ）基本属性",
+      "options": [
+        "类型（type）",
+        "值（Value）",
+        "品质（Quality）",
+        "时间戳（Timestamp）"
+      ],
+      "correct_answer": "1,2,3",
+      "your_answer": "1,2,3",
+      "score": "7.0",
+      "full_score": 7.0
+    },
+    {
+      "sort": 13,
+      "type": "多选题",
+      "title": "OPC规范规定了哪两种通讯方式",
+      "options": [
+        "RS485",
+        "RS232",
+        "同步通讯方式",
+        "异步通讯方式"
+      ],
+      "correct_answer": "2,3",
+      "your_answer": "2,3",
+      "score": "7.0",
+      "full_score": 7.0
+    },
+    {
+      "sort": 14,
+      "type": "多选题",
+      "title": "OPC规范的应用场景包括（ ）",
+      "options": [
+        "工业自动化设备数据交换",
+        "物联网（IoT）设备通信",
+        "石油天然气行业控制系统",
+        "食品饮料生产过程监控"
+      ],
+      "correct_answer": "0,1,2,3",
+      "your_answer": "0,1,2,3",
+      "score": "7.0",
+      "full_score": 7.0
+    },
+    {
+      "sort": 15,
+      "type": "判断题",
+      "title": "OPC为服务器／客户的链接提供统一、标准的接口规范，按照这种统一规范，各客户／服务器间形成即插即用的简单规范的链接关系",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "your_answer": "0",
+      "score": "2.0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 16,
+      "type": "判断题",
+      "title": "OPC UA具有平台独立性，可在非Microsoft系统（包括嵌入式设备）上实现。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "your_answer": "0",
+      "score": "2.0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 17,
+      "type": "判断题",
+      "title": "工业4.0参考架构模型（RAMI4.0）将OPC UA列为通信层，体现了其在工业4.0中的核心地位",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "your_answer": "0",
+      "score": "2.0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 18,
+      "type": "判断题",
+      "title": "OPC规范的应用范围仅局限于工业自动化领域，无法应用于其他行业。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "your_answer": "1",
+      "score": "2.0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 19,
+      "type": "判断题",
+      "title": "COM技术是实现控制设备和控制管理系统之间的数据交换的基础，OPC是作为工业标准定义的特殊COM接口。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "your_answer": "0",
+      "score": "2.0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 20,
+      "type": "判断题",
+      "title": "OPC UA于2011年成为IEC标准，编号为IEC 62541。（ ）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "your_answer": "0",
+      "score": "2.0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 21,
+      "type": "判断题",
+      "title": "OPC数据存取规范是OPC基金会最初制定的一个工业标准，其重点是对现场设备的历史数据进行存取。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "your_answer": "1",
+      "score": "2.0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 22,
+      "type": "判断题",
+      "title": "OPC规范是由单一企业独立开发的，仅适用于该企业的设备和系统。（ ）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "your_answer": "1",
+      "score": "2.0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 23,
+      "type": "判断题",
+      "title": "OPC报警事件规范提供了一种通知机制，即在指定事件或报警条件发生时OPC服务器能够主动通知客户程序。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "your_answer": "0",
+      "score": "2.0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 24,
+      "type": "判断题",
+      "title": "OPC是基于分布式COM（DCOM）的技术",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "your_answer": "0",
+      "score": "0.0",
+      "full_score": 2.0
+    }
+  ]
+}

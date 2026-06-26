@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在线测验</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { DEFAULT: '#0080ff', dark: '#0066cc', light: '#e6f3ff' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .option-item input:checked + .option-body {
+      border-color: #0080ff;
+      background-color: #e6f3ff;
+    }
+    .answer-card-btn.answered { background-color: #0080ff; color: #fff; border-color: #0080ff; }
+    .answer-card-btn.current { box-shadow: 0 0 0 2px #0080ff; }
+    .answer-card-btn.correct { background-color: #22c55e; border-color: #22c55e; color: #fff; }
+    .answer-card-btn.wrong { background-color: #ef4444; border-color: #ef4444; color: #fff; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-800">
+
+  <!-- 首页：选择测验 -->
+  <div id="page-home" class="min-h-screen">
+    <header class="bg-primary text-white shadow">
+      <div class="max-w-3xl mx-auto px-4 py-5">
+        <h1 class="text-xl font-semibold">在线测验</h1>
+        <p class="text-sm text-blue-100 mt-1">选择一套题目开始答题</p>
+      </div>
+    </header>
+    <main class="max-w-3xl mx-auto px-4 py-8">
+      <div id="quiz-list" class="space-y-3"></div>
+      <p id="load-error" class="hidden text-red-500 text-sm mt-4"></p>
+    </main>
+  </div>
+
+  <!-- 答题页 -->
+  <div id="page-quiz" class="hidden min-h-screen flex flex-col">
+    <header class="bg-primary text-white shadow sticky top-0 z-20">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <div class="min-w-0">
+          <h1 id="quiz-title" class="text-lg font-semibold truncate"></h1>
+          <p id="quiz-progress-text" class="text-sm text-blue-100"></p>
+        </div>
+        <button id="btn-back" class="shrink-0 text-sm px-3 py-1.5 rounded border border-white/40 hover:bg-white/10">
+          返回
+        </button>
+      </div>
+      <div class="bg-primary-dark/30">
+        <div class="max-w-6xl mx-auto px-4 py-2">
+          <div class="h-1.5 bg-white/20 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-white rounded-full transition-all duration-300" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex-1 max-w-6xl mx-auto w-full px-4 py-6 flex flex-col lg:flex-row gap-6">
+      <!-- 题目区 -->
+      <main class="flex-1 min-w-0">
+        <div id="question-container" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"></div>
+
+        <div class="flex items-center justify-between mt-4 gap-3">
+          <button id="btn-prev" class="px-5 py-2 rounded border border-gray-300 bg-white hover:bg-gray-50 text-sm disabled:opacity-40">
+            上一题
+          </button>
+          <button id="btn-next" class="px-5 py-2 rounded bg-primary text-white hover:bg-primary-dark text-sm disabled:opacity-40">
+            下一题
+          </button>
+        </div>
+      </main>
+
+      <!-- 答题卡 -->
+      <aside class="lg:w-56 shrink-0">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sticky top-28">
+          <h2 class="text-sm font-semibold text-gray-600 mb-3">答题卡</h2>
+          <div id="answer-card" class="grid grid-cols-5 gap-2"></div>
+          <div class="mt-4 pt-4 border-t border-gray-100 space-y-2">
+            <p class="text-xs text-gray-500">已答 <span id="answered-count">0</span> / <span id="total-count">0</span></p>
+            <button id="btn-submit" class="w-full py-2.5 rounded bg-primary text-white text-sm font-medium hover:bg-primary-dark">
+              交卷
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- 成绩页 -->
+  <div id="page-result" class="hidden min-h-screen">
+    <header class="bg-primary text-white shadow">
+      <div class="max-w-3xl mx-auto px-4 py-5">
+        <h1 class="text-xl font-semibold">测验结果</h1>
+      </div>
+    </header>
+    <main class="max-w-3xl mx-auto px-4 py-8">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+        <p class="text-gray-500 text-sm">客观题得分</p>
+        <p class="text-5xl font-bold text-primary mt-2"><span id="result-score">0</span><span class="text-2xl text-gray-400"> / <span id="result-total">0</span></span></p>
+        <p id="result-rate" class="text-gray-600 mt-2"></p>
+        <div class="flex gap-3 justify-center mt-8">
+          <button id="btn-review" class="px-6 py-2.5 rounded bg-primary text-white text-sm hover:bg-primary-dark">查看解析</button>
+          <button id="btn-retry" class="px-6 py-2.5 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">重新作答</button>
+          <button id="btn-home" class="px-6 py-2.5 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">返回首页</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
