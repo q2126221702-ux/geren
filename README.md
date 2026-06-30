@@ -18,5 +18,20 @@ python -m http.server 8080
 - OPC 规范（24 题）
 - MODBUS 协议及应用（15 题）
 - 串口及应用（15 题）
+- 网络及工业通信综合考核（135 题）
 
 题库文件位于 `data/` 目录，更新题目后同步修改 `data/manifest.json` 即可。
+
+## 导入综合题库
+
+从 docx 重新生成综合题库 JSON：
+
+```bash
+python scripts/parse_comprehensive.py
+```
+
+## GitHub Pages
+
+Settings → Pages → Deploy from branch → main → `/ (root)`，访问：
+
+https://q2126221702-ux.github.io/geren/
