@@ -10,6 +10,7 @@
     answers: {},
     submitted: false,
     reviewMode: false,
+    multiAdvanceTimer: null,
   };
 
   const $ = (id) => document.getElementById(id);
@@ -319,16 +320,15 @@
     return q.correct_answer;
   }
 
-  function selectSingleAnswer(q, idx, value) {
-    const changed = state.answers[idx] !== value;
-    state.answers[idx] = value;
-    renderAnswerCard();
-    updateProgress();
-    if (
-      changed &&
-      (isChoiceQuestion(q) || isJudgmentQuestion(q)) &&
-      idx < state.quiz.questions.length - 1
-    ) {
+  function clearMultiAdvanceTimer() {
+    if (state.multiAdvanceTimer) {
+      clearTimeout(state.multiAdvanceTimer);
+      state.multiAdvanceTimer = null;
+    }
+  }
+
+  function advanceToNextQuestion(idx) {
+    if (idx < state.quiz.questions.length - 1) {
       state.currentIndex = idx + 1;
       renderQuestion();
       renderAnswerCard();
@@ -336,7 +336,37 @@
     }
   }
 
+  function selectSingleAnswer(q, idx, value) {
+    const changed = state.answers[idx] !== value;
+    state.answers[idx] = value;
+    renderAnswerCard();
+    updateProgress();
+    if (changed && (isChoiceQuestion(q) || isJudgmentQuestion(q))) {
+      advanceToNextQuestion(idx);
+    }
+  }
+
+  function updateMultiAnswer(q, idx, container) {
+    const picked = Array.from(
+      container.querySelectorAll('input[type="checkbox"]:checked')
+    ).map((el) => el.value);
+    state.answers[idx] = picked;
+    renderAnswerCard();
+    updateProgress();
+
+    clearMultiAdvanceTimer();
+    if (picked.length > 0 && idx < state.quiz.questions.length - 1) {
+      state.multiAdvanceTimer = setTimeout(() => {
+        state.multiAdvanceTimer = null;
+        if (state.currentIndex === idx && !state.submitted) {
+          advanceToNextQuestion(idx);
+        }
+      }, 600);
+    }
+  }
+
   function renderQuestion() {
+    clearMultiAdvanceTimer();
     const q = state.quiz.questions[state.currentIndex];
     const idx = state.currentIndex;
     const container = $('question-container');
@@ -412,15 +442,15 @@
 
     if (!state.submitted) {
       if (isMultiChoiceQuestion(q)) {
+        const syncMulti = () => updateMultiAnswer(q, idx, container);
         container.querySelectorAll('input[type="checkbox"]').forEach((input) => {
-          input.addEventListener('change', () => {
-            const picked = Array.from(
-              container.querySelectorAll('input[type="checkbox"]:checked')
-            ).map((el) => el.value);
-            state.answers[idx] = picked;
-            renderAnswerCard();
-            updateProgress();
-          });
+          input.addEventListener('change', syncMulti);
+          const label = input.closest('.option-item');
+          if (label) {
+            label.addEventListener('click', () => {
+              setTimeout(syncMulti, 0);
+            });
+          }
         });
       } else {
         container.querySelectorAll('input[type="radio"]').forEach((input) => {
