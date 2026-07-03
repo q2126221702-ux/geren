@@ -1,37 +1,32 @@
 # 在线测验
 
-轻量化答题网页，HTML5 + Tailwind CSS，支持单选题、多选题、判断题、填空题、问答题。填空题显示横线；单选/判断题选完自动进入下一题。
+静态网页题库，支持单选、多选（高考数学判分规则）、判断、填空、问答等题型。
 
-## 使用
+## 本地运行
 
-双击 `start.bat`，或在项目目录运行：
-
-```bash
-python -m http.server 8080
+```bat
+start.bat
 ```
 
 浏览器打开 http://localhost:8080
 
 ## 题库
 
-- Profinet 工业以太网测验（25 题）
-- OPC 规范（24 题）
-- MODBUS 协议及应用（15 题）
-- 串口及应用（15 题）
-- 网络及工业通信综合考核（135 题）
+题目数据在 `data/` 目录，索引见 `data/manifest.json`。
 
-题库文件位于 `data/` 目录，更新题目后同步修改 `data/manifest.json` 即可。
+当前包含：
 
-## 导入综合题库
+- 工业通信类测验（Profinet / OPC / MODBUS / 串口 / 综合考核）
+- WE Learn 实用综合教程 B1U4–U8 翻译练习
 
-从 docx 重新生成综合题库 JSON：
+## 测试
 
-```bash
-python scripts/parse_comprehensive.py
+需先启动本地服务器，再运行：
+
+```bat
+python scripts/test_full.py
 ```
 
 ## GitHub Pages
 
-Settings → Pages → Deploy from branch → main → `/ (root)`，访问：
-
-https://q2126221702-ux.github.io/geren/
+推送到 `main` 分支后，Actions 会自动部署到 GitHub Pages。

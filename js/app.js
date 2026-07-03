@@ -119,6 +119,45 @@
     return normalizeIndexList(user);
   }
 
+  function parseIndexSet(answer) {
+    return new Set(
+      normalizeIndexList(answer)
+        .split(',')
+        .map((s) => s.trim())
+        .filter((s) => s !== '')
+    );
+  }
+
+  /** 高考数学多选题：有错选 0 分；部分选对按正确个数占满分比例给分 */
+  function gaokaoMultiPartialScore(fullScore, correctCount, selectedCorrectCount) {
+    if (selectedCorrectCount <= 0 || selectedCorrectCount >= correctCount) return 0;
+    const raw = (fullScore * selectedCorrectCount) / correctCount;
+    return Number.isInteger(raw) ? raw : Math.round(raw * 10) / 10;
+  }
+
+  function gradeMultiChoiceGaokao(q, userAnswer) {
+    const maxScore = Number(q.full_score) || 1;
+    const correctSet = parseIndexSet(q.correct_answer);
+    const userSet = parseIndexSet(userAnswerToIndexList(userAnswer));
+
+    if (userSet.size === 0) {
+      return { correct: false, partial: false, score: 0, maxScore };
+    }
+
+    const hasWrong = [...userSet].some((i) => !correctSet.has(i));
+    if (hasWrong) {
+      return { correct: false, partial: false, score: 0, maxScore };
+    }
+
+    const selectedCorrectCount = [...userSet].filter((i) => correctSet.has(i)).length;
+    if (selectedCorrectCount === correctSet.size) {
+      return { correct: true, partial: false, score: maxScore, maxScore };
+    }
+
+    const partialScore = gaokaoMultiPartialScore(maxScore, correctSet.size, selectedCorrectCount);
+    return { correct: false, partial: true, score: partialScore, maxScore };
+  }
+
   function gradeQuestion(q, userAnswer) {
     if (isEssayQuestion(q)) {
       return { correct: null, score: 0, maxScore: 0 };
@@ -137,13 +176,7 @@
     }
 
     if (isMultiChoiceQuestion(q)) {
-      const user = String(userAnswer || '').trim();
-      if (!user && (!Array.isArray(userAnswer) || userAnswer.length === 0)) {
-        return { correct: false, score: 0, maxScore };
-      }
-      const ok =
-        userAnswerToIndexList(userAnswer) === normalizeIndexList(q.correct_answer);
-      return { correct: ok, score: ok ? maxScore : 0, maxScore };
+      return gradeMultiChoiceGaokao(q, userAnswer);
     }
 
     if (isChoiceQuestion(q)) {
@@ -382,12 +415,16 @@
         ? '未作答'
         : result.correct
           ? '✓ 回答正确'
-          : '✗ 回答错误';
+          : result.partial
+            ? `△ 部分正确（得 ${result.score} / ${result.maxScore} 分）`
+            : '✗ 回答错误';
       const statusClass = !answered
         ? 'text-gray-500'
         : result.correct
           ? 'text-green-600'
-          : 'text-red-600';
+          : result.partial
+            ? 'text-amber-600'
+            : 'text-red-600';
       reviewBlock = `
         <div class="mt-5 pt-5 border-t border-gray-100">
           <p class="text-sm ${statusClass}">${statusText}</p>
@@ -471,7 +508,9 @@
         if (i === state.currentIndex) cls += ' current';
         if (state.submitted && !isEssayQuestion(q)) {
           const result = gradeQuestion(q, state.answers[i]);
-          cls += result.correct ? ' correct' : ' wrong';
+          if (result.correct) cls += ' correct';
+          else if (result.partial) cls += ' partial';
+          else cls += ' wrong';
         } else if (isAnswered(i)) {
           cls += ' answered';
         }
@@ -526,13 +565,19 @@
       const result = gradeQuestion(q, state.answers[i]);
       return result.correct === true;
     }).length;
+    const partialCount = state.quiz.questions.filter((q, i) => {
+      const result = gradeQuestion(q, state.answers[i]);
+      return result.partial === true;
+    }).length;
     const objectiveCount = state.quiz.questions.filter((q) => !isEssayQuestion(q)).length;
 
     $('result-score').textContent = score.toFixed(1).replace(/\.0$/, '');
     $('result-total').textContent = total.toFixed(1).replace(/\.0$/, '');
     const rate = total ? Math.round((score / total) * 100) : 0;
-    $('result-rate').textContent =
-      `答对 ${correctCount} / ${objectiveCount} 道客观题，得分率 ${rate}%（问答题不计分）`;
+    let rateText = `全对 ${correctCount} 题`;
+    if (partialCount > 0) rateText += `，部分正确 ${partialCount} 题`;
+    rateText += ` / 客观题 ${objectiveCount} 题，得分率 ${rate}%（问答题不计分；多选题按高考数学规则计分）`;
+    $('result-rate').textContent = rateText;
     showPage('result');
   }
 
