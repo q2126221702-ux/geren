@@ -319,6 +319,23 @@
     return q.correct_answer;
   }
 
+  function selectSingleAnswer(q, idx, value) {
+    const changed = state.answers[idx] !== value;
+    state.answers[idx] = value;
+    renderAnswerCard();
+    updateProgress();
+    if (
+      changed &&
+      (isChoiceQuestion(q) || isJudgmentQuestion(q)) &&
+      idx < state.quiz.questions.length - 1
+    ) {
+      state.currentIndex = idx + 1;
+      renderQuestion();
+      renderAnswerCard();
+      updateProgress();
+    }
+  }
+
   function renderQuestion() {
     const q = state.quiz.questions[state.currentIndex];
     const idx = state.currentIndex;
@@ -408,16 +425,16 @@
       } else {
         container.querySelectorAll('input[type="radio"]').forEach((input) => {
           input.addEventListener('change', () => {
-            state.answers[idx] = input.value;
-            renderAnswerCard();
-            updateProgress();
-            if ((isChoiceQuestion(q) || isJudgmentQuestion(q)) && idx < state.quiz.questions.length - 1) {
-              state.currentIndex = idx + 1;
-              renderQuestion();
-              renderAnswerCard();
-              updateProgress();
-            }
+            selectSingleAnswer(q, idx, input.value);
           });
+          const label = input.closest('.option-item');
+          if (label) {
+            label.addEventListener('click', () => {
+              setTimeout(() => {
+                if (input.checked) selectSingleAnswer(q, idx, input.value);
+              }, 0);
+            });
+          }
         });
       }
 
