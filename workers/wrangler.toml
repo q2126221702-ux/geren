@@ -1,0 +1,13 @@
+name = "quiz-ai-proxy"
+main = "ai-proxy.js"
+compatibility_date = "2024-01-01"
+
+# 建议绑定 KV 做 IP 限流（未绑时用 Worker Cache API 兜底，生产环境仍建议绑定）
+# 创建：Dashboard → Workers KV → Create → 复制 Namespace ID
+# [[kv_namespaces]]
+# binding = "AI_RATE"
+# id = "你的_KV_NAMESPACE_ID"
+
+# API Key 请用 Cloudflare 控制台 Settings → Secrets 添加 GEMINI_API_KEY
+# 或命令行：wrangler secret put GEMINI_API_KEY
+# 切勿把 Key 写在本文件或提交到 Git

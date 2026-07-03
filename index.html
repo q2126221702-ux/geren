@@ -34,6 +34,23 @@
       vertical-align: baseline;
       line-height: 1;
     }
+    .ai-output {
+      white-space: normal;
+      line-height: 1.65;
+    }
+    .ai-loading::after {
+      content: '';
+      display: inline-block;
+      width: 1em;
+      text-align: left;
+      animation: ai-dots 1.2s steps(4, end) infinite;
+    }
+    @keyframes ai-dots {
+      0%, 20% { content: ''; }
+      40% { content: '.'; }
+      60% { content: '..'; }
+      80%, 100% { content: '...'; }
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen text-gray-800">
@@ -41,9 +58,14 @@
   <!-- 首页：选择测验 -->
   <div id="page-home" class="min-h-screen">
     <header class="bg-primary text-white shadow">
-      <div class="max-w-3xl mx-auto px-4 py-5">
-        <h1 class="text-xl font-semibold">在线测验</h1>
-        <p class="text-sm text-blue-100 mt-1">选择一套题目开始答题</p>
+      <div class="max-w-3xl mx-auto px-4 py-5 flex items-start justify-between gap-4">
+        <div>
+          <h1 class="text-xl font-semibold">在线测验</h1>
+          <p class="text-sm text-blue-100 mt-1">选择一套题目开始答题</p>
+        </div>
+        <button id="btn-open-settings" class="shrink-0 text-sm px-3 py-1.5 rounded border border-white/40 hover:bg-white/10">
+          AI 设置
+        </button>
       </div>
     </header>
     <main class="max-w-3xl mx-auto px-4 py-8">
@@ -116,15 +138,93 @@
         <p class="text-gray-500 text-sm">客观题得分</p>
         <p class="text-5xl font-bold text-primary mt-2"><span id="result-score">0</span><span class="text-2xl text-gray-400"> / <span id="result-total">0</span></span></p>
         <p id="result-rate" class="text-gray-600 mt-2"></p>
-        <div class="flex gap-3 justify-center mt-8">
+        <div class="flex flex-wrap gap-3 justify-center mt-8">
           <button id="btn-review" class="px-6 py-2.5 rounded bg-primary text-white text-sm hover:bg-primary-dark">查看解析</button>
+          <button id="btn-ai-analysis" class="px-6 py-2.5 rounded bg-violet-600 text-white text-sm hover:bg-violet-700">AI 学情分析</button>
           <button id="btn-retry" class="px-6 py-2.5 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">重新作答</button>
           <button id="btn-home" class="px-6 py-2.5 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">返回首页</button>
+        </div>
+      </div>
+      <div id="ai-analysis-panel" class="hidden mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-left">
+        <div class="flex items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-2 min-w-0">
+            <h2 class="text-sm font-semibold text-gray-700">AI 学情分析</h2>
+            <span id="ai-analysis-mode-badge" class="hidden text-xs px-2 py-0.5 rounded-full shrink-0"></span>
+          </div>
+          <button id="btn-close-analysis" class="text-xs text-gray-400 hover:text-gray-600 shrink-0">收起</button>
+        </div>
+        <div id="ai-analysis-output" class="ai-output text-sm text-gray-700"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- AI 设置页 -->
+  <div id="page-settings" class="hidden min-h-screen">
+    <header class="bg-primary text-white shadow">
+      <div class="max-w-3xl mx-auto px-4 py-5 flex items-center justify-between gap-4">
+        <div>
+          <h1 class="text-xl font-semibold">AI 设置</h1>
+          <p class="text-sm text-blue-100 mt-1">API Key 仅保存在本机浏览器，不会上传</p>
+        </div>
+        <button id="btn-settings-back" class="shrink-0 text-sm px-3 py-1.5 rounded border border-white/40 hover:bg-white/10">
+          返回
+        </button>
+      </div>
+    </header>
+    <main class="max-w-3xl mx-auto px-4 py-8">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-5">
+        <div>
+          <label for="ai-provider" class="block text-sm font-medium text-gray-700 mb-1">服务商</label>
+          <select id="ai-provider" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"></select>
+          <p id="ai-provider-hint" class="text-xs text-gray-500 mt-1.5"></p>
+          <a id="ai-key-link" href="#" target="_blank" rel="noopener" class="text-xs text-primary hover:underline mt-1 inline-block">前往申请 API Key →</a>
+        </div>
+        <div>
+          <label for="ai-api-key" class="block text-sm font-medium text-gray-700 mb-1">API Key</label>
+          <input id="ai-api-key" type="password" autocomplete="off" placeholder="粘贴你的 API Key"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+        </div>
+        <div>
+          <label for="ai-encrypt-passphrase" class="block text-sm font-medium text-gray-700 mb-1">加密口令（可选）</label>
+          <input id="ai-encrypt-passphrase" type="password" autocomplete="new-password" placeholder="保存时填写则 AES 加密 Key；留空则明文存 localStorage"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+          <p class="text-xs text-gray-500 mt-1.5">口令只用于本机加解密，不会上传。刷新页面后需重新解锁。</p>
+        </div>
+        <div id="ai-unlock-block" class="hidden space-y-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
+          <p class="text-xs text-amber-800">已保存加密的 Key，请输入口令解锁后使用完整模式。</p>
+          <label for="ai-unlock-passphrase" class="block text-sm font-medium text-gray-700">解锁口令</label>
+          <div class="flex flex-wrap gap-2">
+            <input id="ai-unlock-passphrase" type="password" autocomplete="current-password" placeholder="输入加密口令"
+              class="flex-1 min-w-[10rem] border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+            <button type="button" id="btn-unlock-key" class="px-4 py-2 rounded bg-amber-600 text-white text-sm hover:bg-amber-700">解锁</button>
+          </div>
+        </div>
+        <div>
+          <label for="ai-model" class="block text-sm font-medium text-gray-700 mb-1">模型（可选）</label>
+          <input id="ai-model" type="text" placeholder="留空则使用默认模型"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+          <p id="ai-default-model" class="text-xs text-gray-500 mt-1.5"></p>
+        </div>
+        <div class="flex flex-wrap gap-3 pt-1">
+          <button id="btn-save-settings" class="px-5 py-2 rounded bg-primary text-white text-sm hover:bg-primary-dark">保存</button>
+          <button id="btn-test-ai" class="px-5 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">测试连接</button>
+          <button id="btn-clear-settings" class="px-5 py-2 rounded border border-red-200 bg-white text-sm text-red-600 hover:bg-red-50">清除 Key / 模型</button>
+        </div>
+        <p id="ai-settings-status" class="text-sm hidden"></p>
+        <p id="ai-source-hint" class="text-xs text-green-700 hidden"></p>
+        <div class="text-xs text-gray-500 border-t border-gray-100 pt-4 space-y-2">
+          <p><strong class="text-emerald-700">自带 Key · 完整模式</strong>：直连服务商，无冷却、可重新分析、流式输出、含全部错题详情（受你 Key 的配额限制）。</p>
+          <p><strong>站点默认 AI</strong>：Cloudflare Worker → Gemini 免费层，有冷却与精简输出，适合偶尔使用。</p>
+          <p class="text-amber-700">填写 Key 并保存后，自带 Key 自动优先于站点代理。可选加密口令保护 localStorage 中的 Key。</p>
+          <p>使用 AI 解析或学情分析时，题目与作答会发送至 Google Gemini 或你所选 AI 服务商处理；Key 与口令不会上传至本站。</p>
         </div>
       </div>
     </main>
   </div>
 
-  <script src="js/app.js?v=20260703f"></script>
+  <script src="js/ai-config.js?v=20260703t"></script>
+  <script src="js/ai-config.local.js?v=20260703z2" onerror=""></script>
+  <script src="js/ai.js?v=20260704i"></script>
+  <script src="js/app.js?v=20260704i"></script>
 </body>
 </html>
