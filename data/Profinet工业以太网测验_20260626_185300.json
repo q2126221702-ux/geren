@@ -155,7 +155,7 @@
     {
       "sort": 11,
       "type": "填空题(客观)",
-      "title": "Profinet 是基于 的工业实时通信总线标准。",
+      "title": "Profinet 是基于______的工业实时通信总线标准。",
       "options": [
         ""
       ],
@@ -167,7 +167,7 @@
     {
       "sort": 12,
       "type": "填空题(客观)",
-      "title": "Profinet IO 系统由 、IO 设备、IO 监视器三部分组成",
+      "title": "Profinet IO 系统由______、IO 设备、IO 监视器三部分组成",
       "options": [
         ""
       ],
@@ -179,7 +179,7 @@
     {
       "sort": 13,
       "type": "填空题(客观)",
-      "title": "Profinet 实时等级分为：TCP/IP、、",
+      "title": "Profinet 实时等级分为：TCP/IP、______、______",
       "options": [
         "",
         ""
@@ -192,7 +192,7 @@
     {
       "sort": 14,
       "type": "填空题(客观)",
-      "title": "实现环网冗余的 Profinet 协议是",
+      "title": "实现环网冗余的 Profinet 协议是______",
       "options": [
         ""
       ],
@@ -204,7 +204,7 @@
     {
       "sort": 15,
       "type": "填空题(客观)",
-      "title": "Profinet 用于设备命名与 IP 分配的协议是",
+      "title": "Profinet 用于设备命名与 IP 分配的协议是______",
       "options": [
         ""
       ],
@@ -216,7 +216,7 @@
     {
       "sort": 16,
       "type": "填空题(客观)",
-      "title": "工业现场推荐使用 网线保证稳定性",
+      "title": "工业现场推荐使用______网线保证稳定性",
       "options": [
         ""
       ],
@@ -228,7 +228,7 @@
     {
       "sort": 17,
       "type": "填空题(客观)",
-      "title": "Profinet 物理层遵循 标准",
+      "title": "Profinet 物理层遵循______标准",
       "options": [
         ""
       ],
@@ -240,7 +240,7 @@
     {
       "sort": 18,
       "type": "填空题(客观)",
-      "title": "IRT 通信最小周期可达到 甚至更小",
+      "title": "IRT 通信最小周期可达到______甚至更小",
       "options": [
         ""
       ],
@@ -252,7 +252,7 @@
     {
       "sort": 19,
       "type": "填空题(客观)",
-      "title": "Profinet 网络故障与状态上报依靠 机制",
+      "title": "Profinet 网络故障与状态上报依靠______机制",
       "options": [
         ""
       ],
@@ -264,7 +264,7 @@
     {
       "sort": 20,
       "type": "填空题(客观)",
-      "title": "Profinet 周期传输的实时数据称为",
+      "title": "Profinet 周期传输的实时数据称为______",
       "options": [
         ""
       ],

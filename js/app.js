@@ -387,7 +387,9 @@
         <span class="text-xs px-2 py-0.5 rounded bg-primary-light text-primary font-medium">${typeLabel(q.type)}</span>
         <span class="text-sm text-gray-400">${idx + 1} / ${state.quiz.questions.length}</span>
       </div>
-      <h2 class="text-base leading-relaxed font-medium mb-5">${escapeHtml(decodeHtml(q.title))}</h2>
+      <h2 class="text-base leading-relaxed font-medium mb-5">${
+        isFillQuestion(q) ? formatFillTitle(q.title) : escapeHtml(decodeHtml(q.title))
+      }</h2>
       ${body}
       ${reviewBlock}`;
 
@@ -409,6 +411,12 @@
             state.answers[idx] = input.value;
             renderAnswerCard();
             updateProgress();
+            if ((isChoiceQuestion(q) || isJudgmentQuestion(q)) && idx < state.quiz.questions.length - 1) {
+              state.currentIndex = idx + 1;
+              renderQuestion();
+              renderAnswerCard();
+              updateProgress();
+            }
           });
         });
       }
@@ -507,6 +515,13 @@
     $('result-rate').textContent =
       `答对 ${correctCount} / ${objectiveCount} 道客观题，得分率 ${rate}%（问答题不计分）`;
     showPage('result');
+  }
+
+  function formatFillTitle(title) {
+    return escapeHtml(decodeHtml(title)).replace(
+      /_{2,}/g,
+      '<span class="fill-blank"></span>'
+    );
   }
 
   function escapeHtml(str) {
