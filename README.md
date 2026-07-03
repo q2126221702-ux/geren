@@ -29,4 +29,6 @@ python scripts/test_full.py
 
 ## GitHub Pages
 
-推送到 `main` 分支后，Actions 会自动部署到 GitHub Pages。
+推送到 `main` 分支后，Actions 会自动部署。
+
+在线访问：https://q2126221702-ux.github.io/geren/
