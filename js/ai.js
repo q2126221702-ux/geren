@@ -278,12 +278,6 @@
         ? [c.proxyUrl]
         : [];
     urls = urls.map((u) => String(u || '').trim().replace(/\/$/, '')).filter(Boolean);
-    if (isMobileClient() && urls.length > 1) {
-      urls.sort((a, b) => {
-        const score = (u) => (u.includes('workers.dev') ? 0 : 1);
-        return score(a) - score(b);
-      });
-    }
     const model = String(c.proxyModel || 'glm-4-flash').trim();
     return urls.map((baseUrl) => ({
       baseUrl,
