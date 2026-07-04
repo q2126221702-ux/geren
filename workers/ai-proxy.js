@@ -22,22 +22,28 @@ export default {
     const cors = buildCors(allowedOrigin);
 
     if (request.method === 'OPTIONS') {
-      if (!allowedOrigin) {
+      if (allowedOrigin === false) {
         return new Response(null, { status: 403 });
       }
-      return new Response(null, { status: 204, headers: cors });
+      return new Response(null, { status: 204, headers: buildCors(allowedOrigin) });
+    }
+
+    const pathname = new URL(request.url).pathname;
+
+    if (request.method === 'GET' && (pathname === '/v1/health' || pathname === '/health')) {
+      return json({ ok: true, service: 'quiz-ai-proxy' }, 200, buildCors(allowedOrigin));
     }
 
     if (request.method !== 'POST') {
       return json({ error: 'Method Not Allowed' }, 405, cors);
     }
 
-    const pathname = new URL(request.url).pathname;
     if (!pathname.endsWith('/chat/completions')) {
       return json({ error: 'Not Found' }, 404, cors);
     }
 
-    if (!allowedOrigin) {
+    // 能识别来源则校验；手机端偶发无 Origin/Referer 时仍放行（靠 IP 限流）
+    if (allowedOrigin === false) {
       return json({ error: 'Origin not allowed' }, 403, cors);
     }
 
@@ -123,27 +129,39 @@ async function forwardToZhipu(payload, apiKey, cors) {
 
 function resolveAllowedOrigin(request) {
   const origin = request.headers.get('Origin') || '';
-  if (ALLOWED_ORIGINS.has(origin)) return origin;
+  if (origin && origin !== 'null') {
+    if (ALLOWED_ORIGINS.has(origin) || origin.endsWith('.github.io')) return origin;
+  }
 
-  // 部分手机浏览器 / 内置 WebView 不发 Origin，用 Referer 兜底
   const referer = request.headers.get('Referer') || '';
   for (const allowed of ALLOWED_ORIGINS) {
     if (referer === allowed || referer.startsWith(`${allowed}/`)) {
       return allowed;
     }
   }
-  return '';
+  if (referer.includes('github.io')) {
+    try {
+      const u = new URL(referer);
+      if (u.hostname.endsWith('.github.io')) return `${u.protocol}//${u.hostname}`;
+    } catch {
+      /* ignore */
+    }
+  }
+
+  // 无法识别来源：允许（移动端兼容），返回 null 表示用 * CORS
+  if (!origin && !referer) return null;
+  if (origin === 'null' && !referer) return null;
+  return false;
 }
 
 function buildCors(allowedOrigin) {
   const headers = {
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Max-Age': '86400',
   };
-  if (allowedOrigin) {
-    headers['Access-Control-Allow-Origin'] = allowedOrigin;
-  }
+  if (allowedOrigin === false) return headers;
+  headers['Access-Control-Allow-Origin'] = allowedOrigin || '*';
   return headers;
 }
 

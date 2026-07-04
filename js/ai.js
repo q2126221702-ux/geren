@@ -266,19 +266,45 @@
     return false;
   }
 
-  function getProxyConfig() {
+  function isMobileClient() {
+    return /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent || '');
+  }
+
+  function getProxyConfigList() {
     const c = window.QuizAIConfig || {};
-    const url = String(c.proxyUrl || '').trim().replace(/\/$/, '');
-    if (!url) return null;
-    return {
-      baseUrl: url,
-      model: String(c.proxyModel || 'glm-4-flash').trim(),
+    let urls = Array.isArray(c.proxyUrls)
+      ? c.proxyUrls.slice()
+      : c.proxyUrl
+        ? [c.proxyUrl]
+        : [];
+    urls = urls.map((u) => String(u || '').trim().replace(/\/$/, '')).filter(Boolean);
+    if (isMobileClient() && urls.length > 1) {
+      urls.sort((a, b) => {
+        const score = (u) => (u.includes('workers.dev') ? 0 : 1);
+        return score(a) - score(b);
+      });
+    }
+    const model = String(c.proxyModel || 'glm-4-flash').trim();
+    return urls.map((baseUrl) => ({
+      baseUrl,
+      model,
       provider: 'zhipu',
-    };
+      apiKey: '',
+    }));
+  }
+
+  function getProxyConfig() {
+    const list = getProxyConfigList();
+    return list.length ? list[0] : null;
   }
 
   function isProxyAvailable() {
-    return Boolean(getProxyConfig());
+    return getProxyConfigList().length > 0;
+  }
+
+  function isProxyNetworkError(err) {
+    const msg = String(err?.message || err || '');
+    return /无法连接|Failed to fetch|NetworkError|Load failed|network/i.test(msg);
   }
 
   function usesProxy() {
@@ -496,7 +522,8 @@
             method: 'POST',
             headers,
             body: JSON.stringify(payload),
-            // 站点代理需带 Origin/Referer 供 Worker 校验；BYOK 仍不发送来源
+            mode: 'cors',
+            credentials: 'omit',
             referrerPolicy: ctx.apiKey ? 'no-referrer' : 'origin',
             signal: controller.signal,
           });
@@ -518,7 +545,7 @@
         }
         const hint = ctx.apiKey
           ? '无法连接 AI 服务，请检查网络或 API 设置。'
-          : '无法连接 AI 代理。请清除手机浏览器缓存，用 Safari/Chrome 打开（勿用微信内置浏览器）；或在 AI 设置填写智谱 Key 直连。';
+          : '无法连接 AI 代理（已尝试全部线路）。手机移动网络建议切换 WiFi，或在 AI 设置填写智谱 Key 直连。';
         throw new Error(hint);
       }
     } finally {
@@ -594,17 +621,44 @@
     return null;
   }
 
+  function resolveProxyContexts() {
+    return getProxyConfigList();
+  }
+
   async function chatCompletion(messages, onChunk, options) {
     const settings = loadSettings();
-    const ctx = resolveChatContext(settings);
-    if (!ctx) {
+    const ownCtx = getApiKey()
+      ? {
+          baseUrl: getProviderInfo(settings.provider).baseUrl,
+          apiKey: getApiKey(),
+          model: getActiveModel(settings),
+          provider: settings.provider,
+        }
+      : null;
+
+    if (ownCtx) {
+      return openAiCompatibleChat(ownCtx, messages, onChunk, options);
+    }
+
+    const proxies = resolveProxyContexts();
+    if (!proxies.length) {
       if (hasStoredKey() && !isKeyUnlocked()) {
         throw new Error('Key 已口令加密，请先在 AI 设置中输入解锁口令');
       }
       throw new Error('请先在「AI 设置」中配置 API Key，或由管理员启用站点默认 AI');
     }
 
-    return openAiCompatibleChat(ctx, messages, onChunk, options);
+    let lastErr;
+    for (let i = 0; i < proxies.length; i++) {
+      try {
+        return await openAiCompatibleChat(proxies[i], messages, onChunk, options);
+      } catch (err) {
+        lastErr = err;
+        if (i < proxies.length - 1 && isProxyNetworkError(err)) continue;
+        throw err;
+      }
+    }
+    throw lastErr || new Error('无法连接 AI 代理');
   }
 
   function formatAiHtml(text) {
