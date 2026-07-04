@@ -59,6 +59,36 @@
       "title": "WE Learn B1U8 Festivals 翻译练习",
       "file": "WE Learn_B1U8_Festivals_翻译题_20260703.json",
       "count": 6
+    },
+    {
+      "id": "welearn_b1u4_iwords",
+      "title": "WE Learn B1U4 Movies iWords 词汇填空",
+      "file": "WE Learn_B1U4_Movies_iWords_20260704.json",
+      "count": 64
+    },
+    {
+      "id": "welearn_b1u5_iwords",
+      "title": "WE Learn B1U5 Our Earth iWords 词汇填空",
+      "file": "WE Learn_B1U5_Our_Earth_iWords_20260704.json",
+      "count": 75
+    },
+    {
+      "id": "welearn_b1u6_iwords",
+      "title": "WE Learn B1U6 Part-time jobs iWords 词汇填空",
+      "file": "WE Learn_B1U6_Part-time_jobs_iWords_20260704.json",
+      "count": 75
+    },
+    {
+      "id": "welearn_b1u7_iwords",
+      "title": "WE Learn B1U7 Health iWords 词汇填空",
+      "file": "WE Learn_B1U7_Health_iWords_20260704.json",
+      "count": 80
+    },
+    {
+      "id": "welearn_b1u8_iwords",
+      "title": "WE Learn B1U8 Festivals iWords 词汇填空",
+      "file": "WE Learn_B1U8_Festivals_iWords_20260704.json",
+      "count": 91
     }
   ]
 }

@@ -94,7 +94,16 @@ def answer_quiz_page(page, quiz, mode="correct"):
                 page.wait_for_timeout(40)
             continue
         if "填空" in q["type"]:
-            page.locator("#fill-input").fill(str(q["correct_answer"]).split("；")[0].split(";")[0][:50])
+            mem = q.get("memory") or {}
+            lang = mem.get("lang")
+            ca = str(q.get("correct_answer", ""))
+            if lang == "pos":
+                fill = mem.get("pos_zh") or ca.split(";")[0]
+            elif lang == "zh":
+                fill = ca.split("；")[0].split(";")[0]
+            else:
+                fill = ca
+            page.locator("#fill-input").fill(fill[:80])
             continue
         if q["type"] == "判断题":
             letter = "A" if str(q["correct_answer"]).strip() in ("0", "A") else "B"
@@ -179,7 +188,7 @@ def test_ui(page):
     we = next(e for e in manifest["quizzes"] if e["id"] == "welearn_b1u4")
     quiz = load_json(DATA / we["file"])
     page.goto(BASE, wait_until="networkidle")
-    page.locator(".quiz-item", has_text="B1U4 Movies").click()
+    page.locator(f'.quiz-item[data-file="{we["file"]}"]').click()
     page.wait_for_timeout(400)
     answer_quiz_page(page, quiz, "correct")
     page.locator("#btn-submit").click()

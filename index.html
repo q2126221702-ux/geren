@@ -138,12 +138,26 @@
         <p class="text-gray-500 text-sm">客观题得分</p>
         <p class="text-5xl font-bold text-primary mt-2"><span id="result-score">0</span><span class="text-2xl text-gray-400"> / <span id="result-total">0</span></span></p>
         <p id="result-rate" class="text-gray-600 mt-2"></p>
+        <p id="wrong-drill-banner" class="hidden text-sm text-amber-700 mt-3 bg-amber-50 rounded-lg px-3 py-2">
+          错词突击已完成。
+          <button type="button" id="btn-exit-drill" class="text-primary underline ml-1">返回成绩单</button>
+        </p>
         <div class="flex flex-wrap gap-3 justify-center mt-8">
           <button id="btn-review" class="px-6 py-2.5 rounded bg-primary text-white text-sm hover:bg-primary-dark">查看解析</button>
           <button id="btn-ai-analysis" class="px-6 py-2.5 rounded bg-violet-600 text-white text-sm hover:bg-violet-700">AI 学情分析</button>
           <button id="btn-retry" class="px-6 py-2.5 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">重新作答</button>
           <button id="btn-home" class="px-6 py-2.5 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">返回首页</button>
         </div>
+      </div>
+      <div id="wrong-memory-panel" class="hidden mt-6 bg-white rounded-lg shadow-sm border border-amber-200 p-6 text-left">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <h2 class="text-sm font-semibold text-gray-700">错词记忆卡</h2>
+          <button id="btn-wrong-drill" type="button" class="px-4 py-2 rounded bg-amber-500 text-white text-sm hover:bg-amber-600">
+            换形式再练错词
+          </button>
+        </div>
+        <p id="wrong-memory-summary" class="text-xs text-gray-500 mb-4"></p>
+        <div id="wrong-memory-list" class="space-y-3 max-h-[28rem] overflow-y-auto"></div>
       </div>
       <div id="ai-analysis-panel" class="hidden mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-left">
         <div class="flex items-center justify-between gap-3 mb-3">
@@ -223,9 +237,9 @@
     </main>
   </div>
 
-  <script src="js/ai-config.js?v=202607041500"></script>
-  <script src="js/ai-config.local.js?v=20260703z2" onerror=""></script>
-  <script src="js/ai.js?v=202607041500"></script>
-  <script src="js/app.js?v=202607042251"></script>
+  <script src="js/ai-config.js?v=202607042400"></script>
+  <script src="js/ai-config.local.js?v=202607042400" onerror=""></script>
+  <script src="js/ai.js?v=202607042400"></script>
+  <script src="js/app.js?v=202607042410"></script>
 </body>
 </html>

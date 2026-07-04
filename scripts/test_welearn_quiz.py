@@ -20,9 +20,9 @@ def load_quiz(page):
     return page.evaluate(f"fetch('data/{QUIZ_FILE}').then(r => r.json())")
 
 
-def start_welearn_quiz(page, title_hint="B1U4"):
+def start_welearn_quiz(page, quiz_file):
     page.goto(BASE, wait_until="networkidle")
-    page.locator(".quiz-item", has_text=title_hint).click()
+    page.locator(f'.quiz-item[data-file="{quiz_file}"]').click()
     page.wait_for_timeout(400)
 
 
@@ -33,8 +33,8 @@ with sync_playwright() as p:
 
     page.goto(BASE, wait_until="networkidle", timeout=15000)
     manifest = page.evaluate("fetch('data/manifest.json').then(r => r.json())")
-    welearn_units = [q for q in manifest["quizzes"] if str(q.get("id", "")).startswith("welearn_b1u")]
-    check("manifest 含 5 个 WE Learn 单元", len(welearn_units) == 5, str(len(welearn_units)))
+    welearn_units = [q for q in manifest["quizzes"] if str(q.get("id", "")).startswith("welearn_b1u") and not str(q.get("id", "")).endswith("_iwords")]
+    check("manifest 含 5 个 WE Learn 翻译单元", len(welearn_units) == 5, str(len(welearn_units)))
 
     b1u4 = next((q for q in manifest["quizzes"] if q["id"] == UNIT_ID), None)
     check("B1U4 单元存在", b1u4 is not None)
@@ -58,10 +58,14 @@ with sync_playwright() as p:
             issues.append(f"第{q['sort']}题缺少参考答案")
     check("题目字段校验", not any("题" in i for i in issues))
 
-    welearn_buttons = [el for el in page.locator(".quiz-item").all() if "WE Learn" in el.inner_text()]
-    check("首页显示 5 个 WE Learn 单元", len(welearn_buttons) == 5, str(len(welearn_buttons)))
+    welearn_buttons = [
+        el
+        for el in page.locator(".quiz-item").all()
+        if "WE Learn" in el.inner_text() and "iWords" not in el.inner_text()
+    ]
+    check("首页显示 5 个 WE Learn 翻译单元", len(welearn_buttons) == 5, str(len(welearn_buttons)))
 
-    start_welearn_quiz(page, "B1U4 Movies")
+    start_welearn_quiz(page, QUIZ_FILE)
     check("进入答题页", page.locator("#page-quiz").is_visible())
     check("题目标题含单元信息", "B1U4" in page.locator("#question-container h2").inner_text())
     check("答题卡总数 6", page.locator("#total-count").inner_text() == "6")

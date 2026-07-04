@@ -9,7 +9,6 @@
     currentIndex: 0,
     answers: {},
     submitted: false,
-    reviewMode: false,
     aiCache: {},
     lastResult: null,
     aiExplainLoading: false,
@@ -20,9 +19,100 @@
     analysisCooldownTimer: null,
     testCooldownUntil: 0,
     testCooldownTimer: null,
+    wrongDrillMode: false,
+    parentQuiz: null,
   };
 
   const $ = (id) => document.getElementById(id);
+
+  const POS_ZH_MAP = {
+    'n.': '名词',
+    'v.': '动词',
+    'adj.': '形容词',
+    'adv.': '副词',
+    'prep.': '介词',
+    'int.': '感叹词',
+    'abbr.': '缩写',
+    'conj.': '连词',
+    'pron.': '代词',
+    'num.': '数词',
+    'art.': '冠词',
+    'phr.': '短语',
+    phr: '短语',
+  };
+
+  const REMIX_FALLBACK = {
+    zh2en: 'en2zh',
+    en2zh: 'zh2en',
+    spell: 'en2zh',
+    pos: 'spell',
+    assoc: 'en2zh',
+    phrase_cloze: 'en2zh',
+  };
+
+  const POS_ALIASES = {
+    名词: ['名词', 'n', 'n.'],
+    动词: ['动词', 'v', 'v.'],
+    形容词: ['形容词', 'adj', 'adj.'],
+    副词: ['副词', 'adv', 'adv.'],
+    介词: ['介词', 'prep', 'prep.'],
+    感叹词: ['感叹词', 'int', 'int.'],
+    缩写: ['缩写', 'abbr', 'abbr.'],
+    连词: ['连词', 'conj', 'conj.'],
+    代词: ['代词', 'pron', 'pron.'],
+    数词: ['数词', 'num', 'num.'],
+    冠词: ['冠词', 'art', 'art.'],
+    短语: ['短语', 'phr'],
+  };
+
+  function normPos(s) {
+    return String(s || '')
+      .trim()
+      .toLowerCase()
+      .replace(/\.$/, '');
+  }
+
+  function posZhFromEn(pos) {
+    if (!pos) return '短语';
+    return POS_ZH_MAP[pos] || POS_ZH_MAP[pos.endsWith('.') ? pos : `${pos}.`] || pos;
+  }
+
+  function expandPosAcceptSet(correctAnswer) {
+    const set = new Set();
+    const parts = String(correctAnswer || '')
+      .split(/[；;]/)
+      .map((p) => p.trim())
+      .filter(Boolean);
+    for (const part of parts) {
+      set.add(normPos(part));
+      if (POS_ALIASES[part]) {
+        POS_ALIASES[part].forEach((a) => set.add(normPos(a)));
+      }
+      for (const [zh, aliases] of Object.entries(POS_ALIASES)) {
+        if (aliases.some((a) => normPos(a) === normPos(part))) {
+          set.add(normPos(zh));
+          aliases.forEach((a) => set.add(normPos(a)));
+        }
+      }
+    }
+    return set;
+  }
+
+  function matchPosAnswer(userAnswer, correctAnswer) {
+    const user = normPos(userAnswer);
+    if (!user) return false;
+    return expandPosAcceptSet(correctAnswer).has(user);
+  }
+
+  function fillInputPlaceholder(q) {
+    if (q.fill_hint) return q.fill_hint;
+    if (q.memory?.fill_hint) return q.memory.fill_hint;
+    const lang = q.memory?.lang;
+    if (lang === 'pos') return '填中文词性，如：名词、动词、形容词（也可填 n. / v. / adj.）';
+    if (lang === 'en') return '填英文单词，小写即可；短语按原样填写';
+    if (lang === 'zh') return '填中文释义，关键词即可';
+    return '请输入答案';
+  }
 
   const pages = {
     home: $('page-home'),
@@ -208,34 +298,29 @@
         return { correct: false, score: 0, maxScore };
       }
 
-      const expectedParts = String(q.correct_answer)
-        .split(/[；;]/)
-        .map((p) => simplifyAnswer(p))
-        .filter(Boolean);
+      const lang = q.memory?.lang;
+      if (lang === 'en') {
+        const normalizeEn = (s) =>
+          String(s || '')
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, ' ')
+            .replace(/\.{3,}/g, '...');
+        const user = normalizeEn(userAnswer);
+        const answers = String(q.correct_answer)
+          .split(/[；;]/)
+          .map(normalizeEn)
+          .filter(Boolean);
+        const ok = answers.some((a) => user === a);
+        return { correct: ok, score: ok ? maxScore : 0, maxScore };
+      }
 
-      const userParts = userNorm.includes(';')
-        ? userNorm.split(';').map((p) => simplifyAnswer(p)).filter(Boolean)
-        : [simplifyAnswer(userNorm)];
+      if (lang === 'pos') {
+        const ok = matchPosAnswer(userAnswer, q.correct_answer);
+        return { correct: ok, score: ok ? maxScore : 0, maxScore };
+      }
 
-      const matchPart = (expected, user) => {
-        if (!expected || !user) return false;
-        if (user === expected) return true;
-        if (user.includes(expected)) return true;
-        if (expected.startsWith(user) && user.length >= 2) return true;
-        return (
-          expected.includes(user) &&
-          user.length >= 2 &&
-          user.length >= expected.length * 0.3
-        );
-      };
-
-      const ok =
-        expectedParts.length > 1
-          ? expectedParts.every((expected) =>
-              userParts.some((user) => matchPart(expected, user))
-            )
-          : matchPart(expectedParts[0], userParts[0]);
-
+      const ok = matchZhFillAnswer(q, userAnswer);
       return { correct: ok, score: ok ? maxScore : 0, maxScore };
     }
 
@@ -260,7 +345,7 @@
       .map(
         (q) => `
       <button
-        data-file="${q.file}"
+        data-file="${escapeAttr(q.file)}"
         class="quiz-item w-full text-left bg-white rounded-lg shadow-sm border border-gray-200 px-5 py-4 hover:border-primary hover:shadow transition"
       >
         <div class="flex items-center justify-between gap-3">
@@ -282,9 +367,10 @@
         state.currentIndex = 0;
         state.answers = {};
         state.submitted = false;
-        state.reviewMode = false;
         state.aiCache = {};
         state.lastResult = null;
+        state.wrongDrillMode = false;
+        state.parentQuiz = null;
         $('quiz-title').textContent = state.quiz.title;
         $('total-count').textContent = state.quiz.questions.length;
         showPage('quiz');
@@ -350,17 +436,36 @@
   function formatCorrectAnswer(q) {
     if (isJudgmentQuestion(q)) {
       const idx = Number(q.correct_answer);
-      return q.options[idx] ? `${indexToLetter(q.correct_answer)}. ${q.options[idx]}` : q.correct_answer;
+      const text = q.options[idx] ? decodeHtml(q.options[idx]) : q.correct_answer;
+      return q.options[idx] ? `${indexToLetter(q.correct_answer)}. ${text}` : q.correct_answer;
     }
     if (isMultiChoiceQuestion(q)) {
       return normalizeIndexList(q.correct_answer)
         .split(',')
         .map((i) => {
           const letter = indexToLetter(i);
-          const text = q.options[Number(i)] || '';
+          const text = q.options[Number(i)] ? decodeHtml(q.options[Number(i)]) : '';
           return `${letter}. ${text}`;
         })
         .join('；');
+    }
+    if (isChoiceQuestion(q)) {
+      const letter = extractChoiceLetter(q.correct_answer);
+      const text = decodeHtml(extractChoiceText(q.correct_answer));
+      return letter ? `${letter}. ${text}` : text;
+    }
+    if (isFillQuestion(q) && q.memory?.lang === 'pos') {
+      const zh = q.memory?.pos_zh || posZhFromEn(q.memory?.pos);
+      const enPos = q.memory?.pos || '';
+      return enPos ? `${zh}（${enPos}）` : zh;
+    }
+    if (isFillQuestion(q) && q.memory?.lang === 'zh') {
+      const short = zhShort(q.correct_answer);
+      const full = q.memory?.zh;
+      return full && full !== short ? `${short}（${full}）` : short;
+    }
+    if (isFillQuestion(q) && q.memory?.lang === 'en') {
+      return q.memory?.en || q.correct_answer;
     }
     return q.correct_answer;
   }
@@ -397,12 +502,13 @@
       body = renderSelectableOptions(q, idx, review);
     } else if (isFillQuestion(q)) {
       const val = state.answers[idx] || '';
+      const ph = fillInputPlaceholder(q);
       body = `
         <input
           type="text"
           id="fill-input"
           value="${escapeAttr(val)}"
-          placeholder="请输入答案"
+          placeholder="${escapeAttr(ph)}"
           ${disabled}
           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         />`;
@@ -441,7 +547,12 @@
       reviewBlock = `
         <div class="mt-5 pt-5 border-t border-gray-100">
           <p class="text-sm ${statusClass}">${statusText}</p>
-          <p class="text-sm text-gray-600 mt-1">正确答案：${escapeHtml(formatCorrectAnswer(q))}</p>
+          <p class="text-sm text-gray-600 mt-1">正确答案：${escapeHtml(formatCorrectAnswer(q))}</p>${
+            q.memory && !result.correct
+              ? `<p class="text-sm text-violet-700 mt-2 bg-violet-50 rounded-lg p-2">💡 ${escapeHtml(q.memory.hook || '')}</p>
+                 <p class="text-xs text-gray-500 mt-1">${escapeHtml(q.memory.en)} · ${escapeHtml(q.memory.zh)}</p>`
+              : ''
+          }
         </div>`;
     } else if (review && isEssayQuestion(q)) {
       reviewBlock = `
@@ -603,22 +714,43 @@
     }).length;
     const objectiveCount = state.quiz.questions.filter((q) => !isEssayQuestion(q)).length;
 
-    $('result-score').textContent = score.toFixed(1).replace(/\.0$/, '');
-    $('result-total').textContent = total.toFixed(1).replace(/\.0$/, '');
     const rate = total ? Math.round((score / total) * 100) : 0;
     let rateText = `全对 ${correctCount} 题`;
     if (partialCount > 0) rateText += `，部分正确 ${partialCount} 题`;
     rateText += ` / 客观题 ${objectiveCount} 题，得分率 ${rate}%（问答题不计分；多选题按高考数学规则计分）`;
-    $('result-rate').textContent = rateText;
 
-    state.lastResult = {
+    const resultSnapshot = {
       score: score.toFixed(1).replace(/\.0$/, ''),
       total: total.toFixed(1).replace(/\.0$/, ''),
       rate,
       correctCount,
       partialCount,
       objectiveCount,
+      rateText,
     };
+
+    if (state.wrongDrillMode && state.parentQuiz) {
+      const parent = state.parentQuiz;
+      state.quiz = parent.quiz;
+      state.answers = parent.answers;
+      state.wrongDrillMode = false;
+      state.parentQuiz = null;
+      state.lastResult = parent.lastResult;
+      $('result-score').textContent = parent.lastResult.score;
+      $('result-total').textContent = parent.lastResult.total;
+      $('result-rate').textContent = parent.lastResult.rateText || rateText;
+      const banner = $('wrong-drill-banner');
+      if (banner) {
+        banner.textContent = `突击练习完成：${resultSnapshot.score}/${resultSnapshot.total}（${resultSnapshot.correctCount}/${resultSnapshot.objectiveCount} 题正确）。下方为原卷错词记忆。`;
+        banner.classList.remove('hidden');
+      }
+    } else {
+      state.lastResult = resultSnapshot;
+      $('result-score').textContent = resultSnapshot.score;
+      $('result-total').textContent = resultSnapshot.total;
+      $('result-rate').textContent = rateText;
+      $('wrong-drill-banner')?.classList.add('hidden');
+    }
 
     $('ai-analysis-panel').classList.add('hidden');
     $('ai-analysis-output').innerHTML = '';
@@ -627,7 +759,313 @@
     updateAnalysisCollapseBtn();
     updateAnalysisButtonLabel();
     updateAnalysisModeBadge();
+    renderWrongMemoryPanel();
     showPage('result');
+  }
+
+  function isIwordsFillQuiz() {
+    return state.quiz?.quiz_type === 'iwords_fill';
+  }
+
+  function getWrongFillQuestions() {
+    if (!state.quiz) return [];
+    return state.quiz.questions
+      .map((q, i) => ({ q, i }))
+      .filter(({ q }) => isFillQuestion(q) && q.memory)
+      .filter(({ i }) => isAnswered(i))
+      .filter(({ q, i }) => {
+        const result = gradeQuestion(q, state.answers[i]);
+        return !result.correct;
+      });
+  }
+
+  function zhShort(zh) {
+    return String(zh || '')
+      .split(/[，；;,/]/)[0]
+      .trim();
+  }
+
+  function zhAnswerParts(zh) {
+    return String(zh || '')
+      .replace(/，/g, '；')
+      .split(/[；;]/)
+      .map((p) => simplifyAnswer(p.trim()))
+      .filter(Boolean);
+  }
+
+  function buildZhAnswer(zh) {
+    if (/[；;,，]/.test(zh)) {
+      const parts = zh
+        .replace(/，/g, '；')
+        .split(/[；;]/)
+        .map((p) => p.trim())
+        .filter(Boolean);
+      return parts.slice(0, 2).join('；') || parts[0];
+    }
+    return zhShort(zh);
+  }
+
+  function collectZhExpectedParts(q) {
+    const parts = new Set();
+    String(q.correct_answer || '')
+      .split(/[；;]/)
+      .map((p) => simplifyAnswer(p))
+      .filter(Boolean)
+      .forEach((p) => parts.add(p));
+    if (q.memory?.zh) {
+      zhAnswerParts(q.memory.zh).forEach((p) => parts.add(p));
+    }
+    return [...parts];
+  }
+
+  function matchZhFillAnswer(q, userAnswer) {
+    const userNorm = normalizeText(userAnswer);
+    if (!userNorm) return false;
+
+    const expectedParts = collectZhExpectedParts(q);
+    const userParts = userNorm.includes(';')
+      ? userNorm.split(';').map((p) => simplifyAnswer(p)).filter(Boolean)
+      : [simplifyAnswer(userNorm)];
+
+    const matchPart = (expected, user) => {
+      if (!expected || !user) return false;
+      if (user === expected) return true;
+      if (user.includes(expected)) return true;
+      if (expected.startsWith(user) && user.length >= 2) return true;
+      return expected.includes(user) && user.length >= 2;
+    };
+
+    if (expectedParts.length > 1) {
+      return expectedParts.some((expected) =>
+        userParts.some((user) => matchPart(expected, user))
+      );
+    }
+    return matchPart(expectedParts[0], userParts[0]);
+  }
+
+  function buildIwordsQuestion(meta, pattern, sort, unitTag) {
+    const en = meta.en || '';
+    const zh = meta.zh || '';
+    const pos = meta.pos || '';
+    const ph = meta.phonetic || '';
+    const tag = unitTag || '';
+    const posLine = pos ? `${pos} ` : '';
+    const phLine = ph ? `  ${ph}` : '';
+    let title = '';
+    let answer = '';
+    let lang = 'en';
+    let remix = 'zh2en';
+
+    if (pattern === 'zh2en') {
+      title = `${tag}【中→英】\n${posLine}${zh}${phLine}\n请填写英文：______`;
+      answer = en;
+      lang = 'en';
+      remix = 'en2zh';
+    } else if (pattern === 'en2zh') {
+      title = `${tag}【英→中】\n${en}${phLine}  ${pos}\n中文释义：______`;
+      answer = buildZhAnswer(zh);
+      lang = 'zh';
+      remix = 'zh2en';
+    } else if (pattern === 'spell') {
+      const letters = en.replace(/\s/g, '').length;
+      title = `${tag}【拼写】\n${posLine}${zh}\n首字母 ${en[0]?.toUpperCase() || '?'}，共 ${letters} 个字母：______`;
+      answer = en;
+      lang = 'en';
+      remix = 'en2zh';
+    } else if (pattern === 'pos') {
+      title = `${tag}【词性】\n${en}${phLine}  ${zh}\n词性（填中文，如名词、动词、形容词）：______`;
+      const posZh = meta.pos_zh || posZhFromEn(pos);
+      const bare = (pos || 'phr').replace(/\.$/, '');
+      const accepts = [];
+      [posZh, pos || 'phr', bare, `${bare}.`].forEach((item) => {
+        if (item && !accepts.includes(item)) accepts.push(item);
+      });
+      answer = accepts.join(';');
+      lang = 'pos';
+      remix = 'spell';
+    } else if (pattern === 'assoc') {
+      const head = en.slice(0, Math.max(2, Math.min(3, en.length - 1)));
+      const tail = '_'.repeat(Math.max(1, en.length - head.length));
+      title = `${tag}【联想拼写】\n${zh}（${pos || '短语'}）\n${head}${tail} 共 ${en.length} 字母：______`;
+      answer = en;
+      lang = 'en';
+      remix = 'en2zh';
+    } else if (pattern === 'phrase_cloze') {
+      if (en.includes('...') || en.includes('/') || en.includes(' / ')) {
+        title = `${tag}【短语填空】\n${zh}\n请填写完整英文短语：______`;
+        answer = en;
+      } else {
+        const words = en.split(/\s+/).filter(Boolean);
+        if (words.length >= 2) {
+          const mid = Math.floor(words.length / 2);
+          const blank = `${words.slice(0, mid).join(' ')} ______ ${words.slice(mid).join(' ')}`;
+          title = `${tag}【短语填空】\n${zh}\n${blank}`;
+          answer = words.slice(mid).length > 2 ? en : words.slice(mid).join(' ');
+        } else {
+          title = `${tag}【中→英】\n${zh}\n请填写英文：______`;
+          answer = en;
+        }
+      }
+      lang = 'en';
+      remix = 'en2zh';
+    } else {
+      title = `${tag}【中→英】\n${posLine}${zh}${phLine}\n请填写英文：______`;
+      answer = en;
+      lang = 'en';
+      remix = 'en2zh';
+    }
+
+    const memory = {
+      ...meta,
+      pattern,
+      lang,
+      remix_pattern: remix,
+      hook: meta.hook || `${en} — ${zhShort(zh)}`,
+      pos_zh: meta.pos_zh || posZhFromEn(pos),
+    };
+    const row = {
+      sort,
+      type: '填空题(客观)',
+      title,
+      options: [''],
+      correct_answer: answer,
+      your_answer: '',
+      score: '0',
+      full_score: 1,
+      memory,
+    };
+    row.fill_hint = meta.fill_hint || fillInputPlaceholder(row);
+    return row;
+  }
+
+  function remixQuestion(q, sort) {
+    const m = q.memory;
+    if (!m) return { ...q, sort };
+    const unitMatch = String(q.title).match(/【([^·]+· [^】]+)】/);
+    const tag = m.unit_tag || (unitMatch ? `【${unitMatch[1]}】` : '');
+    const pattern = m.remix_pattern || REMIX_FALLBACK[m.pattern] || 'zh2en';
+    return buildIwordsQuestion(m, pattern, sort, tag);
+  }
+
+  function renderWrongMemoryPanel() {
+    const panel = $('wrong-memory-panel');
+    const list = $('wrong-memory-list');
+    const summary = $('wrong-memory-summary');
+    const drillBtn = $('btn-wrong-drill');
+    if (!panel || !list) return;
+
+    const wrong = getWrongFillQuestions();
+    if (!wrong.length || !isIwordsFillQuiz()) {
+      panel.classList.add('hidden');
+      list.innerHTML = '';
+      return;
+    }
+
+    panel.classList.remove('hidden');
+    summary.textContent = `共 ${wrong.length} 个错词。先看记忆钩，再盖住答案自己回忆一遍，或换形式再练。`;
+
+    list.innerHTML = wrong
+      .map(({ q, i }, cardIdx) => {
+        const user = String(state.answers[i] || '').trim();
+        const correctDisplay = formatCorrectAnswer(q);
+        const m = q.memory;
+        const hook = m.hook || `${m.en} = ${zhShort(m.zh)}`;
+        const prompt = String(q.title)
+          .replace(/______/g, '___')
+          .split('\n')
+          .slice(0, 3)
+          .join(' · ');
+        return `
+        <div class="memory-card border border-gray-200 rounded-lg p-4 bg-amber-50/40" data-card="${cardIdx}">
+          <p class="text-xs text-gray-500 mb-1">${escapeHtml(prompt)}</p>
+          <p class="text-sm"><span class="text-red-600">你的：${escapeHtml(user)}</span>
+            <span class="text-gray-400 mx-1">→</span>
+            <span class="memory-answer text-green-700 font-medium">${escapeHtml(correctDisplay)}</span>
+          </p>
+          <p class="text-sm text-violet-800 mt-2 memory-hook">💡 ${escapeHtml(hook)}</p>
+          <p class="text-xs text-gray-600 mt-1">完整：${escapeHtml(m.en)} · ${escapeHtml(m.zh)}</p>
+          <button type="button" class="memory-cover-btn text-xs text-primary mt-2 hover:underline" data-card="${cardIdx}">
+            盖住答案，自己回忆
+          </button>
+        </div>`;
+      })
+      .join('');
+
+    list.querySelectorAll('.memory-cover-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.memory-card');
+        const ans = card.querySelector('.memory-answer');
+        const covered = ans.dataset.covered === '1';
+        if (covered) {
+          ans.textContent = ans.dataset.full;
+          ans.dataset.covered = '0';
+          btn.textContent = '盖住答案，自己回忆';
+        } else {
+          ans.dataset.full = ans.textContent;
+          ans.textContent = '●●●';
+          ans.dataset.covered = '1';
+          btn.textContent = '显示答案';
+        }
+      });
+    });
+
+    if (drillBtn) {
+      drillBtn.classList.toggle('hidden', wrong.length === 0);
+    }
+  }
+
+  function startWrongDrill() {
+    if (state.wrongDrillMode) return;
+    const wrong = getWrongFillQuestions();
+    if (!wrong.length) return;
+
+    state.parentQuiz = {
+      quiz: state.quiz,
+      answers: { ...state.answers },
+      lastResult: state.lastResult,
+      submitted: true,
+    };
+    state.wrongDrillMode = true;
+
+    const remixed = wrong.map(({ q }, idx) => remixQuestion(q, idx + 1));
+    state.quiz = {
+      title: `${state.parentQuiz.quiz.title} · 错词突击`,
+      quiz_type: 'iwords_fill',
+      questions: remixed,
+    };
+    state.currentIndex = 0;
+    state.answers = {};
+    state.submitted = false;
+    state.aiCache = {};
+    state.lastResult = null;
+
+    $('quiz-title').textContent = state.quiz.title;
+    $('total-count').textContent = remixed.length;
+    $('wrong-memory-panel')?.classList.add('hidden');
+    showPage('quiz');
+    renderQuestion();
+    renderAnswerCard();
+    updateProgress();
+  }
+
+  function exitWrongDrill() {
+    if (!state.wrongDrillMode || !state.parentQuiz) return;
+    state.quiz = state.parentQuiz.quiz;
+    state.answers = state.parentQuiz.answers;
+    state.lastResult = state.parentQuiz.lastResult;
+    state.submitted = true;
+    state.wrongDrillMode = false;
+    state.parentQuiz = null;
+    $('wrong-drill-banner')?.classList.add('hidden');
+    if (state.lastResult) {
+      $('result-score').textContent = state.lastResult.score;
+      $('result-total').textContent = state.lastResult.total;
+      if (state.lastResult.rateText) {
+        $('result-rate').textContent = state.lastResult.rateText;
+      }
+    }
+    showPage('result');
+    renderWrongMemoryPanel();
   }
 
   function requireAiConfigured(options) {
@@ -1111,6 +1549,10 @@
 
   function bindEvents() {
     $('btn-back').addEventListener('click', () => {
+      if (state.wrongDrillMode && state.parentQuiz) {
+        if (confirm('退出错词突击，返回成绩单？')) exitWrongDrill();
+        return;
+      }
       if (!state.submitted && Object.keys(state.answers).length > 0) {
         if (!confirm('返回将丢失当前作答，确定吗？')) return;
       }
@@ -1138,7 +1580,6 @@
     $('btn-submit').addEventListener('click', submitQuiz);
 
     $('btn-review').addEventListener('click', () => {
-      state.reviewMode = true;
       state.currentIndex = 0;
       showPage('quiz');
       renderQuestion();
@@ -1150,16 +1591,26 @@
       state.currentIndex = 0;
       state.answers = {};
       state.submitted = false;
-      state.reviewMode = false;
       state.aiCache = {};
       state.lastResult = null;
+      state.wrongDrillMode = false;
+      state.parentQuiz = null;
+      $('wrong-drill-banner')?.classList.add('hidden');
+      $('wrong-memory-panel')?.classList.add('hidden');
       showPage('quiz');
       renderQuestion();
       renderAnswerCard();
       updateProgress();
     });
 
-    $('btn-home').addEventListener('click', () => showPage('home'));
+    $('btn-home').addEventListener('click', () => {
+      state.wrongDrillMode = false;
+      state.parentQuiz = null;
+      showPage('home');
+    });
+
+    $('btn-wrong-drill')?.addEventListener('click', startWrongDrill);
+    $('btn-exit-drill')?.addEventListener('click', exitWrongDrill);
 
     $('btn-open-settings').addEventListener('click', openSettings);
     $('btn-settings-back').addEventListener('click', () => showPage('home'));

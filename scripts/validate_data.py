@@ -1,10 +1,26 @@
 """校验 manifest 与题库 JSON 一致性."""
 import json
+import re
 from pathlib import Path
 
 DATA = Path(__file__).parent.parent / "data"
 manifest = json.loads((DATA / "manifest.json").read_text(encoding="utf-8"))
 issues = []
+
+VALID_IWORMS_PATTERNS = {"zh2en", "en2zh", "spell", "pos", "assoc", "phrase_cloze"}
+REMIX_MAP = {
+    "zh2en": "en2zh",
+    "en2zh": "zh2en",
+    "spell": "en2zh",
+    "pos": "spell",
+    "assoc": "en2zh",
+    "phrase_cloze": "en2zh",
+}
+
+
+def is_phrase(en: str) -> bool:
+    return " " in en.strip() or "..." in en or "/" in en
+
 
 for q in manifest["quizzes"]:
     fp = DATA / q["file"]
@@ -15,6 +31,11 @@ for q in manifest["quizzes"]:
     actual = len(data.get("questions", []))
     if actual != q["count"]:
         issues.append(f"{q['id']}: manifest count {q['count']} != actual {actual}")
+
+    is_iwords = data.get("quiz_type") == "iwords_fill" or q["id"].endswith("_iwords")
+    if is_iwords and data.get("quiz_type") != "iwords_fill":
+        issues.append(f"{q['id']}: expected quiz_type iwords_fill")
+
     for qu in data["questions"]:
         sort = qu.get("sort", "?")
         if qu.get("type") == "单选题":
@@ -32,6 +53,28 @@ for q in manifest["quizzes"]:
                     issues.append(f"{q['id']} Q{sort} answer/option mismatch")
         if qu.get("type") == "问答题" and not qu.get("correct_answer"):
             issues.append(f"{q['id']} Q{sort} essay missing ref")
+
+        if is_iwords:
+            if qu.get("type") != "填空题(客观)":
+                issues.append(f"{q['id']} Q{sort} iwords not fill type")
+            if not qu.get("correct_answer"):
+                issues.append(f"{q['id']} Q{sort} fill missing answer")
+            if not qu.get("fill_hint"):
+                issues.append(f"{q['id']} Q{sort} missing fill_hint")
+            mem = qu.get("memory") or {}
+            pattern = mem.get("pattern")
+            if pattern not in VALID_IWORMS_PATTERNS:
+                issues.append(f"{q['id']} Q{sort} bad pattern {pattern}")
+            if mem.get("lang") == "pos" and not mem.get("pos_zh"):
+                issues.append(f"{q['id']} Q{sort} pos missing pos_zh")
+            remix = mem.get("remix_pattern")
+            if remix and remix != REMIX_MAP.get(pattern):
+                issues.append(f"{q['id']} Q{sort} remix {remix} != expected {REMIX_MAP.get(pattern)}")
+            if pattern == "phrase_cloze" and is_phrase(mem.get("en", "")):
+                if "【短语填空】" not in qu.get("title", ""):
+                    issues.append(f"{q['id']} Q{sort} phrase_cloze title mismatch")
+            if pattern == "phrase_cloze" and not is_phrase(mem.get("en", "")):
+                issues.append(f"{q['id']} Q{sort} phrase_cloze on single word")
 
 welearn = [q for q in manifest["quizzes"] if q["id"].startswith("welearn_")]
 print(f"Manifest quizzes: {len(manifest['quizzes'])}")
