@@ -35,9 +35,9 @@
     zhipu: {
       name: '智谱 AI',
       baseUrl: 'https://open.bigmodel.cn/api/paas/v4',
-      defaultModel: 'glm-4-flash',
+      defaultModel: 'glm-4.7-flash',
       keyUrl: 'https://open.bigmodel.cn/usercenter/apikeys',
-      hint: 'GLM 系列：glm-4-flash（快）/ glm-4-air / glm-4-plus',
+      hint: 'glm-4.7-flash 官网完全免费（推荐）；亦可用 glm-4-flash / glm-4-air / glm-4-plus',
     },
     dashscope: {
       name: '阿里云通义',
@@ -272,8 +272,8 @@
     if (!url) return null;
     return {
       baseUrl: url,
-      model: String(c.proxyModel || 'gemini-2.0-flash-lite').trim(),
-      provider: 'gemini',
+      model: String(c.proxyModel || 'glm-4.7-flash').trim(),
+      provider: 'zhipu',
     };
   }
 
@@ -305,7 +305,7 @@
     if (hasStoredKey() && !isKeyUnlocked()) {
       return '自带 Key · 已加密保存（待解锁）';
     }
-    if (isProxyAvailable()) return '站点默认 AI（Cloudflare → Gemini，有配额限制）';
+    if (isProxyAvailable()) return '站点默认 AI（Cloudflare → 智谱 GLM-4.7-Flash，有配额限制）';
     return '未配置';
   }
 
@@ -346,7 +346,9 @@
           : 'Gemini 免费配额限制。请等 1–2 分钟再试；若仍失败，可到 Google AI Studio 查看用量',
         deepseek: 'DeepSeek 账户请求过快或余额不足，请稍后重试',
         moonshot: 'Moonshot 请求过快或余额不足，请稍后重试',
-        zhipu: '智谱 API 请求过快或余额不足，请稍后重试',
+        zhipu: usesProxy()
+          ? '站点共享智谱配额已用尽。请在「AI 设置」填写自己的智谱 Key，或稍后再试。'
+          : '智谱 API 请求过快或余额不足，请稍后重试',
         dashscope: '通义千问配额或 RPM 限制，请稍后重试',
         siliconflow: '硅基流动请求过快或余额不足，请稍后重试',
         volcengine: '火山引擎配额或 RPM 限制，请稍后重试',
@@ -477,7 +479,7 @@
       });
     } catch {
       const hint = usesProxy()
-        ? '无法连接 AI 代理。请 Ctrl+F5 刷新；若用 Cloudflare，国内可能需要科学上网。'
+        ? '无法连接 AI 代理。请 Ctrl+F5 刷新后再试。'
         : '无法连接 AI 服务，请检查网络或 API 设置。';
       throw new Error(hint);
     }

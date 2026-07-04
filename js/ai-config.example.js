@@ -8,6 +8,6 @@ window.QuizAIConfig = {
   // 示例：'https://quiz-ai-proxy.你的子域.workers.dev/v1'
   proxyUrl: '',
 
-  // 站点默认模型（Gemini 免费层，经 Worker 转发）
-  proxyModel: 'gemini-2.0-flash-lite',
+  // 站点默认模型（智谱 GLM-4.7-Flash 免费，经 Worker 转发）
+  proxyModel: 'glm-4.7-flash',
 };

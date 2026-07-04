@@ -3,7 +3,7 @@ chcp 65001 >nul
 cd /d "%~dp0"
 echo.
 echo [1/2] 启动 ChatAnywhere 本地代理（Key 从 .env 读取）...
-echo       站点默认 AI 用 Cloudflare+Gemini 时无需本步骤。
+echo       站点默认 AI 用 Cloudflare+智谱 时无需本步骤。
 start "quiz-ai-proxy" cmd /c "python scripts\ai_proxy.py"
 timeout /t 1 /nobreak >nul
 echo [2/2] 启动测验站点...

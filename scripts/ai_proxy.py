@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """本地 ChatAnywhere 代理：Key 只读 .env，浏览器只连 localhost。
 
-站点默认 AI 已改为 Cloudflare Worker + Gemini；本脚本为可选方案。
+站点默认 AI 已改为 Cloudflare Worker + 智谱 GLM；本脚本为可选方案。
 ChatAnywhere 禁止经 Cloudflare 等反向代理访问，仅能本机直连使用。
 """
 import json

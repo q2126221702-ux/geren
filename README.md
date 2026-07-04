@@ -29,11 +29,11 @@ start.bat
 
 ### 站点默认 AI（免费）
 
-未填写自带 Key 时，使用 **Cloudflare Worker → Google Gemini**（`gemini-2.0-flash-lite`）：
+未填写自带 Key 时，使用 **Cloudflare Worker → 智谱 GLM-4.7-Flash**（官网免费，国内直连）：
 
-- API Key 存在 Worker Secrets（`GEMINI_API_KEY`），**不会**出现在前端或 Git 仓库
+- API Key 存在 Worker Secrets（`ZHIPU_API_KEY`），**不会**出现在前端或 Git 仓库
 - 前端配置见 `js/ai-config.js`（仅 Worker 地址，无 Key）
-- 共享免费配额，请勿频繁点击；用户可在设置页填写自己的 Gemini Key 绕过 Worker
+- 共享站点配额，请勿频繁点击；用户可在设置页填写自己的智谱 Key 启用完整模式
 
 ### 自带 Key（BYOK）· 完整模式
 
@@ -52,9 +52,9 @@ start.bat
 
 ### 部署 Cloudflare Worker
 
-1. 在 [Google AI Studio](https://aistudio.google.com/apikey) 申请 Gemini API Key
-2. Cloudflare Dashboard → Workers → 创建 Worker，粘贴 `workers/ai-proxy.js`
-3. Settings → Secrets → 添加 `GEMINI_API_KEY`
+1. 在 [智谱开放平台](https://open.bigmodel.cn/usercenter/apikeys) 申请 API Key（`glm-4.7-flash` 免费）
+2. Cloudflare Dashboard → Workers → 更新 `workers/ai-proxy.js` → Deploy
+3. Settings → Secrets → 添加 `ZHIPU_API_KEY`（可删除旧的 `GEMINI_API_KEY`）
 4. 将 Worker 地址写入 `js/ai-config.js` 的 `proxyUrl`（形如 `https://xxx.workers.dev/v1`）
 5. 在 Worker 代码 `ALLOWED_ORIGINS` 中加入你的 GitHub Pages 域名（仅白名单 Origin 可调用，拒绝 curl/脚本直调）
 
@@ -72,7 +72,7 @@ copy js\ai-config.local.example.js js\ai-config.local.js
 start-ai.bat
 ```
 
-日常本地调试可直接 `start.bat`，与线上一致使用 Worker；或在 `ai-config.local.js` 中设 `proxyUrl: ''` 后只用自己的 Gemini Key。
+日常本地调试可直接 `start.bat`，与线上一致使用 Worker；或在 `ai-config.local.js` 中设 `proxyUrl: ''` 后只用自己的智谱 Key。
 
 ### 勿提交到 Git
 

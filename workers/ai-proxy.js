@@ -1,13 +1,12 @@
 /**
- * Cloudflare Worker：隐藏 API Key，转发到 Gemini。
- * 非流式走原生 generateContent（更稳定）；流式走 OpenAI 兼容接口。
+ * Cloudflare Worker：隐藏 API Key，转发到智谱 GLM（OpenAI 兼容接口）。
+ * 国内直连，默认模型 glm-4.7-flash（官网免费）。
  *
- * 部署：Settings → Secrets → GEMINI_API_KEY
+ * 部署：Settings → Secrets → ZHIPU_API_KEY
  */
 
-const OPENAI_UPSTREAM =
-  'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
-const DEFAULT_MODEL = 'gemini-2.0-flash-lite';
+const UPSTREAM = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
+const DEFAULT_MODEL = 'glm-4.7-flash';
 
 const HOURLY_LIMIT = 40;
 
@@ -42,10 +41,10 @@ export default {
       return json({ error: 'Origin not allowed' }, 403, cors);
     }
 
-    const apiKey = env.GEMINI_API_KEY;
+    const apiKey = env.ZHIPU_API_KEY;
     if (!apiKey) {
       return json(
-        { error: { message: 'Worker 未配置 GEMINI_API_KEY，请在 Settings → Secrets 添加' } },
+        { error: { message: 'Worker 未配置 ZHIPU_API_KEY，请在 Settings → Secrets 添加智谱 API Key' } },
         500,
         cors
       );
@@ -68,119 +67,48 @@ export default {
       return json({ error: { message: 'Invalid JSON body' } }, 400, cors);
     }
 
-    if (!payload.model || String(payload.model).startsWith('gpt-')) {
-      payload.model = DEFAULT_MODEL;
-    }
+    normalizePayload(payload);
 
-    const wantStream = payload.stream === true;
-
-    if (!wantStream) {
-      payload.stream = false;
-      return handleNativeGenerate(payload, apiKey, cors);
-    }
-
-    return handleOpenAiStream(payload, apiKey, cors);
+    return forwardToZhipu(payload, apiKey, cors);
   },
 };
 
-/** 非流式：原生 Gemini API，一次请求、不重试，避免 429 雪崩 */
-async function handleNativeGenerate(payload, apiKey, cors) {
-  const model = payload.model || DEFAULT_MODEL;
-  const prompt = messagesToPrompt(payload.messages);
-  const maxOutputTokens = Math.max(Number(payload.max_tokens) || 0, 1024);
-
-  const url =
-    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}` +
-    `:generateContent?key=${encodeURIComponent(apiKey)}`;
-
-  let upstream;
-  try {
-    upstream = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: payload.temperature ?? 0.5,
-          maxOutputTokens,
-        },
-      }),
-    });
-  } catch {
-    return json({ error: { message: '无法连接 Gemini 上游' } }, 502, cors);
+function normalizePayload(payload) {
+  const model = String(payload.model || '').trim();
+  if (!model || !model.startsWith('glm-')) {
+    payload.model = DEFAULT_MODEL;
   }
-
-  const bodyText = await upstream.text();
-
-  if (!upstream.ok) {
-    return new Response(bodyText, {
-      status: upstream.status,
-      headers: { ...cors, 'Content-Type': 'application/json' },
-    });
+  if (payload.stream !== true) {
+    payload.stream = false;
   }
-
-  let data;
-  try {
-    data = JSON.parse(bodyText);
-  } catch {
-    return json({ error: { message: 'Gemini 返回格式异常' } }, 502, cors);
-  }
-
-  const candidate = data.candidates?.[0];
-  const content =
-    candidate?.content?.parts?.map((p) => p.text || '').join('') || '';
-  const finishReason = candidate?.finishReason || 'STOP';
-
-  const openAiBody = {
-    id: 'chatcmpl-proxy',
-    object: 'chat.completion',
-    choices: [
-      {
-        index: 0,
-        message: { role: 'assistant', content },
-        finish_reason: finishReason === 'MAX_TOKENS' ? 'length' : 'stop',
-      },
-    ],
-  };
-
-  return json(openAiBody, 200, cors);
 }
 
-/** 流式：OpenAI 兼容接口，仅单模型，429 不重试 */
-async function handleOpenAiStream(payload, apiKey, cors) {
-  payload.model = payload.model || DEFAULT_MODEL;
-  payload.stream = true;
-
-  const upstream = await fetch(OPENAI_UPSTREAM, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify(payload),
-  });
+async function forwardToZhipu(payload, apiKey, cors) {
+  let upstream;
+  try {
+    upstream = await fetch(UPSTREAM, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch {
+    return json({ error: { message: '无法连接智谱 API 上游' } }, 502, cors);
+  }
 
   const resHeaders = new Headers(cors);
   const ct = upstream.headers.get('Content-Type');
   if (ct) resHeaders.set('Content-Type', ct);
 
-  if (upstream.ok && upstream.body) {
+  if (payload.stream === true && upstream.ok && upstream.body) {
     return new Response(upstream.body, { status: upstream.status, headers: resHeaders });
   }
 
   const body = await upstream.text();
-  resHeaders.set('Content-Type', 'application/json');
+  if (!ct) resHeaders.set('Content-Type', 'application/json');
   return new Response(body, { status: upstream.status, headers: resHeaders });
-}
-
-function messagesToPrompt(messages) {
-  if (!Array.isArray(messages)) return '';
-  return messages
-    .map((m) => {
-      const role = m.role === 'assistant' ? '助手' : m.role === 'system' ? '系统' : '用户';
-      return `${role}：${m.content || ''}`;
-    })
-    .join('\n\n');
 }
 
 function buildCors(origin) {
@@ -217,7 +145,6 @@ async function rateLimit(env, ip) {
     return { ok: true };
   }
 
-  // 未绑 KV 时用 Cache API 兜底（按 IP 限流，建议生产环境仍绑定 AI_RATE KV）
   const cache = caches.default;
   const cacheKey = new Request(`https://rate-limit.internal/${key}`);
   const hit = await cache.match(cacheKey);
