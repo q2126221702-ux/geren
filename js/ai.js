@@ -485,25 +485,39 @@
     const timer = setTimeout(() => controller.abort(), timeoutMs);
 
     let res;
-    try {
-      res = await fetch(url, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(payload),
-        referrerPolicy: 'no-referrer',
-        signal: controller.signal,
-      });
-    } catch (err) {
+    let lastErr;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      if (attempt > 0) {
+        await new Promise((r) => setTimeout(r, 1500));
+      }
+      try {
+        res = await fetch(url, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload),
+          // 站点代理需带 Origin/Referer 供 Worker 校验；BYOK 仍不发送来源
+          referrerPolicy: ctx.apiKey ? 'no-referrer' : 'origin',
+          signal: controller.signal,
+        });
+        lastErr = null;
+        break;
+      } catch (err) {
+        lastErr = err;
+        if (attempt === 1 || (err && err.name === 'AbortError')) break;
+      }
+    }
+    if (lastErr) {
+      const err = lastErr;
       if (err && err.name === 'AbortError') {
         throw new Error(
           ctx.apiKey
             ? 'AI 请求超时，请检查网络或更换模型后重试。'
-            : '连接站点 AI 代理超时（国内访问 workers.dev 可能较慢）。请 Ctrl+F5 刷新，或在「AI 设置」填写自己的智谱 Key 直连。'
+            : '连接站点 AI 代理超时。请清除浏览器缓存后重试，或在「AI 设置」填写智谱 Key 直连。'
         );
       }
-      const hint = usesProxy()
-        ? '无法连接 AI 代理。请 Ctrl+F5 刷新后再试。'
-        : '无法连接 AI 服务，请检查网络或 API 设置。';
+      const hint = ctx.apiKey
+        ? '无法连接 AI 服务，请检查网络或 API 设置。'
+        : '无法连接 AI 代理。请清除手机浏览器缓存，用 Safari/Chrome 打开（勿用微信内置浏览器）；或在 AI 设置填写智谱 Key 直连。';
       throw new Error(hint);
     } finally {
       clearTimeout(timer);

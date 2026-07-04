@@ -18,11 +18,11 @@ const ALLOWED_ORIGINS = new Set([
 
 export default {
   async fetch(request, env) {
-    const origin = request.headers.get('Origin') || '';
-    const cors = buildCors(origin);
+    const allowedOrigin = resolveAllowedOrigin(request);
+    const cors = buildCors(allowedOrigin);
 
     if (request.method === 'OPTIONS') {
-      if (!ALLOWED_ORIGINS.has(origin)) {
+      if (!allowedOrigin) {
         return new Response(null, { status: 403 });
       }
       return new Response(null, { status: 204, headers: cors });
@@ -37,7 +37,7 @@ export default {
       return json({ error: 'Not Found' }, 404, cors);
     }
 
-    if (!ALLOWED_ORIGINS.has(origin)) {
+    if (!allowedOrigin) {
       return json({ error: 'Origin not allowed' }, 403, cors);
     }
 
@@ -121,14 +121,28 @@ async function forwardToZhipu(payload, apiKey, cors) {
   return new Response(body, { status: upstream.status, headers: resHeaders });
 }
 
-function buildCors(origin) {
+function resolveAllowedOrigin(request) {
+  const origin = request.headers.get('Origin') || '';
+  if (ALLOWED_ORIGINS.has(origin)) return origin;
+
+  // 部分手机浏览器 / 内置 WebView 不发 Origin，用 Referer 兜底
+  const referer = request.headers.get('Referer') || '';
+  for (const allowed of ALLOWED_ORIGINS) {
+    if (referer === allowed || referer.startsWith(`${allowed}/`)) {
+      return allowed;
+    }
+  }
+  return '';
+}
+
+function buildCors(allowedOrigin) {
   const headers = {
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Max-Age': '86400',
   };
-  if (origin && ALLOWED_ORIGINS.has(origin)) {
-    headers['Access-Control-Allow-Origin'] = origin;
+  if (allowedOrigin) {
+    headers['Access-Control-Allow-Origin'] = allowedOrigin;
   }
   return headers;
 }
