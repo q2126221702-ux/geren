@@ -1,10 +1,11 @@
-"""自动化测试 quiz-web WE Learn 题库."""
+"""自动化测试 quiz-web WE Learn 题库（按单元）."""
 import json
 import sys
 from playwright.sync_api import sync_playwright
 
 BASE = "http://localhost:8080"
-QUIZ_FILE = "WE Learn_B1U4-U8_翻译题_20260703.json"
+QUIZ_FILE = "WE Learn_B1U4_Movies_翻译题_20260703.json"
+UNIT_ID = "welearn_b1u4"
 issues = []
 
 
@@ -19,9 +20,9 @@ def load_quiz(page):
     return page.evaluate(f"fetch('data/{QUIZ_FILE}').then(r => r.json())")
 
 
-def start_welearn_quiz(page):
+def start_welearn_quiz(page, title_hint="B1U4"):
     page.goto(BASE, wait_until="networkidle")
-    page.locator(".quiz-item", has_text="WE Learn").click()
+    page.locator(".quiz-item", has_text=title_hint).click()
     page.wait_for_timeout(400)
 
 
@@ -32,17 +33,20 @@ with sync_playwright() as p:
 
     page.goto(BASE, wait_until="networkidle", timeout=15000)
     manifest = page.evaluate("fetch('data/manifest.json').then(r => r.json())")
-    welearn = next((q for q in manifest["quizzes"] if q["id"] == "welearn_b1u4_u8"), None)
-    check("manifest 含 WE Learn 题库", welearn is not None)
-    check("题目数量 30", welearn and welearn["count"] == 30, str(welearn))
+    welearn_units = [q for q in manifest["quizzes"] if str(q.get("id", "")).startswith("welearn_b1u")]
+    check("manifest 含 5 个 WE Learn 单元", len(welearn_units) == 5, str(len(welearn_units)))
+
+    b1u4 = next((q for q in manifest["quizzes"] if q["id"] == UNIT_ID), None)
+    check("B1U4 单元存在", b1u4 is not None)
+    check("B1U4 题目数量 6", b1u4 and b1u4["count"] == 6, str(b1u4))
 
     quiz = load_quiz(page)
     check("题库 JSON 可加载", bool(quiz.get("questions")))
-    check("共 30 题", len(quiz["questions"]) == 30)
+    check("共 6 题", len(quiz["questions"]) == 6)
     choice = [q for q in quiz["questions"] if q["type"] == "单选题"]
     essay = [q for q in quiz["questions"] if q["type"] == "问答题"]
-    check("单选题 25 道", len(choice) == 25)
-    check("问答题 5 道", len(essay) == 5)
+    check("单选题 5 道", len(choice) == 5)
+    check("问答题 1 道", len(essay) == 1)
 
     for q in quiz["questions"]:
         if q["type"] == "单选题":
@@ -54,13 +58,13 @@ with sync_playwright() as p:
             issues.append(f"第{q['sort']}题缺少参考答案")
     check("题目字段校验", not any("题" in i for i in issues))
 
-    check("首页显示题库按钮", any("WE Learn" in el.inner_text() for el in page.locator(".quiz-item").all()))
+    welearn_buttons = [el for el in page.locator(".quiz-item").all() if "WE Learn" in el.inner_text()]
+    check("首页显示 5 个 WE Learn 单元", len(welearn_buttons) == 5, str(len(welearn_buttons)))
 
-    # 完整作答流程
-    start_welearn_quiz(page)
+    start_welearn_quiz(page, "B1U4 Movies")
     check("进入答题页", page.locator("#page-quiz").is_visible())
     check("题目标题含单元信息", "B1U4" in page.locator("#question-container h2").inner_text())
-    check("答题卡总数 30", page.locator("#total-count").inner_text() == "30")
+    check("答题卡总数 6", page.locator("#total-count").inner_text() == "6")
 
     letter_idx = {"A": 0, "B": 1, "C": 2, "D": 3}
     for idx, q in enumerate(quiz["questions"]):
@@ -74,7 +78,7 @@ with sync_playwright() as p:
         page.wait_for_timeout(150)
 
     answered = page.locator("#answered-count").inner_text()
-    check("30 题均已作答", answered == "30", answered)
+    check("6 题均已作答", answered == "6", answered)
 
     page.locator("#btn-submit").click()
     page.wait_for_timeout(500)
@@ -82,13 +86,12 @@ with sync_playwright() as p:
 
     score = page.locator("#result-score").inner_text()
     total = page.locator("#result-total").inner_text()
-    check("客观题满分 100", score == "100" and total == "100", f"{score}/{total}")
+    check("客观题满分 20", score == "20" and total == "20", f"{score}/{total}")
 
     page.locator("#btn-review").click()
     page.wait_for_timeout(300)
     check("解析模式显示正确答案", "正确答案" in page.locator("#question-container").inner_text())
 
-    # 问答题解析
     for idx, q in enumerate(quiz["questions"]):
         if q["type"] != "问答题":
             continue

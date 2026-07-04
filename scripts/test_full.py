@@ -169,30 +169,30 @@ def test_ui(page):
     for entry in manifest["quizzes"]:
         quiz = load_json(DATA / entry["file"])
         page.goto(BASE, wait_until="networkidle")
-        page.locator(".quiz-item", has_text=entry["title"][:8]).click()
+        page.locator(f'.quiz-item[data-file="{entry["file"]}"]').click()
         page.wait_for_timeout(400)
         check(f"[{entry['id']}] 进入答题页", page.locator("#page-quiz").is_visible())
         total = int(page.locator("#total-count").inner_text())
         check(f"[{entry['id']}] 答题卡题数", total == entry["count"], str(total))
 
-    # WE Learn 全对交卷
-    we = next(e for e in manifest["quizzes"] if e["id"] == "welearn_b1u4_u8")
+    # WE Learn B1U4 全对交卷
+    we = next(e for e in manifest["quizzes"] if e["id"] == "welearn_b1u4")
     quiz = load_json(DATA / we["file"])
     page.goto(BASE, wait_until="networkidle")
-    page.locator(".quiz-item", has_text="WE Learn").click()
+    page.locator(".quiz-item", has_text="B1U4 Movies").click()
     page.wait_for_timeout(400)
     answer_quiz_page(page, quiz, "correct")
     page.locator("#btn-submit").click()
     page.wait_for_timeout(500)
-    check("WE Learn 交卷成功", page.locator("#page-result").is_visible())
-    check("WE Learn 客观题满分100", page.locator("#result-score").inner_text() == "100")
-    check("WE Learn 总分100", page.locator("#result-total").inner_text() == "100")
+    check("WE Learn B1U4 交卷成功", page.locator("#page-result").is_visible())
+    check("WE Learn B1U4 客观题满分20", page.locator("#result-score").inner_text() == "20")
+    check("WE Learn B1U4 总分20", page.locator("#result-total").inner_text() == "20")
 
     page.locator("#btn-review").click()
     page.wait_for_timeout(300)
     page.locator('#answer-card button[data-index="5"]').click()
     page.wait_for_timeout(200)
-    check("WE Learn 问答题解析", "参考答案" in page.locator("#question-container").inner_text())
+    check("WE Learn B1U4 问答题解析", "参考答案" in page.locator("#question-container").inner_text())
 
     # OPC 多选部分得分 UI
     opc = load_json(DATA / "OPC规范_20260626_185227.json")

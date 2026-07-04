@@ -469,9 +469,7 @@
         <span class="text-xs px-2 py-0.5 rounded bg-primary-light text-primary font-medium">${typeLabel(q.type)}</span>
         <span class="text-sm text-gray-400">${idx + 1} / ${state.quiz.questions.length}</span>
       </div>
-      <h2 class="text-base leading-relaxed font-medium mb-5">${
-        isFillQuestion(q) ? formatFillTitle(q.title) : escapeHtml(decodeHtml(q.title))
-      }</h2>
+      <h2 class="${questionTitleClass(q)}">${formatQuestionTitle(q)}</h2>
       ${body}
       ${reviewBlock}
       ${aiBlock}`;
@@ -1084,6 +1082,19 @@
       /_{2,}/g,
       '<span class="fill-blank"></span>'
     );
+  }
+
+  function formatQuestionTitle(q) {
+    if (isFillQuestion(q)) return formatFillTitle(q.title);
+    return escapeHtml(decodeHtml(q.title));
+  }
+
+  function questionTitleClass(q) {
+    const base = 'text-base leading-relaxed font-medium mb-5';
+    if (isEssayQuestion(q) || String(q.title || '').includes('\n')) {
+      return `${base} whitespace-pre-line`;
+    }
+    return base;
   }
 
   function escapeHtml(str) {

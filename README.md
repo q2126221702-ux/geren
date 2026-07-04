@@ -17,7 +17,18 @@ start.bat
 当前包含：
 
 - 工业通信类测验（Profinet / OPC / MODBUS / 串口 / 综合考核）
-- WE Learn 实用综合教程 B1U4–U8 翻译练习
+- WE Learn 实用综合教程翻译练习（按单元拆分，每单元 6 题）：
+  - B1U4 Movies
+  - B1U5 Our Earth
+  - B1U6 Part-time jobs
+  - B1U7 Health
+  - B1U8 Festivals
+
+从 `welearn-output/` 重新生成 WE Learn 题库：
+
+```bat
+python scripts/import_welearn.py
+```
 
 ## AI 功能
 
@@ -29,7 +40,7 @@ start.bat
 
 ### 站点默认 AI（免费）
 
-未填写自带 Key 时，使用 **Cloudflare Worker → 智谱 GLM-4.7-Flash**（官网免费，国内直连）：
+未填写自带 Key 时，使用 **Cloudflare Worker → 智谱 GLM-4-Flash**（官网免费，国内直连）：
 
 - API Key 存在 Worker Secrets（`ZHIPU_API_KEY`），**不会**出现在前端或 Git 仓库
 - 前端配置见 `js/ai-config.js`（仅 Worker 地址，无 Key）
@@ -52,13 +63,13 @@ start.bat
 
 ### 部署 Cloudflare Worker
 
-1. 在 [智谱开放平台](https://open.bigmodel.cn/usercenter/apikeys) 申请 API Key（`glm-4.7-flash` 免费）
+1. 在 [智谱开放平台](https://open.bigmodel.cn/usercenter/apikeys) 申请 API Key（`glm-4-flash` 免费）
 2. Cloudflare Dashboard → Workers → 更新 `workers/ai-proxy.js` → Deploy
 3. Settings → Secrets → 添加 `ZHIPU_API_KEY`（可删除旧的 `GEMINI_API_KEY`）
-4. 将 Worker 地址写入 `js/ai-config.js` 的 `proxyUrl`（形如 `https://xxx.workers.dev/v1`）
+4. 将 Worker 地址写入 `js/ai-config.js` 的 `proxyUrl`（自定义域名或 `https://xxx.workers.dev/v1`）
 5. 在 Worker 代码 `ALLOWED_ORIGINS` 中加入你的 GitHub Pages 域名（仅白名单 Origin 可调用，拒绝 curl/脚本直调）
 
-6. **建议**绑定 KV namespace `AI_RATE` 启用 IP  hourly 限流（见 `workers/wrangler.toml`）；未绑 KV 时会用 Cache API 兜底限流
+6. **建议**绑定 KV namespace `AI_RATE` 启用 IP hourly 限流（见 `workers/wrangler.toml`）；未绑 KV 时会用 Cache API 兜底限流
 
 ### 本地可选：ChatAnywhere 代理
 
@@ -87,6 +98,8 @@ start-ai.bat
 
 ```bat
 python scripts/test_full.py
+python scripts/test_welearn_quiz.py
+python scripts/validate_data.py
 ```
 
 ## GitHub Pages
