@@ -480,7 +480,7 @@
     const headers = { 'Content-Type': 'application/json' };
     if (ctx.apiKey) headers.Authorization = `Bearer ${ctx.apiKey}`;
 
-    const timeoutMs = options?.timeoutMs ?? (usesProxy() ? 45000 : 120000);
+    const timeoutMs = options?.timeoutMs ?? (ctx.apiKey ? 120000 : 120000);
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -496,9 +496,9 @@
     } catch (err) {
       if (err && err.name === 'AbortError') {
         throw new Error(
-          usesProxy()
-            ? 'AI 请求超时。请稍后再试，或在设置中填写自己的智谱 Key。'
-            : 'AI 请求超时，请检查网络或更换模型后重试。'
+          ctx.apiKey
+            ? 'AI 请求超时，请检查网络或更换模型后重试。'
+            : '连接站点 AI 代理超时（国内访问 workers.dev 可能较慢）。请 Ctrl+F5 刷新，或在「AI 设置」填写自己的智谱 Key 直连。'
         );
       }
       const hint = usesProxy()
@@ -571,7 +571,7 @@
       return {
         baseUrl: proxy.baseUrl,
         apiKey: '',
-        model: settings.model || proxy.model,
+        model: proxy.model,
         provider: proxy.provider,
       };
     }
@@ -755,7 +755,7 @@
     const text = await chatCompletion(
       [{ role: 'user', content: '请只回复：连接成功' }],
       null,
-      { maxTokens: 64, temperature: 0, timeoutMs: usesProxy() ? 45000 : 90000 }
+      { maxTokens: 64, temperature: 0, timeoutMs: 120000 }
     );
     return text.trim();
   }

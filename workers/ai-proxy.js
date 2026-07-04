@@ -99,8 +99,12 @@ async function forwardToZhipu(payload, apiKey, cors) {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(35000),
     });
-  } catch {
+  } catch (err) {
+    if (err && err.name === 'TimeoutError') {
+      return json({ error: { message: '智谱 API 响应超时，请稍后再试' } }, 504, cors);
+    }
     return json({ error: { message: '无法连接智谱 API 上游' } }, 502, cors);
   }
 
