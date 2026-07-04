@@ -973,7 +973,7 @@
     const hadKey = $('ai-api-key').value.trim() !== '' || QuizAI.hasStoredKey();
     const hadModel = $('ai-model').value.trim() !== '';
     if (!hadKey && !hadModel && !QuizAI.isConfigured()) {
-      setSettingsStatus('没有可清除的内容', '');
+      setSettingsStatus('没有可清除的内容', 'err');
       return;
     }
     $('ai-api-key').value = '';
