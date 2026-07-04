@@ -81,6 +81,10 @@ function normalizePayload(payload) {
   if (payload.stream !== true) {
     payload.stream = false;
   }
+  // GLM-4.7 默认强制思考，站点代理需关闭否则短请求会极慢或看似卡死
+  payload.thinking = { type: 'disabled' };
+  const want = Number(payload.max_tokens) || 0;
+  payload.max_tokens = Math.max(want, 256);
 }
 
 async function forwardToZhipu(payload, apiKey, cors) {

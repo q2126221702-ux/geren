@@ -445,6 +445,13 @@
     payload.max_completion_tokens = budget;
   }
 
+  /** GLM-4.7 默认强制思考，测验场景关闭以加快响应 */
+  function applyZhipuRequestOptions(payload, options) {
+    payload.thinking = { type: 'disabled' };
+    const want = options?.maxTokens || 512;
+    payload.max_tokens = Math.max(want, 64);
+  }
+
   /** 从 SSE delta 只取最终答案字段，忽略 reasoning_content */
   function extractStreamContentDelta(delta) {
     if (!delta || typeof delta !== 'object') return '';
@@ -465,9 +472,14 @@
       payload.max_completion_tokens = options.maxTokens;
     }
     if (ctx.provider === 'deepseek') applyDeepSeekRequestOptions(payload, options);
+    if (ctx.provider === 'zhipu') applyZhipuRequestOptions(payload, options);
 
     const headers = { 'Content-Type': 'application/json' };
     if (ctx.apiKey) headers.Authorization = `Bearer ${ctx.apiKey}`;
+
+    const timeoutMs = options?.timeoutMs ?? (usesProxy() ? 45000 : 120000);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
 
     let res;
     try {
@@ -476,12 +488,22 @@
         headers,
         body: JSON.stringify(payload),
         referrerPolicy: 'no-referrer',
+        signal: controller.signal,
       });
-    } catch {
+    } catch (err) {
+      if (err && err.name === 'AbortError') {
+        throw new Error(
+          usesProxy()
+            ? 'AI 请求超时。请稍后再试，或在设置中填写自己的智谱 Key。'
+            : 'AI 请求超时，请检查网络或更换模型后重试。'
+        );
+      }
       const hint = usesProxy()
         ? '无法连接 AI 代理。请 Ctrl+F5 刷新后再试。'
         : '无法连接 AI 服务，请检查网络或 API 设置。';
       throw new Error(hint);
+    } finally {
+      clearTimeout(timer);
     }
 
     if (!res.ok) {
@@ -727,11 +749,10 @@
   }
 
   async function testConnection() {
-    const settings = loadSettings();
     const text = await chatCompletion(
       [{ role: 'user', content: '请只回复：连接成功' }],
       null,
-      { maxTokens: 16, temperature: 0 }
+      { maxTokens: 64, temperature: 0, timeoutMs: usesProxy() ? 45000 : 90000 }
     );
     return text.trim();
   }

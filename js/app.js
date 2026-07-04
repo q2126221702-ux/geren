@@ -1074,6 +1074,7 @@
         startTestCooldown(isRateLimit ? 60 : 10);
       }
     } finally {
+      $('btn-test-ai').disabled = false;
       updateTestButtonLabel();
     }
   }
