@@ -811,7 +811,7 @@
       : '<span class="text-gray-500 ai-loading">正在分析学情，请稍候</span>';
     $('btn-ai-analysis').disabled = true;
     if (!ownKey) {
-      startAnalysisCooldown(90);
+      startAnalysisCooldown(120);
     }
 
     const stats = {
@@ -1065,13 +1065,13 @@
       updateAiSourceHint();
       setSettingsStatus(`连接成功：${reply.slice(0, 80)}`, 'ok');
       if (!QuizAI.canUseOwnKey()) {
-        startTestCooldown(15);
+        startTestCooldown(30);
       }
     } catch (err) {
       setSettingsStatus(err.message, 'err');
       if (!QuizAI.canUseOwnKey()) {
-        const isRateLimit = /过于频繁|429|配额|quota|rate/i.test(err.message);
-        startTestCooldown(isRateLimit ? 60 : 10);
+        const isRateLimit = /过于频繁|429|配额|quota|rate|速率限制/i.test(err.message);
+        startTestCooldown(isRateLimit ? 120 : 15);
       }
     } finally {
       $('btn-test-ai').disabled = false;

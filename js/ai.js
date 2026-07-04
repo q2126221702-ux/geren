@@ -272,7 +272,7 @@
     if (!url) return null;
     return {
       baseUrl: url,
-      model: String(c.proxyModel || 'glm-4.7-flash').trim(),
+      model: String(c.proxyModel || 'glm-4-flash').trim(),
       provider: 'zhipu',
     };
   }
@@ -305,7 +305,7 @@
     if (hasStoredKey() && !isKeyUnlocked()) {
       return '自带 Key · 已加密保存（待解锁）';
     }
-    if (isProxyAvailable()) return '站点默认 AI（Cloudflare → 智谱 GLM-4.7-Flash，有配额限制）';
+    if (isProxyAvailable()) return '站点默认 AI（Cloudflare → 智谱 GLM-4-Flash，有配额限制）';
     return '未配置';
   }
 
@@ -347,7 +347,7 @@
         deepseek: 'DeepSeek 账户请求过快或余额不足，请稍后重试',
         moonshot: 'Moonshot 请求过快或余额不足，请稍后重试',
         zhipu: usesProxy()
-          ? '站点共享智谱配额已用尽。请在「AI 设置」填写自己的智谱 Key，或稍后再试。'
+          ? '站点共享智谱 Key 触发速率限制（免费 Key 有 RPM 上限）。请等 1–2 分钟再试，或在「AI 设置」填写自己的智谱 Key 启用完整模式。'
           : '智谱 API 请求过快或余额不足，请稍后重试',
         dashscope: '通义千问配额或 RPM 限制，请稍后重试',
         siliconflow: '硅基流动请求过快或余额不足，请稍后重试',
@@ -447,7 +447,10 @@
 
   /** GLM-4.7 默认强制思考，测验场景关闭以加快响应 */
   function applyZhipuRequestOptions(payload, options) {
-    payload.thinking = { type: 'disabled' };
+    const model = String(payload.model || '');
+    if (model.startsWith('glm-4.7')) {
+      payload.thinking = { type: 'disabled' };
+    }
     const want = options?.maxTokens || 512;
     payload.max_tokens = Math.max(want, 64);
   }

@@ -1,14 +1,14 @@
 /**
  * Cloudflare Worker：隐藏 API Key，转发到智谱 GLM（OpenAI 兼容接口）。
- * 国内直连，默认模型 glm-4.7-flash（官网免费）。
+ * 国内直连，默认模型 glm-4-flash（官网永久免费，RPM 更宽松）。
  *
  * 部署：Settings → Secrets → ZHIPU_API_KEY
  */
 
 const UPSTREAM = 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
-const DEFAULT_MODEL = 'glm-4.7-flash';
+const DEFAULT_MODEL = 'glm-4-flash';
 
-const HOURLY_LIMIT = 40;
+const HOURLY_LIMIT = 25;
 
 const ALLOWED_ORIGINS = new Set([
   'https://q2126221702-ux.github.io',
@@ -82,7 +82,9 @@ function normalizePayload(payload) {
     payload.stream = false;
   }
   // GLM-4.7 默认强制思考，站点代理需关闭否则短请求会极慢或看似卡死
-  payload.thinking = { type: 'disabled' };
+  if (String(payload.model).startsWith('glm-4.7')) {
+    payload.thinking = { type: 'disabled' };
+  }
   const want = Number(payload.max_tokens) || 0;
   payload.max_tokens = Math.max(want, 256);
 }
