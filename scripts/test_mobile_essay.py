@@ -20,6 +20,7 @@ def measure(page):
       const input = document.getElementById('essay-input');
       const bar = document.getElementById('quiz-mobile-bar');
       const submit = document.getElementById('btn-submit-mobile');
+      const pageEl = document.getElementById('page-quiz');
       const vh = window.innerHeight;
       const box = (el) => {
         if (!el || el.classList.contains('hidden')) return null;
@@ -34,7 +35,8 @@ def measure(page):
         input: box(input),
         bar: box(bar),
         submit: box(submit),
-        essayMobile: document.getElementById('page-quiz')?.classList.contains('quiz-essay-mobile'),
+        keyboardOpenClass: pageEl?.classList.contains('quiz-keyboard-open'),
+        essayMobile: pageEl?.classList.contains('quiz-essay-mobile'),
       };
     }"""
     )
@@ -74,12 +76,16 @@ with sync_playwright() as p:
 
     page.on("dialog", lambda d: d.dismiss())
     page.locator("#essay-input").click()
-    page.wait_for_timeout(500)
+    page.wait_for_timeout(400)
     m1 = measure(page)
     print("after focus:", json.dumps(m1, ensure_ascii=False, indent=2))
     if m1.get("input") and m1["input"]["top"] > m1["vh"] * 0.72:
         add(f"textarea too low after focus (top={m1['input']['top']:.0f})")
+    if not m1.get("keyboardOpenClass"):
+        add("submit bar should hide while input focused")
 
+    page.locator("#essay-input").blur()
+    page.wait_for_timeout(250)
     page.locator("#btn-submit-mobile").click()
     page.wait_for_timeout(200)
 

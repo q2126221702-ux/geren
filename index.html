@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
-  <meta name="app-version" content="202607052100">
+  <meta name="app-version" content="202607052200">
   <title>在线测验</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -81,6 +81,16 @@
       }
       #page-quiz.quiz-essay-mobile aside h2 {
         margin-bottom: 0.5rem;
+      }
+      #page-quiz.quiz-keyboard-open {
+        padding-bottom: 0.75rem !important;
+      }
+      #page-quiz.quiz-keyboard-open #quiz-mobile-bar {
+        display: none !important;
+      }
+      #page-quiz.quiz-keyboard-open aside,
+      #page-quiz.quiz-keyboard-open main > .flex.items-center.justify-between.mt-4 {
+        display: none;
       }
     }
     @keyframes ai-dots {
@@ -288,7 +298,7 @@
 
   <script src="js/ai-config.js?v=202607042400"></script>
   <script src="js/ai-config.local.js?v=202607042400" onerror=""></script>
-  <script src="js/ai.js?v=202607052100"></script>
-  <script src="js/app.js?v=202607052100"></script>
+  <script src="js/ai.js?v=202607052200"></script>
+  <script src="js/app.js?v=202607052200"></script>
 </body>
 </html>

@@ -214,12 +214,67 @@
     const page = pages.quiz;
     const bar = $('quiz-mobile-bar');
     if (!page || !bar) return;
-    const showBar = !page.classList.contains('hidden') && !state.submitted && isMobileQuiz();
+    const keyboardOpen = page.classList.contains('quiz-keyboard-open');
+    const showBar =
+      !page.classList.contains('hidden') && !state.submitted && isMobileQuiz() && !keyboardOpen;
     bar.classList.toggle('hidden', !showBar);
     page.classList.toggle('quiz-mobile-actions', showBar);
     const q = state.quiz?.questions[state.currentIndex];
     const essayMode = showBar && q && isEssayQuestion(q);
-    page.classList.toggle('quiz-essay-mobile', essayMode);
+    page.classList.toggle('quiz-essay-mobile', essayMode && !keyboardOpen);
+  }
+
+  function scrollEssayInputIntoView(textarea) {
+    if (!textarea || !isMobileQuiz()) return;
+    const vv = window.visualViewport;
+    const header = pages.quiz?.querySelector('header');
+    const headerBottom = header ? header.getBoundingClientRect().bottom : 0;
+    const margin = 12;
+    const viewBottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
+    const rect = textarea.getBoundingClientRect();
+    if (rect.bottom > viewBottom - margin) {
+      window.scrollBy({ top: rect.bottom - (viewBottom - margin), behavior: 'auto' });
+    }
+    const rect2 = textarea.getBoundingClientRect();
+    const viewTop = vv ? vv.offsetTop : 0;
+    if (rect2.top < headerBottom + margin) {
+      window.scrollBy({ top: rect2.top - headerBottom - margin - viewTop, behavior: 'auto' });
+    }
+  }
+
+  function bindEssayMobileKeyboard(textarea) {
+    if (!textarea || textarea.dataset.mobileKeyboard === '1') return;
+    textarea.dataset.mobileKeyboard = '1';
+
+    const sync = () => {
+      if (!isMobileQuiz() || document.activeElement !== textarea) return;
+      pages.quiz?.classList.add('quiz-keyboard-open');
+      updateQuizMobileChrome();
+      scrollEssayInputIntoView(textarea);
+    };
+
+    const release = () => {
+      window.setTimeout(() => {
+        if (document.activeElement === textarea) return;
+        pages.quiz?.classList.remove('quiz-keyboard-open');
+        updateQuizMobileChrome();
+      }, 120);
+    };
+
+    textarea.addEventListener('focus', () => {
+      pages.quiz?.classList.add('quiz-keyboard-open');
+      updateQuizMobileChrome();
+      [60, 160, 320, 520].forEach((ms) => window.setTimeout(sync, ms));
+    });
+    textarea.addEventListener('blur', release);
+
+    if (!window.__essayViewportBound) {
+      window.__essayViewportBound = true;
+      const onViewportChange = () => sync();
+      window.visualViewport?.addEventListener('resize', onViewportChange);
+      window.visualViewport?.addEventListener('scroll', onViewportChange);
+      window.addEventListener('resize', onViewportChange);
+    }
   }
 
   function scrollToQuestionArea() {
@@ -244,17 +299,6 @@
     const offset = header ? header.offsetHeight + 12 : 0;
     const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
     window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
-  }
-
-  function bindEssayInputMobileFocus(textarea) {
-    if (!textarea || textarea.dataset.mobileFocus === '1') return;
-    textarea.dataset.mobileFocus = '1';
-    textarea.addEventListener('focus', () => {
-      if (!isMobileQuiz()) return;
-      window.setTimeout(() => {
-        textarea.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
-      }, 320);
-    });
   }
 
   function normalizeText(text) {
@@ -856,7 +900,7 @@
 
       const essayInput = container.querySelector('#essay-input');
       if (essayInput) {
-        bindEssayInputMobileFocus(essayInput);
+        bindEssayMobileKeyboard(essayInput);
         essayInput.addEventListener('input', (e) => {
           state.answers[idx] = e.target.value;
           renderAnswerCard();
