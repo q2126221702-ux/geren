@@ -6,7 +6,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-BASE = "http://localhost:8080"
+BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765"
 ROOT = Path(__file__).parent.parent
 DATA = ROOT / "data"
 PATTERNS = {"zh2en", "en2zh", "spell", "pos", "assoc", "phrase_cloze"}

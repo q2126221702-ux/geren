@@ -18,7 +18,7 @@ def measure(page):
       const fold = document.querySelector('.essay-prompt-fold');
       const prompt = document.querySelector('.essay-prompt');
       const input = document.getElementById('essay-input');
-      const bar = document.getElementById('quiz-mobile-bar');
+      const bar = document.getElementById('quiz-answer-dock');
       const submit = document.getElementById('btn-submit-mobile');
       const pageEl = document.getElementById('page-quiz');
       const vh = window.innerHeight;
@@ -56,9 +56,11 @@ with sync_playwright() as p:
     )
     page.goto(BASE, wait_until="networkidle")
     page.locator(f'.quiz-item[data-file="{FILE}"]').click()
-    page.wait_for_selector("#answer-card button")
-    page.locator('#answer-card button[data-index="5"]').click()
-    page.wait_for_timeout(500)
+    page.wait_for_selector("#question-container")
+    for _ in range(5):
+        page.locator("label.option-item").first.click()
+        page.wait_for_timeout(120)
+    page.wait_for_selector("#essay-input")
 
     m0 = measure(page)
     print("on enter Q6:", json.dumps(m0, ensure_ascii=False, indent=2))

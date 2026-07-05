@@ -1,11 +1,11 @@
-"""自动化测试 quiz-web WE Learn 题库（按单元）."""
 import json
 import sys
 from playwright.sync_api import sync_playwright
 
-BASE = "http://localhost:8080"
+BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765"
 QUIZ_FILE = "WE Learn_B1U4_Movies_翻译题_20260703.json"
 UNIT_ID = "welearn_b1u4"
+TRANSLATION_UNIT_IDS = {f"welearn_b1u{i}" for i in range(4, 9)}
 issues = []
 
 
@@ -33,7 +33,7 @@ with sync_playwright() as p:
 
     page.goto(BASE, wait_until="networkidle", timeout=15000)
     manifest = page.evaluate("fetch('data/manifest.json').then(r => r.json())")
-    welearn_units = [q for q in manifest["quizzes"] if str(q.get("id", "")).startswith("welearn_b1u") and not str(q.get("id", "")).endswith("_iwords")]
+    welearn_units = [q for q in manifest["quizzes"] if q.get("id") in TRANSLATION_UNIT_IDS]
     check("manifest 含 5 个 WE Learn 翻译单元", len(welearn_units) == 5, str(len(welearn_units)))
 
     b1u4 = next((q for q in manifest["quizzes"] if q["id"] == UNIT_ID), None)
@@ -58,11 +58,7 @@ with sync_playwright() as p:
             issues.append(f"第{q['sort']}题缺少参考答案")
     check("题目字段校验", not any("题" in i for i in issues))
 
-    welearn_buttons = [
-        el
-        for el in page.locator(".quiz-item").all()
-        if "WE Learn" in el.inner_text() and "iWords" not in el.inner_text()
-    ]
+    welearn_buttons = page.locator('.quiz-item[data-file*="翻译题"]').all()
     check("首页显示 5 个 WE Learn 翻译单元", len(welearn_buttons) == 5, str(len(welearn_buttons)))
 
     start_welearn_quiz(page, QUIZ_FILE)

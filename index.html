@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
-  <meta name="app-version" content="202607060130">
+  <meta name="app-version" content="202607060100">
   <title>在线测验</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -31,6 +31,48 @@
     .answer-card-btn.correct { background-color: #22c55e; border-color: #22c55e; color: #fff; }
     .answer-card-btn.partial { background-color: #f59e0b; border-color: #f59e0b; color: #fff; }
     .answer-card-btn.wrong { background-color: #ef4444; border-color: #ef4444; color: #fff; }
+    .review-filter-chip {
+      border-color: #e5e7eb;
+      color: #6b7280;
+      background: #fff;
+    }
+    .review-filter-chip.active {
+      border-color: #0080ff;
+      color: #0080ff;
+      background: #e6f3ff;
+    }
+    #review-sheet.open #review-sheet-backdrop {
+      opacity: 1;
+    }
+    #review-sheet.open .review-sheet-panel {
+      transform: translateY(0);
+    }
+    #review-sheet-backdrop {
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .review-sheet-panel {
+      transform: translateY(100%);
+      transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .review-sheet-btn {
+      min-height: 2.75rem;
+    }
+    .option-item .option-body {
+      min-height: 2.75rem;
+    }
+    @media (max-width: 1023px) {
+      .option-item .option-body {
+        min-height: 3.25rem;
+        align-items: center;
+        padding-top: 0.875rem;
+        padding-bottom: 0.875rem;
+      }
+      .option-item .option-body > span:first-child {
+        width: 2rem;
+        height: 2rem;
+      }
+    }
     .fill-blank {
       display: inline-block;
       min-width: 3.5em;
@@ -64,32 +106,34 @@
     }
     @media (max-width: 1023px) {
       #page-quiz.quiz-mobile-actions {
-        padding-bottom: 4.75rem;
+        padding-bottom: 6.75rem;
       }
-      #quiz-mobile-bar {
-        padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+      #page-quiz.quiz-review-actions {
+        padding-bottom: 5.25rem;
+      }
+      #page-quiz.quiz-mobile-layout aside,
+      #page-quiz.quiz-review-mobile aside {
+        display: none;
+      }
+      #page-quiz.quiz-review-mobile .quiz-nav-row,
+      #page-quiz.quiz-mobile-layout main > .quiz-nav-row {
+        display: none;
+      }
+      #page-quiz.quiz-review-mobile .quiz-layout > main,
+      #page-quiz.quiz-mobile-layout .quiz-layout > main {
+        order: 1;
       }
       #page-quiz.quiz-essay-mobile #question-container {
         padding: 1rem;
       }
-      #page-quiz.quiz-essay-mobile aside .answer-card-scroll {
-        max-height: 4.5rem;
-      }
-      #page-quiz.quiz-essay-mobile aside > div {
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-      }
-      #page-quiz.quiz-essay-mobile aside h2 {
-        margin-bottom: 0.5rem;
-      }
       #page-quiz.quiz-keyboard-open {
         padding-bottom: 0.75rem !important;
       }
-      #page-quiz.quiz-keyboard-open #quiz-mobile-bar {
+      #page-quiz.quiz-keyboard-open #quiz-answer-dock {
         display: none !important;
       }
       #page-quiz.quiz-keyboard-open aside,
-      #page-quiz.quiz-keyboard-open main > .flex.items-center.justify-between.mt-4 {
+      #page-quiz.quiz-keyboard-open main > .quiz-nav-row {
         display: none;
       }
     }
@@ -188,12 +232,12 @@
       </div>
     </header>
 
-    <div class="max-w-6xl mx-auto w-full px-4 py-4 lg:py-6 flex flex-col lg:flex-row lg:flex-1 lg:min-h-0 gap-4 lg:gap-6">
+    <div class="quiz-layout max-w-6xl mx-auto w-full px-4 py-4 lg:py-6 flex flex-col lg:flex-row lg:flex-1 lg:min-h-0 gap-4 lg:gap-6">
       <!-- 题目区 -->
       <main class="min-w-0 order-1 lg:flex-1">
         <div id="question-container" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"></div>
 
-        <div class="flex items-center justify-between mt-4 gap-3">
+        <div class="quiz-nav-row flex items-center justify-between mt-4 gap-3">
           <button id="btn-prev" class="px-5 py-2 rounded border border-gray-300 bg-white hover:bg-gray-50 text-sm disabled:opacity-40">
             上一题
           </button>
@@ -206,7 +250,14 @@
       <!-- 答题卡（移动端紧跟题目下方，网格可滚动） -->
       <aside class="w-full lg:w-56 shrink-0 order-2 lg:order-none">
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:sticky lg:top-28">
-          <h2 class="text-sm font-semibold text-gray-600 mb-3">答题卡</h2>
+          <h2 class="text-sm font-semibold text-gray-600 mb-3">
+            <span>答题卡</span>
+            <span id="answer-card-hint" class="hidden font-normal text-gray-400"> · 点击题号跳转</span>
+          </h2>
+          <div id="review-filter-bar" class="hidden flex gap-2 mb-3">
+            <button type="button" id="review-filter-all-desktop" class="review-filter-chip active text-xs px-2.5 py-1 rounded-full border">全部</button>
+            <button type="button" id="review-filter-wrong-desktop" class="review-filter-chip text-xs px-2.5 py-1 rounded-full border">仅错题</button>
+          </div>
           <div class="answer-card-scroll max-h-44 overflow-y-auto overscroll-contain px-1.5 py-1.5 lg:max-h-none lg:overflow-visible lg:px-0 lg:py-0">
             <div id="answer-card" class="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-5 gap-1.5 sm:gap-2"></div>
           </div>
@@ -220,11 +271,69 @@
       </aside>
     </div>
 
-    <div id="quiz-mobile-bar" class="lg:hidden hidden fixed bottom-0 inset-x-0 z-30 border-t border-gray-200 bg-white/95 backdrop-blur-sm shadow-[0_-4px_16px_rgba(0,0,0,0.06)] px-4 pt-3">
-      <button id="btn-submit-mobile" type="button" class="w-full py-2.5 rounded bg-primary text-white text-sm font-medium hover:bg-primary-dark">
-        交卷
-      </button>
-      <p class="text-xs text-gray-500 text-center mt-1.5">已答 <span id="answered-count-mobile">0</span> / <span id="total-count-mobile">0</span></p>
+    <div id="quiz-answer-dock" class="lg:hidden hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-gray-200 shadow-[0_-8px_24px_rgba(0,0,0,0.08)] px-3 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
+      <div class="max-w-lg mx-auto space-y-2">
+        <div class="flex items-stretch gap-1.5">
+          <button id="btn-answer-prev" type="button" class="flex-1 flex flex-col items-center justify-center py-2 rounded-xl border border-gray-200 text-gray-600 disabled:opacity-40 min-h-[3rem]">
+            <span class="text-lg leading-none">‹</span>
+            <span class="text-[11px] mt-0.5">上一题</span>
+          </button>
+          <button id="btn-answer-sheet" type="button" class="flex-[1.15] flex flex-col items-center justify-center py-2 rounded-xl bg-primary/5 border border-primary/25 text-primary min-h-[3rem]">
+            <span class="text-sm font-semibold leading-tight">答题卡</span>
+            <span id="answer-dock-meta" class="text-[10px] text-primary/75 mt-0.5">1/50 · 已答0</span>
+          </button>
+          <button id="btn-answer-next" type="button" class="flex-1 flex flex-col items-center justify-center py-2 rounded-xl border border-gray-200 text-gray-600 disabled:opacity-40 min-h-[3rem]">
+            <span class="text-lg leading-none">›</span>
+            <span class="text-[11px] mt-0.5">下一题</span>
+          </button>
+        </div>
+        <button id="btn-submit-mobile" type="button" class="w-full py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary-dark shadow-sm">
+          交卷 · 已答 0/0
+        </button>
+      </div>
+    </div>
+
+    <div id="quiz-review-dock" class="lg:hidden hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-gray-200 shadow-[0_-8px_24px_rgba(0,0,0,0.08)] px-2 pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom,0px))]">
+      <div class="flex items-stretch gap-1.5 max-w-lg mx-auto">
+        <button id="btn-review-prev-wrong" type="button" class="flex-1 flex flex-col items-center justify-center py-2 rounded-xl border border-gray-200 text-gray-600 disabled:opacity-40 min-h-[3.25rem]">
+          <span class="text-lg leading-none">‹</span>
+          <span class="text-[11px] mt-0.5">上一错题</span>
+        </button>
+        <button id="btn-review-sheet" type="button" class="flex-[1.15] flex flex-col items-center justify-center py-2 rounded-xl bg-primary/5 border border-primary/25 text-primary min-h-[3.25rem]">
+          <span class="text-sm font-semibold leading-tight">答题卡</span>
+          <span id="review-dock-meta" class="text-[10px] text-primary/75 mt-0.5">第 1 / 50 题</span>
+        </button>
+        <button id="btn-review-next-wrong" type="button" class="flex-1 flex flex-col items-center justify-center py-2 rounded-xl bg-primary text-white disabled:opacity-40 min-h-[3.25rem]">
+          <span class="text-lg leading-none">›</span>
+          <span class="text-[11px] mt-0.5">下一错题</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="review-sheet" class="hidden fixed inset-0 z-40" aria-hidden="true">
+      <div id="review-sheet-backdrop" class="absolute inset-0 bg-black/45"></div>
+      <div class="review-sheet-panel absolute bottom-0 inset-x-0 bg-white rounded-t-2xl shadow-2xl max-h-[min(82vh,640px)] flex flex-col">
+        <div class="flex justify-center pt-3 pb-1"><div class="w-10 h-1 rounded-full bg-gray-300"></div></div>
+        <div class="flex items-center justify-between px-4 pb-2">
+          <div>
+            <h3 id="answer-sheet-title" class="text-base font-semibold text-gray-800">答题卡</h3>
+            <p id="review-sheet-summary" class="text-xs text-gray-500 mt-0.5">共 0 题</p>
+          </div>
+          <button id="btn-close-review-sheet" type="button" class="text-sm text-gray-500 px-3 py-1.5 rounded-lg hover:bg-gray-100">关闭</button>
+        </div>
+        <div id="answer-sheet-filter-row" class="hidden flex items-center gap-2 px-4 pb-3 flex-wrap">
+          <button type="button" id="review-filter-all" class="review-filter-chip active text-xs px-3 py-1.5 rounded-full border">全部</button>
+          <button type="button" id="review-filter-wrong" class="review-filter-chip text-xs px-3 py-1.5 rounded-full border">仅错题</button>
+          <span id="answer-sheet-legend" class="ml-auto text-[11px] text-gray-400 flex items-center gap-2.5">
+            <span class="inline-flex items-center gap-1"><i class="w-2 h-2 rounded-sm bg-green-500 inline-block"></i>对</span>
+            <span class="inline-flex items-center gap-1"><i class="w-2 h-2 rounded-sm bg-amber-500 inline-block"></i>部分</span>
+            <span class="inline-flex items-center gap-1"><i class="w-2 h-2 rounded-sm bg-red-500 inline-block"></i>错</span>
+          </span>
+        </div>
+        <div id="review-sheet-scroll" class="flex-1 overflow-y-auto overscroll-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <div id="review-sheet-grid" class="grid grid-cols-6 gap-2"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -400,6 +509,6 @@
   <script src="js/ai-config.js?v=202607042400"></script>
   <script src="js/ai-config.local.js?v=202607042400" onerror=""></script>
   <script src="js/ai.js?v=202607052200"></script>
-  <script src="js/app.js?v=202607060130"></script>
+  <script src="js/app.js?v=202607060400"></script>
 </body>
 </html>

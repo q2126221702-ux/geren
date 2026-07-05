@@ -18,7 +18,7 @@ def measure(page):
         """() => {
       const vv = window.visualViewport;
       const input = document.getElementById('essay-input');
-      const bar = document.getElementById('quiz-mobile-bar');
+      const bar = document.getElementById('quiz-answer-dock');
       const pageEl = document.getElementById('page-quiz');
       const header = document.querySelector('#page-quiz header');
       const box = (el) => {
@@ -72,8 +72,10 @@ with sync_playwright() as p:
     )
     page.goto(BASE, wait_until="networkidle")
     page.locator(f'.quiz-item[data-file="{FILE}"]').click()
-    page.wait_for_selector("#answer-card button")
-    page.locator('#answer-card button[data-index="5"]').click()
+    page.wait_for_selector("#question-container")
+    for _ in range(5):
+        page.locator("label.option-item").first.click()
+        page.wait_for_timeout(120)
     page.wait_for_selector("#essay-input")
 
     before = measure(page)

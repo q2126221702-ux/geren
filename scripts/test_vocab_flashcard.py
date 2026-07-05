@@ -12,9 +12,9 @@ deck = json.loads((DATA / entry["file"]).read_text(encoding="utf-8"))
 assert deck["quiz_type"] == "vocab_flashcard"
 assert len(deck["cards"]) == entry["count"]
 multi = [c for c in deck["cards"] if c.get("multi") or len(c.get("forms", [])) > 1]
+assert len(multi) == len(deck["cards"]), "all cards must be multi-form"
 complete = next(c for c in deck["cards"] if any(f["word"] == "complete" for f in c.get("forms", [])))
-assert any(f["word"] == "completion" for f in complete["forms"]), "complete/completion should be one card"
-assert len(complete["forms"]) >= 2
+assert any(f["word"] == "completion" for f in complete["forms"])
 print(f"deck OK: {len(deck['cards'])} cards, all multi-form")
 
 try:

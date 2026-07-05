@@ -22,6 +22,8 @@
     testCooldownTimer: null,
     wrongDrillMode: false,
     parentQuiz: null,
+    reviewSheetOpen: false,
+    reviewFilterWrong: false,
     flashcard: {
       deck: null,
       order: [],
@@ -217,25 +219,336 @@
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
     if (name === 'quiz') updateQuizMobileChrome();
-    else $('quiz-mobile-bar')?.classList.add('hidden');
+    else {
+      $('quiz-answer-dock')?.classList.add('hidden');
+      $('quiz-review-dock')?.classList.add('hidden');
+      if (state.reviewSheetOpen) closeReviewSheet();
+    }
   }
 
   function isMobileQuiz() {
     return window.matchMedia('(max-width: 1023px)').matches;
   }
 
+  function countAnswered() {
+    if (!state.quiz) return 0;
+    return state.quiz.questions.filter((_, i) => isAnswered(i)).length;
+  }
+
+  function refreshAnswerMetaBanner(idx) {
+    const banner = document.querySelector('.answer-meta');
+    if (!banner || !isMobileQuiz() || state.submitted) return;
+    const done = isAnswered(idx);
+    const badge = banner.querySelector('span.shrink-0');
+    if (!badge) return;
+    badge.textContent = done ? '已作答' : '未作答';
+    badge.className = `shrink-0 text-xs font-medium px-2.5 py-1 rounded-full border ${
+      done ? 'bg-primary/10 text-primary border-primary/20' : 'bg-white text-gray-500 border-gray-200'
+    }`;
+  }
+
   function updateQuizMobileChrome() {
     const page = pages.quiz;
-    const bar = $('quiz-mobile-bar');
-    if (!page || !bar) return;
+    if (!page) return;
+    const mobile = isMobileQuiz();
     const keyboardOpen = page.classList.contains('quiz-keyboard-open');
-    const showBar =
-      !page.classList.contains('hidden') && !state.submitted && isMobileQuiz() && !keyboardOpen;
-    bar.classList.toggle('hidden', !showBar);
-    page.classList.toggle('quiz-mobile-actions', showBar);
+    const onQuiz = !page.classList.contains('hidden');
+    const answering = onQuiz && !state.submitted && mobile && !keyboardOpen;
+    const reviewing = onQuiz && state.submitted && mobile;
+
+    page.classList.toggle('quiz-mobile-layout', onQuiz && mobile && !keyboardOpen && !state.submitted);
+    page.classList.toggle('quiz-mobile-actions', answering);
+    page.classList.toggle('quiz-review-mobile', reviewing);
+    page.classList.toggle('quiz-review-actions', reviewing && !keyboardOpen);
+
+    $('quiz-answer-dock')?.classList.toggle('hidden', !answering);
     const q = state.quiz?.questions[state.currentIndex];
-    const essayMode = showBar && q && isEssayQuestion(q);
-    page.classList.toggle('quiz-essay-mobile', essayMode && !keyboardOpen);
+    const essayMode = answering && q && isEssayQuestion(q);
+    page.classList.toggle('quiz-essay-mobile', essayMode);
+
+    if (answering) updateAnswerDock();
+    updateReviewChrome();
+  }
+
+  function updateAnswerDock() {
+    const total = state.quiz?.questions.length || 0;
+    const idx = state.currentIndex;
+    const answered = countAnswered();
+    const meta = $('answer-dock-meta');
+    const submitBtn = $('btn-submit-mobile');
+    if (meta) meta.textContent = `${idx + 1}/${total} · 已答${answered}`;
+    if (submitBtn) submitBtn.textContent = `交卷 · 已答 ${answered}/${total}`;
+    $('btn-answer-prev')?.toggleAttribute('disabled', idx <= 0);
+    $('btn-answer-next')?.toggleAttribute('disabled', idx >= total - 1);
+    refreshAnswerMetaBanner(idx);
+  }
+
+  function getReviewWrongIndices() {
+    if (!state.quiz) return [];
+    return state.quiz.questions
+      .map((q, i) => ({ q, i }))
+      .filter(({ q, i }) => {
+        if (isEssayQuestion(q)) return false;
+        return !gradeQuestion(q, state.answers[i]).correct;
+      })
+      .map(({ i }) => i);
+  }
+
+  function getQuestionReviewStatus(idx) {
+    const q = state.quiz?.questions[idx];
+    if (!q) return { label: '—', tone: 'neutral', badgeClass: 'bg-gray-100 text-gray-600 border-gray-200' };
+    if (isEssayQuestion(q)) {
+      return { label: '问答题', tone: 'essay', badgeClass: 'bg-blue-50 text-blue-700 border-blue-200' };
+    }
+    const result = gradeQuestion(q, state.answers[idx]);
+    if (!isAnswered(idx)) {
+      return { label: '未作答', tone: 'unanswered', badgeClass: 'bg-gray-100 text-gray-600 border-gray-200' };
+    }
+    if (result.correct) {
+      return { label: '正确', tone: 'correct', badgeClass: 'bg-green-50 text-green-700 border-green-200' };
+    }
+    if (result.partial) {
+      return { label: '部分正确', tone: 'partial', badgeClass: 'bg-amber-50 text-amber-700 border-amber-200' };
+    }
+    return { label: '错误', tone: 'wrong', badgeClass: 'bg-red-50 text-red-700 border-red-200' };
+  }
+
+  function findAdjacentWrongIndex(from, direction) {
+    const wrong = getReviewWrongIndices();
+    if (!wrong.length) return null;
+    if (direction > 0) {
+      for (const i of wrong) if (i > from) return i;
+      return wrong[0];
+    }
+    for (let k = wrong.length - 1; k >= 0; k--) {
+      if (wrong[k] < from) return wrong[k];
+    }
+    return wrong[wrong.length - 1];
+  }
+
+  function answerCardButtonClass(i) {
+    let cls =
+      'answer-card-btn review-sheet-btn h-10 w-full rounded border border-gray-200 text-sm hover:border-primary flex items-center justify-center';
+    if (i === state.currentIndex) cls += ' current';
+    const q = state.quiz.questions[i];
+    if (state.submitted && !isEssayQuestion(q)) {
+      const result = gradeQuestion(q, state.answers[i]);
+      if (result.correct) cls += ' correct';
+      else if (result.partial) cls += ' partial';
+      else cls += ' wrong';
+    } else if (isAnswered(i)) {
+      cls += ' answered';
+    }
+    return cls;
+  }
+
+  function setReviewFilter(wrongOnly) {
+    state.reviewFilterWrong = wrongOnly;
+    ['review-filter-all', 'review-filter-wrong', 'review-filter-all-desktop', 'review-filter-wrong-desktop'].forEach(
+      (id) => {
+        const el = $(id);
+        if (!el) return;
+        const isAll = id.includes('all');
+        el.classList.toggle('active', wrongOnly ? !isAll : isAll);
+      }
+    );
+    renderAnswerCard();
+    renderReviewSheet();
+  }
+
+  function openReviewSheet() {
+    const sheet = $('review-sheet');
+    if (!sheet || state.reviewSheetOpen) return;
+    state.reviewSheetOpen = true;
+    sheet.classList.remove('hidden');
+    sheet.setAttribute('aria-hidden', 'false');
+    renderReviewSheet();
+    requestAnimationFrame(() => sheet.classList.add('open'));
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeReviewSheet() {
+    const sheet = $('review-sheet');
+    if (!sheet || !state.reviewSheetOpen) return;
+    state.reviewSheetOpen = false;
+    sheet.classList.remove('open');
+    sheet.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    window.setTimeout(() => {
+      if (!state.reviewSheetOpen) sheet.classList.add('hidden');
+    }, 280);
+  }
+
+  function renderReviewSheet() {
+    const grid = $('review-sheet-grid');
+    const summary = $('review-sheet-summary');
+    const title = $('answer-sheet-title');
+    const filterRow = $('answer-sheet-filter-row');
+    if (!grid || !state.quiz) return;
+
+    const wrong = getReviewWrongIndices();
+    const total = state.quiz.questions.length;
+    const answered = countAnswered();
+    const indices = state.submitted && state.reviewFilterWrong ? wrong : state.quiz.questions.map((_, i) => i);
+
+    if (title) title.textContent = state.submitted ? '答题卡 · 解析' : '答题卡';
+    if (filterRow) filterRow.classList.toggle('hidden', !state.submitted);
+
+    if (summary) {
+      summary.textContent = state.submitted
+        ? wrong.length === 0
+          ? `共 ${total} 题 · 全部正确`
+          : `共 ${total} 题 · 错题 ${wrong.length} 道`
+        : `已答 ${answered} / ${total} 题 · 点击题号跳转`;
+    }
+
+    if (!indices.length) {
+      grid.innerHTML = `<p class="col-span-6 text-center text-sm text-gray-400 py-8">没有符合条件的题目</p>`;
+      return;
+    }
+
+    grid.innerHTML = indices
+      .map(
+        (i) =>
+          `<button type="button" data-index="${i}" class="${answerCardButtonClass(i)}">${i + 1}</button>`
+      )
+      .join('');
+
+    grid.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        goToQuestion(Number(btn.dataset.index));
+        closeReviewSheet();
+      });
+    });
+
+    const current = grid.querySelector(`button[data-index="${state.currentIndex}"]`);
+    current?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }
+
+  function buildAnswerMeta(idx) {
+    const total = state.quiz.questions.length;
+    const q = state.quiz.questions[idx];
+    const done = isAnswered(idx);
+    return `
+      <div class="answer-meta mb-4 px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between gap-3">
+        <div>
+          <p class="text-sm font-semibold text-gray-800">第 ${idx + 1} / ${total} 题</p>
+          <p class="text-xs text-gray-500 mt-0.5">${typeLabel(q.type)}</p>
+        </div>
+        <span class="shrink-0 text-xs font-medium px-2.5 py-1 rounded-full border ${
+          done ? 'bg-primary/10 text-primary border-primary/20' : 'bg-white text-gray-500 border-gray-200'
+        }">${done ? '已作答' : '未作答'}</span>
+      </div>`;
+  }
+
+  function buildReviewBanner(idx) {
+    const status = getQuestionReviewStatus(idx);
+    const wrong = getReviewWrongIndices();
+    const wrongPos = wrong.indexOf(idx);
+    const total = state.quiz.questions.length;
+    const tones = {
+      correct: 'border-green-500 bg-green-50',
+      wrong: 'border-red-500 bg-red-50',
+      partial: 'border-amber-500 bg-amber-50',
+      unanswered: 'border-gray-300 bg-gray-50',
+      essay: 'border-blue-400 bg-blue-50',
+      neutral: 'border-gray-300 bg-gray-50',
+    };
+    const icons = {
+      correct: '✓',
+      wrong: '✗',
+      partial: '△',
+      unanswered: '○',
+      essay: '译',
+      neutral: '·',
+    };
+    const wrongHint = wrongPos >= 0 ? ` · 错题 ${wrongPos + 1}/${wrong.length}` : '';
+    return `
+      <div class="review-banner mb-4 px-4 py-3 rounded-lg border-l-4 ${tones[status.tone] || tones.neutral}">
+        <div class="flex items-center justify-between gap-3">
+          <p class="text-sm font-semibold text-gray-800">${icons[status.tone] || '·'} ${status.label}</p>
+          <p class="text-xs text-gray-500 shrink-0">第 ${idx + 1} / ${total} 题${wrongHint}</p>
+        </div>
+      </div>`;
+  }
+
+  function updateReviewChrome() {
+    const review = state.submitted;
+    const page = pages.quiz;
+    const mobile = isMobileQuiz();
+
+    const dock = $('quiz-review-dock');
+    const hint = $('answer-card-hint');
+    const filterBar = $('review-filter-bar');
+    const navRow = page?.querySelector('.quiz-nav-row');
+    const wrong = getReviewWrongIndices();
+    const total = state.quiz?.questions.length || 0;
+    const idx = state.currentIndex;
+    const wrongPos = wrong.indexOf(idx);
+
+    if (hint) hint.classList.toggle('hidden', !review);
+    if (filterBar) filterBar.classList.toggle('hidden', !review || mobile);
+    if (navRow) navRow.classList.toggle('hidden', review && mobile);
+
+    const progressEl = $('quiz-progress-text');
+    if (progressEl && state.quiz) {
+      if (review) {
+        let text = `题目解析 · 第 ${idx + 1}/${total} 题`;
+        if (wrong.length) text += ` · 错题 ${wrong.length} 道`;
+        progressEl.textContent = text;
+      } else {
+        progressEl.textContent = `第 ${idx + 1}/${total} 题 · 已答 ${countAnswered()} 题`;
+      }
+    }
+
+    if (dock) {
+      dock.classList.toggle('hidden', !review || !mobile);
+      const meta = $('review-dock-meta');
+      if (meta) {
+        meta.textContent =
+          wrongPos >= 0
+            ? `错题 ${wrongPos + 1}/${wrong.length}`
+            : `第 ${idx + 1} / ${total} 题`;
+      }
+      $('btn-review-prev-wrong')?.toggleAttribute('disabled', wrong.length === 0);
+      $('btn-review-next-wrong')?.toggleAttribute('disabled', wrong.length === 0);
+    }
+
+    if (review && state.reviewSheetOpen) renderReviewSheet();
+  }
+
+  function goToQuestion(index) {
+    if (!state.quiz || index < 0 || index >= state.quiz.questions.length) return;
+    state.currentIndex = index;
+    renderQuestion();
+    renderAnswerCard();
+    updateProgress();
+    if (isMobileQuiz()) scrollToQuestionArea();
+  }
+
+  function resetReviewUI() {
+    state.reviewSheetOpen = false;
+    state.reviewFilterWrong = false;
+    const sheet = $('review-sheet');
+    if (sheet) {
+      sheet.classList.add('hidden');
+      sheet.classList.remove('open');
+      sheet.setAttribute('aria-hidden', 'true');
+    }
+    document.body.style.overflow = '';
+    ['review-filter-all', 'review-filter-wrong', 'review-filter-all-desktop', 'review-filter-wrong-desktop'].forEach(
+      (id) => {
+        const el = $(id);
+        if (!el) return;
+        el.classList.toggle('active', id.includes('all'));
+      }
+    );
+  }
+
+  function goToAdjacentWrong(direction) {
+    const target = findAdjacentWrongIndex(state.currentIndex, direction);
+    if (target === null || target === undefined) return;
+    goToQuestion(target);
   }
 
   function scrollEssayInputIntoView(textarea) {
@@ -791,10 +1104,9 @@
         state.lastResult = null;
         state.wrongDrillMode = false;
         state.parentQuiz = null;
+        resetReviewUI();
         $('quiz-title').textContent = state.quiz.title;
         $('total-count').textContent = state.quiz.questions.length;
-        const totalMobile = $('total-count-mobile');
-        if (totalMobile) totalMobile.textContent = state.quiz.questions.length;
         showPage('quiz');
         renderQuestion();
         renderAnswerCard();
@@ -920,11 +1232,7 @@
 
   function advanceToNextQuestion(idx) {
     if (idx < state.quiz.questions.length - 1) {
-      state.currentIndex = idx + 1;
-      renderQuestion();
-      renderAnswerCard();
-      updateProgress();
-      if (window.matchMedia('(max-width: 1023px)').matches) scrollToQuestionArea();
+      goToQuestion(idx + 1);
     }
   }
 
@@ -1083,9 +1391,10 @@
     }
 
     container.innerHTML = `
-      <div class="flex items-center gap-2 mb-4">
+      ${review ? buildReviewBanner(idx) : isMobileQuiz() ? buildAnswerMeta(idx) : ''}
+      <div class="flex items-center gap-2 mb-4 ${isMobileQuiz() && !review ? 'hidden' : ''}">
         <span class="text-xs px-2 py-0.5 rounded bg-primary-light text-primary font-medium">${typeLabel(q.type)}</span>
-        <span class="text-sm text-gray-400">${idx + 1} / ${state.quiz.questions.length}</span>
+        ${review || !isMobileQuiz() ? `<span class="text-sm text-gray-400">第 ${idx + 1} / ${state.quiz.questions.length} 题</span>` : ''}
       </div>
       <h2 class="${questionTitleClass(q)}">${
         essayLead
@@ -1160,49 +1469,45 @@
 
   function renderAnswerCard() {
     const card = $('answer-card');
-    card.innerHTML = state.quiz.questions
-      .map((q, i) => {
-        let cls = 'answer-card-btn h-10 w-full rounded border border-gray-200 text-sm hover:border-primary flex items-center justify-center';
-        if (i === state.currentIndex) cls += ' current';
-        if (state.submitted && !isEssayQuestion(q)) {
-          const result = gradeQuestion(q, state.answers[i]);
-          if (result.correct) cls += ' correct';
-          else if (result.partial) cls += ' partial';
-          else cls += ' wrong';
-        } else if (isAnswered(i)) {
-          cls += ' answered';
-        }
-        return `<button data-index="${i}" class="${cls}">${i + 1}</button>`;
-      })
-      .join('');
+    const wrong = getReviewWrongIndices();
+    const indices = state.submitted && state.reviewFilterWrong
+      ? wrong
+      : state.quiz.questions.map((_, i) => i);
+
+    if (!indices.length && state.submitted && state.reviewFilterWrong) {
+      card.innerHTML = `<p class="col-span-5 text-center text-xs text-gray-400 py-4">没有错题</p>`;
+    } else {
+      card.innerHTML = indices
+        .map(
+          (i) =>
+            `<button type="button" data-index="${i}" class="${answerCardButtonClass(i)}">${i + 1}</button>`
+        )
+        .join('');
+    }
 
     card.querySelectorAll('button').forEach((btn) => {
       btn.addEventListener('click', () => {
-        state.currentIndex = Number(btn.dataset.index);
-        renderQuestion();
-        renderAnswerCard();
-        updateProgress();
-        if (window.matchMedia('(max-width: 1023px)').matches) scrollToQuestionArea();
+        goToQuestion(Number(btn.dataset.index));
       });
     });
 
-    const answered = state.quiz.questions.filter((_, i) => isAnswered(i)).length;
+    const answered = countAnswered();
     $('answered-count').textContent = answered;
-    const answeredMobile = $('answered-count-mobile');
-    const totalMobile = $('total-count-mobile');
-    if (answeredMobile) answeredMobile.textContent = answered;
-    if (totalMobile) totalMobile.textContent = state.quiz.questions.length;
+    $('total-count').textContent = state.quiz.questions.length;
     $('btn-submit').classList.toggle('hidden', state.submitted);
-    $('btn-submit-mobile')?.classList.toggle('hidden', state.submitted);
     updateQuizMobileChrome();
   }
 
   function updateProgress() {
     const total = state.quiz.questions.length;
-    const answered = state.quiz.questions.filter((_, i) => isAnswered(i)).length;
-    const pct = total ? Math.round((answered / total) * 100) : 0;
+    let pct;
+    if (state.submitted) {
+      pct = total ? Math.round(((state.currentIndex + 1) / total) * 100) : 0;
+    } else {
+      const answered = countAnswered();
+      pct = total ? Math.round((answered / total) * 100) : 0;
+    }
     $('progress-bar').style.width = `${pct}%`;
-    $('quiz-progress-text').textContent = `已完成 ${answered} / ${total} 题`;
   }
 
   function submitQuiz() {
@@ -2200,35 +2505,34 @@
     });
 
     $('btn-prev').addEventListener('click', () => {
-      if (state.currentIndex > 0) {
-        state.currentIndex--;
-        renderQuestion();
-        renderAnswerCard();
-        updateProgress();
-        if (window.matchMedia('(max-width: 1023px)').matches) scrollToQuestionArea();
-      }
+      if (state.currentIndex > 0) goToQuestion(state.currentIndex - 1);
     });
 
     $('btn-next').addEventListener('click', () => {
-      if (state.currentIndex < state.quiz.questions.length - 1) {
-        state.currentIndex++;
-        renderQuestion();
-        renderAnswerCard();
-        updateProgress();
-        if (window.matchMedia('(max-width: 1023px)').matches) scrollToQuestionArea();
-      }
+      if (state.currentIndex < state.quiz.questions.length - 1) goToQuestion(state.currentIndex + 1);
     });
 
     $('btn-submit').addEventListener('click', submitQuiz);
     $('btn-submit-mobile')?.addEventListener('click', submitQuiz);
 
     $('btn-review').addEventListener('click', () => {
-      state.currentIndex = 0;
+      const wrong = getReviewWrongIndices();
       showPage('quiz');
-      renderQuestion();
-      renderAnswerCard();
-      updateProgress();
+      goToQuestion(wrong.length ? wrong[0] : 0);
     });
+
+    $('btn-review-prev-wrong')?.addEventListener('click', () => goToAdjacentWrong(-1));
+    $('btn-review-next-wrong')?.addEventListener('click', () => goToAdjacentWrong(1));
+    $('btn-review-sheet')?.addEventListener('click', openReviewSheet);
+    $('btn-answer-sheet')?.addEventListener('click', openReviewSheet);
+    $('btn-answer-prev')?.addEventListener('click', () => goToQuestion(state.currentIndex - 1));
+    $('btn-answer-next')?.addEventListener('click', () => goToQuestion(state.currentIndex + 1));
+    $('btn-close-review-sheet')?.addEventListener('click', closeReviewSheet);
+    $('review-sheet-backdrop')?.addEventListener('click', closeReviewSheet);
+    $('review-filter-all')?.addEventListener('click', () => setReviewFilter(false));
+    $('review-filter-wrong')?.addEventListener('click', () => setReviewFilter(true));
+    $('review-filter-all-desktop')?.addEventListener('click', () => setReviewFilter(false));
+    $('review-filter-wrong-desktop')?.addEventListener('click', () => setReviewFilter(true));
 
     $('btn-retry').addEventListener('click', () => {
       state.currentIndex = 0;
@@ -2239,6 +2543,7 @@
       state.lastResult = null;
       state.wrongDrillMode = false;
       state.parentQuiz = null;
+      resetReviewUI();
       $('wrong-drill-banner')?.classList.add('hidden');
       $('wrong-memory-panel')?.classList.add('hidden');
       showPage('quiz');
@@ -2255,6 +2560,12 @@
 
     $('btn-wrong-drill')?.addEventListener('click', startWrongDrill);
     $('btn-exit-drill')?.addEventListener('click', exitWrongDrill);
+
+    window.addEventListener('resize', () => {
+      if (pages.quiz.classList.contains('hidden')) return;
+      updateQuizMobileChrome();
+      if (state.reviewSheetOpen && !isMobileQuiz()) closeReviewSheet();
+    });
 
     $('btn-open-settings').addEventListener('click', openSettings);
     $('btn-settings-back').addEventListener('click', () => showPage('home'));

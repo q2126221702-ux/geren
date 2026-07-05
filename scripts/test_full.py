@@ -6,7 +6,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-BASE = "http://localhost:8080"
+BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765"
 ROOT = Path(__file__).parent.parent
 DATA = ROOT / "data"
 issues = []
@@ -126,6 +126,12 @@ def test_static():
         if not fp.exists():
             continue
         quiz = load_json(fp)
+        is_flashcard = quiz.get("quiz_type") == "vocab_flashcard" or entry.get("kind") == "flashcard"
+        if is_flashcard:
+            n = len(quiz.get("cards", []))
+            check(f"[{entry['id']}] 卡片数匹配 manifest", n == entry["count"], f"{n} vs {entry['count']}")
+            check(f"[{entry['id']}] 有标题", bool(quiz.get("title")))
+            continue
         n = len(quiz.get("questions", []))
         check(f"[{entry['id']}] 题数匹配 manifest", n == entry["count"], f"{n} vs {entry['count']}")
         check(f"[{entry['id']}] 有标题", bool(quiz.get("title")))
@@ -177,9 +183,19 @@ def test_ui(page):
 
     for entry in manifest["quizzes"]:
         quiz = load_json(DATA / entry["file"])
+        is_flashcard = quiz.get("quiz_type") == "vocab_flashcard" or entry.get("kind") == "flashcard"
         page.goto(BASE, wait_until="networkidle")
         page.locator(f'.quiz-item[data-file="{entry["file"]}"]').click()
         page.wait_for_timeout(400)
+        if is_flashcard:
+            check(f"[{entry['id']}] 进入闪卡页", page.locator("#page-flashcard").is_visible())
+            progress = page.locator("#flashcard-progress-text").inner_text()
+            check(
+                f"[{entry['id']}] 闪卡数量",
+                f"/ {entry['count']} 张" in progress,
+                progress,
+            )
+            continue
         check(f"[{entry['id']}] 进入答题页", page.locator("#page-quiz").is_visible())
         total = int(page.locator("#total-count").inner_text())
         check(f"[{entry['id']}] 答题卡题数", total == entry["count"], str(total))

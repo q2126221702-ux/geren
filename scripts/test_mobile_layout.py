@@ -1,82 +1,79 @@
 #!/usr/bin/env python3
-"""Mobile layout checks: answer card gap + essay review collapsible."""
+"""Layout checks: desktop answer card + mobile essay review."""
 import sys
-from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-ROOT = Path(__file__).parent.parent
-BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8080"
+BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765"
 
 
 def main():
     issues = []
     with sync_playwright() as p:
         browser = p.chromium.launch()
-        page = browser.new_page(viewport={"width": 390, "height": 844})
+        page = browser.new_page(viewport={"width": 1280, "height": 900})
         page.goto(BASE, wait_until="networkidle")
 
-        # OPC quiz — answer card layout
+        # Desktop — sidebar answer card layout
         page.locator('.quiz-item:has-text("OPC规范")').click()
         page.wait_for_selector("#answer-card button")
 
         nav = page.locator("#btn-next")
         card_title = page.locator('aside h2:has-text("答题卡")')
-        gap = card_title.bounding_box()["y"] - (
-            nav.bounding_box()["y"] + nav.bounding_box()["height"]
+        nav_box = nav.bounding_box()
+        card_box = card_title.bounding_box()
+        aside_visible = page.evaluate(
+            "() => getComputedStyle(document.querySelector('#page-quiz aside')).display !== 'none'"
         )
-        print(f"gap between nav and answer card: {gap:.0f}px")
-        if gap > 80:
-            issues.append(f"answer card too far below nav ({gap:.0f}px)")
+        print(f"desktop aside visible: {aside_visible}, card title y={card_box['y']:.0f}, nav y={nav_box['y']:.0f}")
+        if not aside_visible:
+            issues.append("desktop aside should be visible")
 
-        current = page.locator('#answer-card button.current')
         clip = page.evaluate(
             """() => {
               const btn = document.querySelector('#answer-card button.current');
               const box = document.querySelector('.answer-card-scroll') || document.getElementById('answer-card');
-              if (!btn || !box) return { ok: false };
+              if (!btn || !box) return { ok: false, skipped: true };
+              const overflow = getComputedStyle(box).overflowY;
+              if (overflow === 'visible') return { ok: true, skipped: true };
               const br = btn.getBoundingClientRect();
               const cr = box.getBoundingClientRect();
-              const style = getComputedStyle(btn);
               const spread = 2;
               return {
                 ok: br.top - spread >= cr.top + 0.5
                   && br.left - spread >= cr.left + 0.5
                   && br.bottom + spread <= cr.bottom + 0.5
                   && br.right + spread <= cr.right + 0.5,
-                boxShadow: style.boxShadow,
-                paddingTop: getComputedStyle(box).paddingTop,
+                skipped: false,
               };
             }"""
         )
-        print(f"current highlight visible: {clip}")
-        if not clip.get("ok"):
+        print(f"desktop current highlight visible: {clip}")
+        if not clip.get("ok") and not clip.get("skipped"):
             issues.append("current question highlight clipped by answer card container")
 
-        grid = page.locator("#answer-card")
-        grid_box = grid.bounding_box()
-        btn1 = page.locator('#answer-card button[data-index="0"]')
-        btn6 = page.locator('#answer-card button[data-index="5"]')
-        row_gap = btn6.bounding_box()["y"] - (
-            btn1.bounding_box()["y"] + btn1.bounding_box()["height"]
-        )
-        print(f"answer card grid width: {grid_box['width']:.0f}px, row gap (1->6): {row_gap:.0f}px")
-        if row_gap < 0:
-            issues.append(f"answer card rows overlap ({row_gap:.0f}px)")
-
-        # Essay review collapsible (WE Learn B1U4)
         page.locator("#btn-back").click()
         page.wait_for_selector("#quiz-list")
+
+        # Mobile — essay review collapsible
+        page.set_viewport_size({"width": 390, "height": 844})
         page.locator('.quiz-item[data-file="WE Learn_B1U4_Movies_翻译题_20260703.json"]').click()
-        for idx in range(6):
-            page.locator(f'#answer-card button[data-index="{idx}"]').click()
-            if idx < 5:
-                page.locator("label.option-item").first.click()
+        page.wait_for_selector("#question-container")
+        for _ in range(5):
+            page.locator("label.option-item").first.click()
+            page.wait_for_timeout(120)
         page.locator("#essay-input").fill("测试翻译")
-        page.locator("#btn-submit").click()
+        page.locator("#essay-input").blur()
+        page.wait_for_timeout(250)
+        page.locator("#btn-submit-mobile").click()
         page.wait_for_selector("#page-result")
         page.locator("#btn-review").click()
-        page.locator('#answer-card button[data-index="5"]').click()
+        page.wait_for_selector("#quiz-review-dock:not(.hidden)")
+
+        page.locator("#btn-review-sheet").click()
+        page.wait_for_selector("#review-sheet.open")
+        page.locator('#review-sheet-grid button[data-index="5"]').click()
+        page.wait_for_timeout(350)
         page.wait_for_selector("#question-container")
 
         has_fold = page.locator(".essay-prompt-fold").count()

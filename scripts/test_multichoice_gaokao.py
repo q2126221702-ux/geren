@@ -1,8 +1,7 @@
-"""测试高考数学多选题判分（满分取自题库 full_score）."""
 import sys
 from playwright.sync_api import sync_playwright
 
-BASE = "http://localhost:8080"
+BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765"
 issues = []
 
 
@@ -31,8 +30,6 @@ with sync_playwright() as p:
     page.wait_for_timeout(300)
 
     def submit_and_score(answers):
-        page.evaluate("() => { window.__testAnswers = arguments[0]; }", answers)
-        # use grade via loaded app - reload quiz fresh each time
         return page.evaluate(
             """async (payload) => {
                 const res = await fetch(`data/${payload.file}`);
