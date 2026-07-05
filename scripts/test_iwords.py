@@ -217,6 +217,33 @@ def test_ui(page):
     check("错词记忆卡显示", "hidden" not in cls)
     check("换形式再练按钮可见", page.locator("#btn-wrong-drill").is_visible())
 
+    # phrase_cloze 题目 UI 与解析
+    phrase_q = next(
+        q
+        for q in quiz["questions"]
+        if q.get("memory", {}).get("pattern") == "phrase_cloze" and q.get("memory", {}).get("en") == "in real life"
+    )
+    phrase_idx = quiz["questions"].index(phrase_q)
+    page.goto(BASE, wait_until="networkidle")
+    page.locator(f'.quiz-item[data-file="{entry["file"]}"]').click()
+    page.wait_for_timeout(300)
+    page.locator(f'#answer-card button[data-index="{phrase_idx}"]').click()
+    page.wait_for_timeout(200)
+    ph = page.locator("#fill-input").get_attribute("placeholder") or ""
+    check("phrase_cloze placeholder", "空格" in ph, ph)
+    cloze_visible = page.locator("#question-container").inner_text()
+    check("phrase_cloze 显示 in ___ life", "in" in cloze_visible and "life" in cloze_visible)
+    page.locator("#fill-input").fill("the")
+    page.locator("#btn-submit").click()
+    page.wait_for_timeout(400)
+    page.locator("#btn-review").click()
+    page.wait_for_timeout(300)
+    page.locator(f'#answer-card button[data-index="{phrase_idx}"]').click()
+    page.wait_for_timeout(200)
+    review_text = page.locator("#question-container").inner_text()
+    check("phrase_cloze 解析含 real", "real" in review_text)
+    check("phrase_cloze 解析含完整短语", "in real life" in review_text)
+
 
 def main():
     print("iWords 词汇填空测试")
@@ -231,6 +258,15 @@ def main():
 
     test_static()
     test_pos_grading()
+
+    import subprocess
+
+    audit = subprocess.run(
+        [sys.executable, str(Path(__file__).parent / "audit_iwords_fill.py")],
+        capture_output=True,
+        text=True,
+    )
+    check("iWords 填空数据审计", audit.returncode == 0, audit.stdout.strip().split("\n")[-1] if audit.stdout else audit.stderr)
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)

@@ -1167,6 +1167,71 @@
     return buildIwordsQuestion(m, pattern, sort, tag);
   }
 
+  function memoryFootnote(q) {
+    const m = q.memory;
+    if (!m) return '';
+    if (isPhraseClozeQuestion(q)) {
+      return `完整短语：${m.en} · ${m.zh}`;
+    }
+    if (m.lang === 'zh') {
+      return `英文：${m.en} · 中文：${m.zh}`;
+    }
+    if (m.lang === 'pos') {
+      return `${m.en} · ${m.zh}`;
+    }
+    return `${m.en} · ${m.zh}`;
+  }
+
+  function renderWrongMemoryCard({ q, i }, cardIdx) {
+    const user = String(state.answers[i] || '').trim();
+    const correctDisplay = formatCorrectAnswer(q);
+    const m = q.memory;
+    const hook = m.hook || `${m.en} = ${zhShort(m.zh)}`;
+    const foot = memoryFootnote(q);
+
+    if (isPhraseClozeQuestion(q)) {
+      const titleLines = String(q.title).split('\n');
+      const clozeLine = titleLines[titleLines.length - 1].replace(/______/g, '___');
+      const prompt = titleLines
+        .slice(0, -1)
+        .join(' · ')
+        .replace(/______/g, '___');
+      return `
+        <div class="memory-card border border-gray-200 rounded-lg p-4 bg-amber-50/40" data-card="${cardIdx}">
+          <p class="text-xs text-gray-500 mb-1">${escapeHtml(prompt)}</p>
+          <p class="text-sm font-medium text-gray-800 mb-1">${escapeHtml(clozeLine)}</p>
+          <p class="text-sm"><span class="text-red-600">你的：${escapeHtml(user || '（未填）')}</span>
+            <span class="text-gray-400 mx-1">→</span>
+            <span class="memory-answer text-green-700 font-medium">${escapeHtml(correctDisplay)}</span>
+          </p>
+          <p class="text-sm text-violet-800 mt-2 memory-hook">💡 ${escapeHtml(hook)}</p>
+          <p class="text-xs text-gray-600 mt-1">${escapeHtml(foot)}</p>
+          <button type="button" class="memory-cover-btn text-xs text-primary mt-2 hover:underline" data-card="${cardIdx}">
+            盖住答案，自己回忆
+          </button>
+        </div>`;
+    }
+
+    const prompt = String(q.title)
+      .replace(/______/g, '___')
+      .split('\n')
+      .slice(0, 3)
+      .join(' · ');
+    return `
+        <div class="memory-card border border-gray-200 rounded-lg p-4 bg-amber-50/40" data-card="${cardIdx}">
+          <p class="text-xs text-gray-500 mb-1">${escapeHtml(prompt)}</p>
+          <p class="text-sm"><span class="text-red-600">你的：${escapeHtml(user || '（未填）')}</span>
+            <span class="text-gray-400 mx-1">→</span>
+            <span class="memory-answer text-green-700 font-medium">${escapeHtml(correctDisplay)}</span>
+          </p>
+          <p class="text-sm text-violet-800 mt-2 memory-hook">💡 ${escapeHtml(hook)}</p>
+          <p class="text-xs text-gray-600 mt-1">${escapeHtml(foot)}</p>
+          <button type="button" class="memory-cover-btn text-xs text-primary mt-2 hover:underline" data-card="${cardIdx}">
+            盖住答案，自己回忆
+          </button>
+        </div>`;
+  }
+
   function renderWrongMemoryPanel() {
     const panel = $('wrong-memory-panel');
     const list = $('wrong-memory-list');
@@ -1184,34 +1249,7 @@
     panel.classList.remove('hidden');
     summary.textContent = `共 ${wrong.length} 个错词。先看记忆钩，再盖住答案自己回忆一遍，或换形式再练。`;
 
-    list.innerHTML = wrong
-      .map(({ q, i }, cardIdx) => {
-        const user = String(state.answers[i] || '').trim();
-        const correctDisplay = formatCorrectAnswer(q);
-        const m = q.memory;
-        const hook = m.hook || `${m.en} = ${zhShort(m.zh)}`;
-        const titleLines = String(q.title).split('\n');
-        const clozeLine = titleLines[titleLines.length - 1].replace(/______/g, '___');
-        const prompt = titleLines
-          .slice(0, -1)
-          .join(' · ')
-          .replace(/______/g, '___');
-        return `
-        <div class="memory-card border border-gray-200 rounded-lg p-4 bg-amber-50/40" data-card="${cardIdx}">
-          <p class="text-xs text-gray-500 mb-1">${escapeHtml(prompt)}</p>
-          <p class="text-sm font-medium text-gray-800 mb-1">${escapeHtml(clozeLine)}</p>
-          <p class="text-sm"><span class="text-red-600">你的：${escapeHtml(user || '（未填）')}</span>
-            <span class="text-gray-400 mx-1">→</span>
-            <span class="memory-answer text-green-700 font-medium">${escapeHtml(correctDisplay)}</span>
-          </p>
-          <p class="text-sm text-violet-800 mt-2 memory-hook">💡 ${escapeHtml(hook)}</p>
-          <p class="text-xs text-gray-600 mt-1">完整短语：${escapeHtml(m.en)} · ${escapeHtml(m.zh)}</p>
-          <button type="button" class="memory-cover-btn text-xs text-primary mt-2 hover:underline" data-card="${cardIdx}">
-            盖住答案，自己回忆
-          </button>
-        </div>`;
-      })
-      .join('');
+    list.innerHTML = wrong.map((item, cardIdx) => renderWrongMemoryCard(item, cardIdx)).join('');
 
     list.querySelectorAll('.memory-cover-btn').forEach((btn) => {
       btn.addEventListener('click', () => {

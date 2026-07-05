@@ -746,6 +746,16 @@
     return n % 1 === 0 ? String(n) : n.toFixed(1);
   }
 
+  function formatReferenceAnswer(q) {
+    if (q.memory?.pattern === 'phrase_cloze') {
+      const full = q.memory?.en;
+      if (full && q.correct_answer && q.correct_answer !== full) {
+        return `空格处：${q.correct_answer}；完整短语：${full}`;
+      }
+    }
+    return q.correct_answer;
+  }
+
   function buildQuestionPrompt(q, userAnswer, gradeResult, options) {
     const full = options && options.full;
     const parts = [
@@ -767,7 +777,13 @@
       });
     }
 
-    parts.push(`参考答案：${q.correct_answer}`);
+    parts.push(`参考答案：${formatReferenceAnswer(q)}`);
+
+    if (q.fill_hint) {
+      parts.push(`作答说明：${q.fill_hint}`);
+    } else if (q.memory?.fill_hint) {
+      parts.push(`作答说明：${q.memory.fill_hint}`);
+    }
 
     const user = String(userAnswer || '').trim();
     if (user) {
