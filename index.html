@@ -22,7 +22,11 @@
       background-color: #e6f3ff;
     }
     .answer-card-btn.answered { background-color: #0080ff; color: #fff; border-color: #0080ff; }
-    .answer-card-btn.current { box-shadow: 0 0 0 2px #0080ff; }
+    .answer-card-btn.current { border-color: #0080ff; }
+    .answer-card-btn.answered.current,
+    .answer-card-btn.correct.current,
+    .answer-card-btn.partial.current,
+    .answer-card-btn.wrong.current { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.9); }
     .answer-card-btn.correct { background-color: #22c55e; border-color: #22c55e; color: #fff; }
     .answer-card-btn.partial { background-color: #f59e0b; border-color: #f59e0b; color: #fff; }
     .answer-card-btn.wrong { background-color: #ef4444; border-color: #ef4444; color: #fff; }
@@ -126,7 +130,7 @@
       <aside class="w-full lg:w-56 shrink-0 order-2 lg:order-none">
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:sticky lg:top-28">
           <h2 class="text-sm font-semibold text-gray-600 mb-3">答题卡</h2>
-          <div id="answer-card" class="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-5 gap-1.5 sm:gap-2 max-h-44 overflow-y-auto overscroll-contain lg:max-h-none lg:overflow-visible"></div>
+          <div id="answer-card" class="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-5 gap-1.5 sm:gap-2 max-h-44 overflow-y-auto overscroll-contain p-0.5 lg:max-h-none lg:overflow-visible lg:p-0"></div>
           <div class="mt-4 pt-4 border-t border-gray-100 space-y-2">
             <p class="text-xs text-gray-500">已答 <span id="answered-count">0</span> / <span id="total-count">0</span></p>
             <button id="btn-submit" class="w-full py-2.5 rounded bg-primary text-white text-sm font-medium hover:bg-primary-dark">
@@ -254,6 +258,6 @@
   <script src="js/ai-config.js?v=202607042400"></script>
   <script src="js/ai-config.local.js?v=202607042400" onerror=""></script>
   <script src="js/ai.js?v=202607051330"></script>
-  <script src="js/app.js?v=202607051600"></script>
+  <script src="js/app.js?v=202607051700"></script>
 </body>
 </html>

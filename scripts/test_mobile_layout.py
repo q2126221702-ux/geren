@@ -29,6 +29,27 @@ def main():
         if gap > 80:
             issues.append(f"answer card too far below nav ({gap:.0f}px)")
 
+        current = page.locator('#answer-card button.current')
+        clip = page.evaluate(
+            """() => {
+              const btn = document.querySelector('#answer-card button.current');
+              const box = document.getElementById('answer-card');
+              if (!btn || !box) return { ok: false };
+              const br = btn.getBoundingClientRect();
+              const cr = box.getBoundingClientRect();
+              const style = getComputedStyle(btn);
+              const borderTop = parseFloat(style.borderTopWidth) || 0;
+              return {
+                ok: br.top - borderTop >= cr.top - 0.5 && br.left - borderTop >= cr.left - 0.5,
+                borderTop,
+                topGap: br.top - cr.top,
+              };
+            }"""
+        )
+        print(f"current border visible: {clip}")
+        if not clip.get("ok"):
+            issues.append("current question border clipped by answer card container")
+
         grid = page.locator("#answer-card")
         grid_box = grid.bounding_box()
         btn1 = page.locator('#answer-card button[data-index="0"]')

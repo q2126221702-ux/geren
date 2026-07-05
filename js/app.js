@@ -799,7 +799,7 @@
     const card = $('answer-card');
     card.innerHTML = state.quiz.questions
       .map((q, i) => {
-        let cls = 'answer-card-btn h-10 w-full rounded border border-gray-200 text-sm hover:border-primary flex items-center justify-center';
+        let cls = 'answer-card-btn h-10 w-full rounded border-2 border-gray-200 text-sm hover:border-primary flex items-center justify-center';
         if (i === state.currentIndex) cls += ' current';
         if (state.submitted && !isEssayQuestion(q)) {
           const result = gradeQuestion(q, state.answers[i]);
