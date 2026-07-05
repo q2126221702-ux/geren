@@ -1,6 +1,6 @@
 {
   "title": "WE Learn B1U6 Part-time jobs iWords 词汇填空",
-  "exported_at": "2026-07-05T14:15:27.492122",
+  "exported_at": "2026-07-05T14:20:37.675982",
   "source": "WE Learn iWords 截图整理",
   "unit": "B1U6 Part-time jobs",
   "quiz_type": "iwords_fill",
@@ -494,7 +494,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "be prepared to do",
         "zh": "准备好做某事",
@@ -502,9 +502,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U6 Part-time jobs · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 be prepared to do ↔ 准备好做某事（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -695,7 +695,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "for free",
         "zh": "免费",
@@ -703,9 +703,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U6 Part-time jobs · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 for free ↔ 免费（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -897,7 +897,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "like mad",
         "zh": "疯狂地",
@@ -905,9 +905,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U6 Part-time jobs · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 like mad ↔ 疯狂地（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1501,7 +1501,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "make rescues",
         "zh": "进行救援工作",
@@ -1509,9 +1509,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U6 Part-time jobs · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 make rescues ↔ 进行救援工作（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1702,7 +1702,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "visitor's center",
         "zh": "游客中心",
@@ -1710,9 +1710,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U6 Part-time jobs · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 visitor's center ↔ 游客中心（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },

@@ -1,6 +1,6 @@
 {
   "title": "WE Learn B1U8 Festivals iWords 词汇填空",
-  "exported_at": "2026-07-05T14:15:27.495657",
+  "exported_at": "2026-07-05T14:20:37.678756",
   "source": "WE Learn iWords 截图整理",
   "unit": "B1U8 Festivals",
   "quiz_type": "iwords_fill",
@@ -91,7 +91,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "get busy doing sth.",
         "zh": "忙着做某事",
@@ -99,9 +99,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U8 Festivals · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 get busy doing sth. ↔ 忙着做某事（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -292,7 +292,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "upside down",
         "zh": "颠倒，倒转",
@@ -300,9 +300,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U8 Festivals · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 upside down ↔ 颠倒（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -593,7 +593,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "stay up",
         "zh": "不睡，熬夜",
@@ -601,9 +601,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U8 Festivals · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 stay up ↔ 不睡（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -693,7 +693,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "rice cake",
         "zh": "米糕",
@@ -701,9 +701,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U8 Festivals · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 rice cake ↔ 米糕（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -996,7 +996,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "dragon dancing",
         "zh": "舞龙",
@@ -1004,9 +1004,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U8 Festivals · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 dragon dancing ↔ 舞龙（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1801,7 +1801,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "walk up to",
         "zh": "走上前去",
@@ -1809,9 +1809,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U8 Festivals · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 walk up to ↔ 走上前去（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1902,7 +1902,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "do with",
         "zh": "处置",
@@ -1910,9 +1910,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U8 Festivals · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 do with ↔ 处置（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -2003,7 +2003,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "take on",
         "zh": "呈现，具有",
@@ -2011,9 +2011,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U8 Festivals · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 take on ↔ 呈现（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -2204,7 +2204,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "Dear me!",
         "zh": "我的天哪！（用以表示惊奇、害怕等强烈感情）",
@@ -2212,9 +2212,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U8 Festivals · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 Dear me! ↔ 我的天哪！（用以表示惊奇、害怕等强烈感情）（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },

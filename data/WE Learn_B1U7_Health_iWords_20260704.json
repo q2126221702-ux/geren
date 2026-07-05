@@ -1,6 +1,6 @@
 {
   "title": "WE Learn B1U7 Health iWords 词汇填空",
-  "exported_at": "2026-07-05T14:15:27.493941",
+  "exported_at": "2026-07-05T14:20:37.677147",
   "source": "WE Learn iWords 截图整理",
   "unit": "B1U7 Health",
   "quiz_type": "iwords_fill",
@@ -192,7 +192,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "lose weight",
         "zh": "减少体重",
@@ -200,9 +200,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U7 Health · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 lose weight ↔ 减少体重（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -392,7 +392,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "be sure to",
         "zh": "一定要（做某事）",
@@ -400,9 +400,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U7 Health · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 be sure to ↔ 一定要（做某事）（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -592,7 +592,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "gain weight",
         "zh": "增加体重",
@@ -600,9 +600,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U7 Health · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 gain weight ↔ 增加体重（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -692,7 +692,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "replace ... with",
         "zh": "以……替换",
@@ -700,9 +700,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U7 Health · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 replace ... with ↔ 以……替换（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1094,7 +1094,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "body shaping",
         "zh": "塑身，美体",
@@ -1102,9 +1102,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U7 Health · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 body shaping ↔ 塑身（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1395,7 +1395,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "what's more",
         "zh": "此外，另外",
@@ -1403,9 +1403,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U7 Health · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 what's more ↔ 此外（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1999,7 +1999,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "from time to time",
         "zh": "时不时，时常",
@@ -2007,9 +2007,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U7 Health · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 from time to time ↔ 时不时（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     }

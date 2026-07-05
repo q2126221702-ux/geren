@@ -108,6 +108,7 @@
   function fillInputPlaceholder(q) {
     if (q.fill_hint) return q.fill_hint;
     if (q.memory?.fill_hint) return q.memory.fill_hint;
+    if (q.memory?.pattern === 'phrase_cloze') return '只填空格处缺失的英文（一个词）';
     const lang = q.memory?.lang;
     if (lang === 'pos') return '填中文词性，如：名词、动词、形容词（也可填 n. / v. / adj.）';
     if (lang === 'en') return '填英文单词，小写即可；短语按原样填写';
@@ -553,6 +554,28 @@
       .join('')}</div>`;
   }
 
+  function isPhraseClozeQuestion(q) {
+    return isFillQuestion(q) && q.memory?.pattern === 'phrase_cloze';
+  }
+
+  function parsePhraseClozeTitle(title) {
+    const lines = String(title || '').split('\n');
+    if (lines.length < 2) return { head: title, cloze: '' };
+    return {
+      head: lines.slice(0, -1).join('\n'),
+      cloze: lines[lines.length - 1],
+    };
+  }
+
+  function formatPhraseClozeReviewAnswer(q) {
+    const blank = formatCorrectAnswer(q);
+    const full = q.memory?.en;
+    if (full && full !== blank) {
+      return `${blank}（完整短语：${full}）`;
+    }
+    return blank;
+  }
+
   function formatCorrectAnswer(q) {
     if (isJudgmentQuestion(q)) {
       const idx = Number(q.correct_answer);
@@ -622,13 +645,19 @@
 
     let body = '';
     let essayLead = '';
+    let fillLead = '';
 
     if (isSelectableQuestion(q)) {
       body = renderSelectableOptions(q, idx, review);
     } else if (isFillQuestion(q)) {
       const val = state.answers[idx] || '';
       const ph = fillInputPlaceholder(q);
-      body = `
+      let fillLead = '';
+      if (isPhraseClozeQuestion(q)) {
+        const { head, cloze } = parsePhraseClozeTitle(q.title);
+        fillLead = head;
+        body = `
+        <p class="text-lg font-medium mb-4 leading-relaxed">${formatFillTitle(cloze)}</p>
         <input
           type="text"
           id="fill-input"
@@ -637,6 +666,17 @@
           ${disabled}
           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         />`;
+      } else {
+        body = `
+        <input
+          type="text"
+          id="fill-input"
+          value="${escapeAttr(val)}"
+          placeholder="${escapeAttr(ph)}"
+          ${disabled}
+          class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+        />`;
+      }
     } else if (isEssayQuestion(q)) {
       const { lead, passage } = parseEssayTitle(q.title);
       const val = state.answers[idx] || '';
@@ -693,10 +733,15 @@
       reviewBlock = `
         <div class="mt-5 pt-5 border-t border-gray-100">
           <p class="text-sm ${statusClass}">${statusText}</p>
-          <p class="text-sm text-gray-600 mt-1">正确答案：${escapeHtml(formatCorrectAnswer(q))}</p>${
+          <p class="text-sm text-gray-600 mt-1">正确答案：${escapeHtml(
+            isPhraseClozeQuestion(q) ? formatPhraseClozeReviewAnswer(q) : formatCorrectAnswer(q)
+          )}</p>${
             q.memory && !result.correct
-              ? `<p class="text-sm text-violet-700 mt-2 bg-violet-50 rounded-lg p-2">💡 ${escapeHtml(q.memory.hook || '')}</p>
-                 <p class="text-xs text-gray-500 mt-1">${escapeHtml(q.memory.en)} · ${escapeHtml(q.memory.zh)}</p>`
+              ? `<p class="text-sm text-violet-700 mt-2 bg-violet-50 rounded-lg p-2">💡 ${escapeHtml(q.memory.hook || '')}</p>${
+                  isPhraseClozeQuestion(q)
+                    ? `<p class="text-xs text-gray-500 mt-1">完整短语：${escapeHtml(q.memory.en)} · ${escapeHtml(q.memory.zh)}</p>`
+                    : `<p class="text-xs text-gray-500 mt-1">${escapeHtml(q.memory.en)} · ${escapeHtml(q.memory.zh)}</p>`
+                }`
               : ''
           }
         </div>`;
@@ -734,7 +779,13 @@
         <span class="text-xs px-2 py-0.5 rounded bg-primary-light text-primary font-medium">${typeLabel(q.type)}</span>
         <span class="text-sm text-gray-400">${idx + 1} / ${state.quiz.questions.length}</span>
       </div>
-      <h2 class="${questionTitleClass(q)}">${essayLead ? escapeHtml(decodeHtml(essayLead)) : formatQuestionTitle(q)}</h2>
+      <h2 class="${questionTitleClass(q)}">${
+        essayLead
+          ? escapeHtml(decodeHtml(essayLead))
+          : fillLead
+            ? formatFillTitle(fillLead)
+            : formatQuestionTitle(q)
+      }</h2>
       ${body}
       ${reviewBlock}
       ${aiBlock}`;
@@ -1076,6 +1127,7 @@
       }
       lang = 'en';
       remix = 'en2zh';
+      meta.fill_hint = '只填空格处缺失的英文（一个词）';
     } else {
       title = `${tag}【中→英】\n${posLine}${zh}${phLine}\n请填写英文：______`;
       answer = en;
@@ -1754,6 +1806,9 @@
   }
 
   function formatQuestionTitle(q) {
+    if (isPhraseClozeQuestion(q)) {
+      return formatFillTitle(parsePhraseClozeTitle(q.title).head);
+    }
     if (isFillQuestion(q)) return formatFillTitle(q.title);
     return escapeHtml(decodeHtml(q.title));
   }

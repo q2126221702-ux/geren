@@ -1,6 +1,6 @@
 {
   "title": "WE Learn B1U5 Our Earth iWords 词汇填空",
-  "exported_at": "2026-07-05T14:15:27.489332",
+  "exported_at": "2026-07-05T14:20:37.674596",
   "source": "WE Learn iWords 截图整理",
   "unit": "B1U5 Our Earth",
   "quiz_type": "iwords_fill",
@@ -192,7 +192,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "take a stand against",
         "zh": "采取反对立场",
@@ -200,9 +200,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U5 Our Earth · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 take a stand against ↔ 采取反对立场（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -594,7 +594,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "take place",
         "zh": "发生，举行",
@@ -602,9 +602,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U5 Our Earth · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 take place ↔ 发生（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1097,7 +1097,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "switch to",
         "zh": "转换到，切换到",
@@ -1105,9 +1105,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U5 Our Earth · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 switch to ↔ 转换到（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1298,7 +1298,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "clean up",
         "zh": "打扫干净，整理",
@@ -1306,9 +1306,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U5 Our Earth · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 clean up ↔ 打扫干净（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1600,7 +1600,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "in honor of",
         "zh": "向……表示敬意，为祝贺",
@@ -1608,9 +1608,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U5 Our Earth · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 in honor of ↔ 向……表示敬意（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },

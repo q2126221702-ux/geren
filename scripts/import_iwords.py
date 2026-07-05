@@ -163,10 +163,12 @@ def build_question(entry: dict, pattern: str, sort: int, unit: str, section: str
     else:  # phrase_cloze
         title, answer = phrase_cloze_title_answer(en, zh, tag)
         lang = "en"
+        meta["fill_hint"] = "只填空格处缺失的英文（一个词）"
 
     meta["lang"] = lang
     meta["hook"] = memory_hook(pattern, en, zh, pos)
-    meta["fill_hint"] = fill_hint_for(lang)
+    if pattern != "phrase_cloze":
+        meta["fill_hint"] = fill_hint_for(lang)
 
     meta["remix_pattern"] = remix_for(pattern)
 
@@ -179,7 +181,7 @@ def build_question(entry: dict, pattern: str, sort: int, unit: str, section: str
         "your_answer": "",
         "score": "0",
         "full_score": 1,
-        "fill_hint": fill_hint_for(lang),
+        "fill_hint": meta.get("fill_hint") or fill_hint_for(lang),
         "memory": meta,
     }
 

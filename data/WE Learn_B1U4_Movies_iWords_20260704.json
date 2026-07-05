@@ -1,6 +1,6 @@
 {
   "title": "WE Learn B1U4 Movies iWords 词汇填空",
-  "exported_at": "2026-07-05T14:15:27.487047",
+  "exported_at": "2026-07-05T14:20:37.672264",
   "source": "WE Learn iWords 截图整理",
   "unit": "B1U4 Movies",
   "quiz_type": "iwords_fill",
@@ -494,7 +494,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "have fun",
         "zh": "玩得开心，享乐",
@@ -502,9 +502,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U4 Movies · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 have fun ↔ 玩得开心（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -695,7 +695,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "in real life",
         "zh": "在现实生活中",
@@ -703,9 +703,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U4 Movies · iWords A】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 in real life ↔ 在现实生活中（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1197,7 +1197,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "as well",
         "zh": "也",
@@ -1205,9 +1205,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U4 Movies · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 as well ↔ 也（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
@@ -1399,7 +1399,7 @@
       "your_answer": "",
       "score": "0",
       "full_score": 1,
-      "fill_hint": "填英文单词，小写即可；短语按原样填写",
+      "fill_hint": "只填空格处缺失的英文（一个词）",
       "memory": {
         "en": "refer to ... as",
         "zh": "把……称作",
@@ -1407,9 +1407,9 @@
         "phonetic": "",
         "pattern": "phrase_cloze",
         "unit_tag": "【B1U4 Movies · iWords B】",
+        "fill_hint": "只填空格处缺失的英文（一个词）",
         "lang": "en",
         "hook": "短语 refer to ... as ↔ 把……称作（整句记，再拆关键词）",
-        "fill_hint": "填英文单词，小写即可；短语按原样填写",
         "remix_pattern": "en2zh"
       }
     },
