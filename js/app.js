@@ -27,7 +27,6 @@
       order: [],
       index: 0,
       flipped: false,
-      mode: 'en2zh',
       shuffle: false,
       queue: [],
       known: new Set(),
@@ -555,19 +554,24 @@
       .trim();
   }
 
-  function renderFlashcardForms(card, compact) {
-    const forms = card.forms || [];
-    if (forms.length <= 1) {
-      return `<p class="text-sm text-gray-600 mt-2">${escapeHtml(card.pos)} ${escapeHtml(card.pos_zh || posZhFromEn(card.pos))}</p>`;
-    }
-    const rows = forms
+  function renderFlashcardFormRows(forms, { coverWords } = {}) {
+    const rows = (forms || [])
       .map((f) => {
-        const ph = f.phonetic ? `<span class="text-gray-400 text-xs ml-1">${escapeHtml(f.phonetic)}</span>` : '';
-        const rule = f.rule && !compact ? `<span class="text-violet-600 text-xs ml-1">${escapeHtml(f.rule)}</span>` : '';
-        return `<li class="text-sm leading-relaxed"><span class="font-medium text-gray-900">${escapeHtml(f.word)}</span> <span class="text-gray-500">${escapeHtml(f.pos)}</span>${ph}${rule}<br><span class="text-gray-700">${escapeHtml(zhShortFlash(f.zh))}</span></li>`;
+        const wordCell = coverWords
+          ? '<span class="text-gray-300 tracking-widest">●●●●●●</span>'
+          : `<span class="font-semibold text-gray-900 text-lg">${escapeHtml(f.word)}</span>`;
+        const ph = f.phonetic
+          ? `<p class="text-xs text-gray-400 mt-0.5">${escapeHtml(f.phonetic)}</p>`
+          : '';
+        return `
+          <div class="fc-form-row">
+            <div>${wordCell}${coverWords ? '' : ph}</div>
+            <span class="fc-pos-badge">${escapeHtml(f.pos)} ${escapeHtml(f.pos_zh || posZhFromEn(f.pos))}</span>
+            <span class="text-sm text-gray-700">${escapeHtml(zhShortFlash(f.zh))}</span>
+          </div>`;
       })
       .join('');
-    return `<ul class="mt-3 space-y-2 text-left w-full max-w-sm mx-auto">${rows}</ul>`;
+    return `<div class="w-full max-w-md mx-auto mt-1">${rows}</div>`;
   }
 
   function renderFlashcardFaces() {
@@ -579,45 +583,20 @@
     if (!card || !front || !back) return;
 
     inner?.classList.toggle('is-flipped', fc.flipped);
+    const forms = card.forms || [];
+    const multi = forms.length > 1 || card.multi;
+    const zh = card.zh_summary || zhShortFlash(card.zh || forms[0]?.zh || '');
 
-    if (fc.mode === 'en2zh') {
-      front.innerHTML = `
-        <p class="text-xs text-gray-400 mb-2">英 → 中</p>
-        <p class="text-3xl font-bold text-gray-900">${escapeHtml(card.word)}</p>
-        ${card.phonetic ? `<p class="text-base text-gray-500 mt-2">${escapeHtml(card.phonetic)}</p>` : ''}
-        <p class="text-sm text-primary mt-3">${escapeHtml(card.pos)}</p>
-        <p class="text-xs text-gray-400 mt-6">点击翻转看释义</p>`;
-      back.innerHTML = `
-        <p class="text-xs text-violet-600 mb-2">释义</p>
-        <p class="text-2xl font-semibold text-gray-900">${escapeHtml(card.zh)}</p>
-        ${renderFlashcardForms(card)}
-        <p class="text-xs text-violet-700 mt-4 bg-violet-50 rounded-lg px-3 py-2 w-full">💡 ${escapeHtml(card.hook || '')}</p>`;
-    } else if (fc.mode === 'zh2en') {
-      front.innerHTML = `
-        <p class="text-xs text-gray-400 mb-2">中 → 英</p>
-        <p class="text-2xl font-semibold text-gray-900 leading-snug">${escapeHtml(zhShortFlash(card.zh))}</p>
-        <p class="text-sm text-primary mt-3">${escapeHtml(card.pos_zh || posZhFromEn(card.pos))}</p>
-        <p class="text-xs text-gray-400 mt-6">点击翻转看英文</p>`;
-      back.innerHTML = `
-        <p class="text-xs text-violet-600 mb-2">英文</p>
-        <p class="text-3xl font-bold text-gray-900">${escapeHtml(card.word)}</p>
-        ${card.phonetic ? `<p class="text-base text-gray-500 mt-2">${escapeHtml(card.phonetic)}</p>` : ''}
-        <p class="text-sm text-gray-600 mt-2">${escapeHtml(card.pos)} · ${escapeHtml(card.zh)}</p>
-        ${card.forms?.length > 1 ? `<div class="mt-3 w-full">${renderFlashcardForms(card, true)}</div>` : ''}
-        <p class="text-xs text-violet-700 mt-4 bg-violet-50 rounded-lg px-3 py-2 w-full">💡 ${escapeHtml(card.hook || '')}</p>`;
-    } else {
-      const others = (card.forms || []).filter((f) => f.word !== card.word);
-      front.innerHTML = `
-        <p class="text-xs text-gray-400 mb-2">词性转化</p>
-        <p class="text-2xl font-bold text-gray-900">${escapeHtml(card.word)}</p>
-        <p class="text-sm text-gray-600 mt-2">${escapeHtml(card.pos)} · ${escapeHtml(zhShortFlash(card.zh))}</p>
-        <p class="text-sm text-primary mt-4">${others.length ? '其他词性形式是？' : '这个词的词性是？'}</p>
-        <p class="text-xs text-gray-400 mt-6">点击翻转</p>`;
-      back.innerHTML = `
-        <p class="text-xs text-violet-600 mb-2">词性 & 转化</p>
-        ${renderFlashcardForms(card)}
-        <p class="text-xs text-violet-700 mt-4 bg-violet-50 rounded-lg px-3 py-2 w-full">💡 ${escapeHtml(card.hook || '')}</p>`;
-    }
+    front.innerHTML = `
+      <p class="text-xs text-violet-600 mb-3">${multi ? `词族 · ${forms.length} 个词性` : '单词'}</p>
+      <p class="text-3xl font-bold text-gray-900 leading-snug px-2">${escapeHtml(zh)}</p>
+      ${multi ? '<p class="text-sm text-violet-700 mt-4">回忆各词性的英文拼写</p>' : '<p class="text-sm text-gray-500 mt-4">回忆英文拼写</p>'}
+      <p class="text-xs text-gray-400 mt-6">点击翻转</p>`;
+
+    back.innerHTML = `
+      <p class="text-xs text-gray-500 mb-2 w-full text-left max-w-md mx-auto">${escapeHtml(zh)}</p>
+      ${renderFlashcardFormRows(forms)}
+      <p class="text-xs text-gray-400 mt-4">← → 切换 · 记得/再练</p>`;
 
     updateFlashcardProgress();
   }
@@ -628,7 +607,7 @@
     const current = total ? fc.index + 1 : 0;
     $('flashcard-title').textContent = fc.deck?.title || '单词速记';
     $('flashcard-progress-text').textContent = total
-      ? `第 ${current} / ${total} 张 · 已掌握 ${fc.known.size} · 模式 ${fc.mode === 'en2zh' ? '英→中' : fc.mode === 'zh2en' ? '中→英' : '词性'}`
+      ? `第 ${current} / ${total} 张 · 已掌握 ${fc.known.size}`
       : '';
     $('flashcard-progress-bar').style.width = total ? `${(current / total) * 100}%` : '0%';
 
@@ -639,9 +618,6 @@
       qCount.textContent = String(fc.queue.length);
     }
 
-    document.querySelectorAll('.flashcard-mode-btn').forEach((btn) => {
-      btn.classList.toggle('active', btn.dataset.fcMode === fc.mode);
-    });
     const shuffleEl = $('flashcard-shuffle');
     if (shuffleEl) shuffleEl.checked = fc.shuffle;
   }
@@ -686,7 +662,6 @@
       .then((deck) => {
         if (!isFlashcardDeck(deck)) throw new Error('不是单词速记卡组');
         state.flashcard.deck = deck;
-        state.flashcard.mode = 'en2zh';
         state.flashcard.shuffle = false;
         state.flashcard.queue = [];
         state.flashcard.known = new Set();
@@ -705,14 +680,6 @@
     $('btn-fc-known')?.addEventListener('click', () => markFlashcardKnown(true));
     $('btn-fc-again')?.addEventListener('click', () => markFlashcardKnown(false));
     $('flashcard-scene')?.addEventListener('click', flipFlashcard);
-
-    document.querySelectorAll('.flashcard-mode-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        state.flashcard.mode = btn.dataset.fcMode || 'en2zh';
-        state.flashcard.flipped = false;
-        renderFlashcardFaces();
-      });
-    });
 
     $('flashcard-shuffle')?.addEventListener('change', (e) => {
       state.flashcard.shuffle = e.target.checked;

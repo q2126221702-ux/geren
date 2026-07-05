@@ -42,10 +42,10 @@ for q in manifest["quizzes"]:
             issues.append(f"{q['id']}: expected quiz_type vocab_flashcard")
         for card in data.get("cards", []):
             sort = card.get("sort", "?")
-            if not card.get("word") or not card.get("zh"):
-                issues.append(f"{q['id']} card {sort} missing word/zh")
             if not card.get("forms"):
                 issues.append(f"{q['id']} card {sort} missing forms")
+            if not (card.get("word") or card.get("headword")):
+                issues.append(f"{q['id']} card {sort} missing word/headword")
         continue
 
     actual = len(data.get("questions", []))

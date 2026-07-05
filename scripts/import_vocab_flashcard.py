@@ -1,6 +1,7 @@
-"""从 WE Learn iWords 生成单词速记闪卡（纯背诵，含词性转化）."""
+"""从 WE Learn iWords 生成单词速记闪卡（词族合并，纯背诵）."""
 import json
 import re
+from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 
@@ -9,7 +10,6 @@ DATA_DIR = Path(__file__).parent.parent / "data"
 MANIFEST = DATA_DIR / "manifest.json"
 OUT_FILE = DATA_DIR / "WE Learn_B1U4-U8_单词速记_20260704.json"
 DECK_ID = "welearn_b1u4u8_vocab"
-DATE_TAG = "20260704"
 
 POS_ZH = {
     "n.": "名词",
@@ -25,36 +25,38 @@ POS_ZH = {
     "art.": "冠词",
 }
 
+POS_ORDER = {"v.": 0, "n.": 1, "adj.": 2, "adv.": 3, "prep.": 4, "conj.": 5, "pron.": 6, "int.": 7, "num.": 8, "art.": 9, "abbr.": 10}
+
 DERIVE_RULES = [
-    (r"(.+)tion$", r"\1t", "v → n：-tion"),
-    (r"(.+)tion$", r"\1te", "v → n：-tion"),
-    (r"(.+)sion$", r"\1de", "v → n：-sion"),
-    (r"(.+)sion$", r"\1d", "v → n：-sion"),
-    (r"(.+)ment$", r"\1", "v → n：-ment"),
-    (r"(.+)ment$", r"\1e", "v → n：-ment"),
-    (r"(.+)ness$", r"\1", "adj → n：-ness"),
-    (r"(.+)ness$", r"\1y", "adj → n：-ness"),
-    (r"(.+)ly$", r"\1", "adj → adv：-ly"),
-    (r"(.+)al$", r"\1", "n → adj：-al"),
-    (r"(.+)al$", r"\1e", "n → adj：-al"),
-    (r"(.+)ive$", r"\1e", "v → adj：-ive"),
-    (r"(.+)ive$", r"\1", "v → adj：-ive"),
-    (r"(.+)er$", r"\1", "v → n：-er"),
-    (r"(.+)er$", r"\1e", "v → n：-er"),
-    (r"(.+)or$", r"\1", "v → n：-or"),
-    (r"(.+)or$", r"\1e", "v → n：-or"),
-    (r"(.+)ist$", r"\1", "n → n：-ist"),
-    (r"(.+)ist$", r"\1e", "n → n：-ist"),
-    (r"(.+)ance$", r"\1", "v → n：-ance"),
-    (r"(.+)ence$", r"\1", "v → n：-ence"),
-    (r"(.+)ity$", r"\1", "adj → n：-ity"),
-    (r"(.+)ity$", r"\1e", "adj → n：-ity"),
-    (r"(.+)ful$", r"\1", "n → adj：-ful"),
-    (r"(.+)less$", r"\1", "n → adj：-less"),
-    (r"^un(.+)$", r"\1", "反义：un-"),
-    (r"^in(.+)$", r"\1", "否定/向内：in-"),
-    (r"^dis(.+)$", r"\1", "否定：dis-"),
-    (r"^re(.+)$", r"\1", "再：re-"),
+    (r"(.+)tion$", r"\1t"),
+    (r"(.+)tion$", r"\1te"),
+    (r"(.+)sion$", r"\1de"),
+    (r"(.+)sion$", r"\1d"),
+    (r"(.+)ment$", r"\1"),
+    (r"(.+)ment$", r"\1e"),
+    (r"(.+)ness$", r"\1"),
+    (r"(.+)ness$", r"\1y"),
+    (r"(.+)ly$", r"\1"),
+    (r"(.+)al$", r"\1"),
+    (r"(.+)al$", r"\1e"),
+    (r"(.+)ive$", r"\1e"),
+    (r"(.+)ive$", r"\1"),
+    (r"(.+)er$", r"\1"),
+    (r"(.+)er$", r"\1e"),
+    (r"(.+)or$", r"\1"),
+    (r"(.+)or$", r"\1e"),
+    (r"(.+)ist$", r"\1"),
+    (r"(.+)ist$", r"\1e"),
+    (r"(.+)ance$", r"\1"),
+    (r"(.+)ence$", r"\1"),
+    (r"(.+)ity$", r"\1"),
+    (r"(.+)ity$", r"\1e"),
+    (r"(.+)ful$", r"\1"),
+    (r"(.+)less$", r"\1"),
+    (r"^un(.+)$", r"\1"),
+    (r"^in(.+)$", r"\1"),
+    (r"^dis(.+)$", r"\1"),
+    (r"^re(.+)$", r"\1"),
 ]
 
 
@@ -70,93 +72,121 @@ def pos_zh(pos: str) -> str:
     return POS_ZH.get(pos, pos or "短语")
 
 
-def derive_candidates(w: str) -> list[tuple[str, str]]:
+def derive_candidates(w: str) -> set[str]:
     w = w.lower()
-    out: list[tuple[str, str]] = []
-    seen = set()
-    for pat, repl, rule in DERIVE_RULES:
-        if not re.match(pat, w):
-            continue
-        c = re.sub(pat, repl, w)
-        for cand in (c, c + "e"):
-            if cand and cand not in seen:
-                seen.add(cand)
-                out.append((cand, rule))
+    out = set()
+    for pat, repl in DERIVE_RULES:
+        if re.match(pat, w):
+            c = re.sub(pat, repl, w)
+            out.add(c)
+            out.add(c + "e")
     return out
 
 
-def find_related(base: str, by_word: dict) -> list[dict]:
-    related = []
-    seen = {base.lower()}
-    for cand, rule in derive_candidates(base):
-        hit = by_word.get(cand)
-        if hit and cand not in seen:
-            seen.add(cand)
-            related.append(
-                {
-                    "word": hit["word"],
-                    "pos": hit["pos"],
-                    "pos_zh": pos_zh(hit["pos"]),
-                    "zh": hit["meaning_zh"],
-                    "phonetic": hit.get("phonetic", ""),
-                    "rule": rule,
-                }
-            )
-    return related
+def merge_rows(rows: list[dict]) -> list[dict]:
+    by_word: dict[str, dict] = {}
+    for row in rows:
+        key = row["word"].lower()
+        if key not in by_word:
+            by_word[key] = dict(row)
+            continue
+        prev = by_word[key]
+        for zh in row["meaning_zh"].split("；"):
+            zh = zh.strip()
+            if zh and zh not in prev["meaning_zh"]:
+                prev["meaning_zh"] = f"{prev['meaning_zh']}；{zh}" if prev["meaning_zh"] else zh
+        if not prev.get("phonetic") and row.get("phonetic"):
+            prev["phonetic"] = row["phonetic"]
+    return list(by_word.values())
 
 
-def build_hook(word: str, pos: str, zh: str, forms: list[dict]) -> str:
-    short = zh_short(zh)
-    if len(forms) > 1:
-        chain = " → ".join(f"{f['word']}({f['pos']})" for f in forms[:4])
-        return f"词性链：{chain}"
-    letters = len(word.replace(" ", ""))
-    return f"{word} = {short}（{pos_zh(pos)}，{letters} 字母，首字母 {word[0].upper()}）"
+def form_entry(row: dict) -> dict:
+    return {
+        "word": row["word"],
+        "pos": row["pos"],
+        "pos_zh": pos_zh(row["pos"]),
+        "zh": row["meaning_zh"],
+        "phonetic": row.get("phonetic", "").strip(),
+    }
 
 
-def collect_words(data: dict) -> list[dict]:
-    rows = []
-    for unit in data.get("units", []):
-        for sec in unit.get("sections", []):
-            for e in sec.get("words", []):
-                w = e["word"].strip()
-                if is_phrase(w) or not e.get("pos"):
-                    continue
-                rows.append(
-                    {
-                        "word": w,
-                        "phonetic": e.get("phonetic", "").strip(),
-                        "pos": e["pos"].strip(),
-                        "meaning_zh": e.get("meaning_zh", "").strip(),
-                    }
-                )
-    return rows
+def sort_forms(forms: list[dict]) -> list[dict]:
+    return sorted(forms, key=lambda f: (POS_ORDER.get(f["pos"], 99), f["word"].lower()))
 
 
-def build_cards(rows: list[dict]) -> list[dict]:
+def pick_headword(forms: list[dict]) -> str:
+    """Prefer verb, then noun, then shortest."""
+    for pos in ("v.", "n.", "adj.", "adv."):
+        for f in forms:
+            if f["pos"] == pos:
+                return f["word"]
+    return min(forms, key=lambda f: len(f["word"]))["word"]
+
+
+def zh_summary(forms: list[dict]) -> str:
+    parts = []
+    seen = set()
+    for f in sort_forms(forms):
+        s = zh_short(f["zh"])
+        if s and s not in seen:
+            seen.add(s)
+            parts.append(s)
+    return "；".join(parts[:3])
+
+
+def build_families(rows: list[dict]) -> list[list[dict]]:
     by_word = {r["word"].lower(): r for r in rows}
+    parent = {r["word"].lower(): r["word"].lower() for r in rows}
+
+    def find(x: str) -> str:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a: str, b: str) -> None:
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[rb] = ra
+
+    for row in rows:
+        w = row["word"].lower()
+        for cand in derive_candidates(w):
+            if cand in by_word:
+                union(w, cand)
+
+    groups: dict[str, list[dict]] = defaultdict(list)
+    for row in rows:
+        groups[find(row["word"].lower())].append(row)
+
+    # Preserve source order by first appearance
+    order = []
+    seen_roots = set()
+    for row in rows:
+        root = find(row["word"].lower())
+        if root not in seen_roots:
+            seen_roots.add(root)
+            order.append(groups[root])
+
+    return order
+
+
+def build_cards(families: list[list[dict]]) -> list[dict]:
     cards = []
-    for i, row in enumerate(rows, start=1):
-        related = find_related(row["word"], by_word)
-        base = {
-            "word": row["word"],
-            "pos": row["pos"],
-            "pos_zh": pos_zh(row["pos"]),
-            "zh": row["meaning_zh"],
-            "phonetic": row["phonetic"],
-            "role": "base",
-        }
-        forms = [base] + related
+    for i, group in enumerate(families, start=1):
+        uniq = {}
+        for r in group:
+            uniq[r["word"].lower()] = r
+        forms = sort_forms([form_entry(r) for r in uniq.values()])
+        head = pick_headword(forms)
         cards.append(
             {
                 "sort": i,
-                "word": row["word"],
-                "phonetic": row["phonetic"],
-                "pos": row["pos"],
-                "pos_zh": pos_zh(row["pos"]),
-                "zh": row["meaning_zh"],
+                "headword": head,
+                "word": head,
                 "forms": forms,
-                "hook": build_hook(row["word"], row["pos"], row["meaning_zh"], forms),
+                "zh_summary": zh_summary(forms),
+                "multi": len(forms) > 1,
             }
         )
     return cards
@@ -183,22 +213,42 @@ def update_manifest(count: int):
 
 def main():
     data = json.loads(SRC.read_text(encoding="utf-8"))
-    rows = collect_words(data)
-    cards = build_cards(rows)
-    with_forms = sum(1 for c in cards if len(c["forms"]) > 1)
+    rows = []
+    for unit in data.get("units", []):
+        for sec in unit.get("sections", []):
+            for e in sec.get("words", []):
+                w = e["word"].strip()
+                if is_phrase(w) or not e.get("pos"):
+                    continue
+                rows.append(
+                    {
+                        "word": w,
+                        "phonetic": e.get("phonetic", "").strip(),
+                        "pos": e["pos"].strip(),
+                        "meaning_zh": e.get("meaning_zh", "").strip(),
+                    }
+                )
+
+    rows = merge_rows(rows)
+    families = build_families(rows)
+    cards = build_cards(families)
+    multi = sum(1 for c in cards if c["multi"])
 
     deck = {
         "title": "WE Learn B1U4~U8 单词速记",
         "exported_at": datetime.now().isoformat(),
         "source": "WE Learn iWords 截图整理（7月4日）",
         "quiz_type": "vocab_flashcard",
-        "description": f"共 {len(cards)} 个单词 · 含 {with_forms} 张词性转化 · 纯背诵",
+        "description": f"共 {len(cards)} 张 · {multi} 张含词性转化 · 同词族合并",
         "cards": cards,
     }
     OUT_FILE.write_text(json.dumps(deck, ensure_ascii=False, indent=2), encoding="utf-8")
     update_manifest(len(cards))
-    print(f"  {OUT_FILE.name} — {len(cards)} 张（{with_forms} 张含词性转化）")
-    print(f"已更新 {MANIFEST}")
+    print(f"  {OUT_FILE.name} — {len(cards)} 张（{multi} 张词族，原 {len(rows)} 词）")
+    for c in cards:
+        if c["multi"]:
+            words = " / ".join(f"{f['word']} {f['pos']}" for f in c["forms"])
+            print(f"    词族: {words}")
 
 
 if __name__ == "__main__":

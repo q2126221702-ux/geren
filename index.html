@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
-  <meta name="app-version" content="202607052345">
+  <meta name="app-version" content="202607060010">
   <title>在线测验</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -120,6 +120,29 @@
       background-color: #0080ff;
       color: #fff;
       border-color: #0080ff;
+    }
+    .fc-form-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) auto minmax(0, 1fr);
+      gap: 0.5rem 0.75rem;
+      align-items: baseline;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid #f3f4f6;
+      text-align: left;
+      width: 100%;
+    }
+    .fc-form-row:last-child {
+      border-bottom: none;
+    }
+    .fc-pos-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      line-height: 1.2;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      background: #ede9fe;
+      color: #6d28d9;
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -274,9 +297,7 @@
 
     <main class="max-w-3xl mx-auto w-full px-4 py-5 flex-1 flex flex-col gap-4">
       <div class="flex flex-wrap items-center gap-2">
-        <button type="button" data-fc-mode="en2zh" class="flashcard-mode-btn active text-xs px-3 py-1.5 rounded-full border border-gray-300 bg-white">英 → 中</button>
-        <button type="button" data-fc-mode="zh2en" class="flashcard-mode-btn text-xs px-3 py-1.5 rounded-full border border-gray-300 bg-white">中 → 英</button>
-        <button type="button" data-fc-mode="pos" class="flashcard-mode-btn text-xs px-3 py-1.5 rounded-full border border-gray-300 bg-white">词性转化</button>
+        <p class="text-xs text-gray-500">中文 → 英文 · 同词族各词性在一张卡</p>
         <label class="ml-auto flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer select-none">
           <input id="flashcard-shuffle" type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" />
           随机
@@ -379,6 +400,6 @@
   <script src="js/ai-config.js?v=202607042400"></script>
   <script src="js/ai-config.local.js?v=202607042400" onerror=""></script>
   <script src="js/ai.js?v=202607052200"></script>
-  <script src="js/app.js?v=202607052345"></script>
+  <script src="js/app.js?v=202607060010"></script>
 </body>
 </html>

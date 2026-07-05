@@ -10,10 +10,12 @@ entry = next(q for q in MANIFEST["quizzes"] if q.get("id") == "welearn_b1u4u8_vo
 deck = json.loads((DATA / entry["file"]).read_text(encoding="utf-8"))
 
 assert deck["quiz_type"] == "vocab_flashcard"
-assert len(deck["cards"]) == entry["count"] == 284
-with_forms = sum(1 for c in deck["cards"] if len(c.get("forms", [])) > 1)
-assert with_forms >= 8
-print(f"deck OK: {len(deck['cards'])} cards, {with_forms} with word forms")
+assert len(deck["cards"]) == entry["count"]
+multi = [c for c in deck["cards"] if c.get("multi") or len(c.get("forms", [])) > 1]
+complete = next(c for c in deck["cards"] if any(f["word"] == "complete" for f in c.get("forms", [])))
+assert any(f["word"] == "completion" for f in complete["forms"]), "complete/completion should be one card"
+assert len(complete["forms"]) >= 2
+print(f"deck OK: {len(deck['cards'])} cards, {len(multi)} families")
 
 try:
     from playwright.sync_api import sync_playwright
@@ -33,14 +35,11 @@ def main():
         page.wait_for_timeout(500)
         assert not page.locator("#page-flashcard").evaluate("el => el.classList.contains('hidden')")
         front = page.locator("#flashcard-front").inner_text()
-        assert "empire" in front or "英" in front
+        assert "完成" in front or "词族" in front or "单词" in front
         page.locator("#btn-fc-flip").click()
         page.wait_for_timeout(200)
         back = page.locator("#flashcard-back").inner_text()
-        assert "帝国" in back or "释义" in back
-        page.locator('[data-fc-mode="pos"]').click()
-        page.wait_for_timeout(200)
-        page.locator("#btn-fc-next").click()
+        assert "empire" in back or "complete" in back or "v." in back
         page.wait_for_timeout(200)
         browser.close()
     print("UI OK")
