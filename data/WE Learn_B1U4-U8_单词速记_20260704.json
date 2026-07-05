@@ -1,10 +1,11 @@
 {
-  "title": "WE Learn B1U4~U8 单词速记（重点99词）",
-  "exported_at": "2026-07-05T19:17:22.870299",
+  "title": "WE Learn B1U4~U8 考前冲刺（56词）",
+  "exported_at": "2026-07-05T19:22:23.579678",
   "source": "实用综合教程(第三版)1 ISBN 9787544677301 · WE Learn iWords",
   "quiz_type": "vocab_flashcard",
-  "description": "共 99 张 · 9 张词族 · 课标2021+AB级考点精选",
-  "filter_criteria": "教育部《高职英语课标2021》词汇等级 + 教材iWords + PRETCO B级导向，每单元约18词",
+  "description": "共 56 张 · 9 张词族 · 课标*/** + B级冲刺",
+  "filter_criteria": "考前冲刺：词族全留，每单元约10词，优先课标*/**与B级高频",
+  "filter_profile": "sprint",
   "cards": [
     {
       "sort": 1,
@@ -25,23 +26,6 @@
     },
     {
       "sort": 2,
-      "headword": "mouse",
-      "word": "mouse",
-      "forms": [
-        {
-          "word": "mouse",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "（复数 mice）老鼠",
-          "phonetic": "[maʊs]"
-        }
-      ],
-      "zh_summary": "（复数 mice）老鼠",
-      "multi": false,
-      "unit": "B1U4"
-    },
-    {
-      "sort": 3,
       "headword": "studio",
       "word": "studio",
       "forms": [
@@ -58,7 +42,7 @@
       "unit": "B1U4"
     },
     {
-      "sort": 4,
+      "sort": 3,
       "headword": "cage",
       "word": "cage",
       "forms": [
@@ -75,7 +59,7 @@
       "unit": "B1U4"
     },
     {
-      "sort": 5,
+      "sort": 4,
       "headword": "cartoon",
       "word": "cartoon",
       "forms": [
@@ -92,24 +76,7 @@
       "unit": "B1U4"
     },
     {
-      "sort": 6,
-      "headword": "character",
-      "word": "character",
-      "forms": [
-        {
-          "word": "character",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "人物，角色",
-          "phonetic": "['kærəktə]"
-        }
-      ],
-      "zh_summary": "人物",
-      "multi": false,
-      "unit": "B1U4"
-    },
-    {
-      "sort": 7,
+      "sort": 5,
       "headword": "appear",
       "word": "appear",
       "forms": [
@@ -126,41 +93,7 @@
       "unit": "B1U4"
     },
     {
-      "sort": 8,
-      "headword": "screen",
-      "word": "screen",
-      "forms": [
-        {
-          "word": "screen",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "银幕",
-          "phonetic": "[skriːn]"
-        }
-      ],
-      "zh_summary": "银幕",
-      "multi": false,
-      "unit": "B1U4"
-    },
-    {
-      "sort": 9,
-      "headword": "popular",
-      "word": "popular",
-      "forms": [
-        {
-          "word": "popular",
-          "pos": "adj.",
-          "pos_zh": "形容词",
-          "zh": "流行的，受欢迎的",
-          "phonetic": "['pɒpjʊlə]"
-        }
-      ],
-      "zh_summary": "流行的",
-      "multi": false,
-      "unit": "B1U4"
-    },
-    {
-      "sort": 10,
+      "sort": 6,
       "headword": "create",
       "word": "create",
       "forms": [
@@ -177,7 +110,7 @@
       "unit": "B1U4"
     },
     {
-      "sort": 11,
+      "sort": 7,
       "headword": "complete",
       "word": "complete",
       "forms": [
@@ -201,7 +134,7 @@
       "unit": "B1U4"
     },
     {
-      "sort": 12,
+      "sort": 8,
       "headword": "expand",
       "word": "expand",
       "forms": [
@@ -218,58 +151,7 @@
       "unit": "B1U4"
     },
     {
-      "sort": 13,
-      "headword": "star",
-      "word": "star",
-      "forms": [
-        {
-          "word": "star",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "主演",
-          "phonetic": "[stɑː]"
-        }
-      ],
-      "zh_summary": "主演",
-      "multi": false,
-      "unit": "B1U4"
-    },
-    {
-      "sort": 14,
-      "headword": "barrier",
-      "word": "barrier",
-      "forms": [
-        {
-          "word": "barrier",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "障碍，隔阂",
-          "phonetic": "['bæriə]"
-        }
-      ],
-      "zh_summary": "障碍",
-      "multi": false,
-      "unit": "B1U4"
-    },
-    {
-      "sort": 15,
-      "headword": "contribution",
-      "word": "contribution",
-      "forms": [
-        {
-          "word": "contribution",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "贡献",
-          "phonetic": "[ˌkɒntrɪ'bjuːʃən]"
-        }
-      ],
-      "zh_summary": "贡献",
-      "multi": false,
-      "unit": "B1U4"
-    },
-    {
-      "sort": 16,
+      "sort": 9,
       "headword": "tradition",
       "word": "tradition",
       "forms": [
@@ -293,7 +175,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 17,
+      "sort": 10,
       "headword": "tone",
       "word": "tone",
       "forms": [
@@ -310,24 +192,7 @@
       "unit": "B1U4"
     },
     {
-      "sort": 18,
-      "headword": "international",
-      "word": "international",
-      "forms": [
-        {
-          "word": "international",
-          "pos": "adj.",
-          "pos_zh": "形容词",
-          "zh": "国际的",
-          "phonetic": "[ˌɪntə'næʃənəl]"
-        }
-      ],
-      "zh_summary": "国际的",
-      "multi": false,
-      "unit": "B1U4"
-    },
-    {
-      "sort": 19,
+      "sort": 11,
       "headword": "generation",
       "word": "generation",
       "forms": [
@@ -344,7 +209,7 @@
       "unit": "B1U4"
     },
     {
-      "sort": 20,
+      "sort": 12,
       "headword": "refer",
       "word": "refer",
       "forms": [
@@ -368,7 +233,7 @@
       "unit": "B1U4"
     },
     {
-      "sort": 21,
+      "sort": 13,
       "headword": "extraordinary",
       "word": "extraordinary",
       "forms": [
@@ -385,7 +250,7 @@
       "unit": "B1U4"
     },
     {
-      "sort": 22,
+      "sort": 14,
       "headword": "natural",
       "word": "natural",
       "forms": [
@@ -409,7 +274,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 23,
+      "sort": 15,
       "headword": "conservation",
       "word": "conservation",
       "forms": [
@@ -426,7 +291,7 @@
       "unit": "B1U5"
     },
     {
-      "sort": 24,
+      "sort": 16,
       "headword": "climate",
       "word": "climate",
       "forms": [
@@ -443,24 +308,24 @@
       "unit": "B1U5"
     },
     {
-      "sort": 25,
-      "headword": "switch",
-      "word": "switch",
+      "sort": 17,
+      "headword": "movement",
+      "word": "movement",
       "forms": [
         {
-          "word": "switch",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "（使）转换，使改变",
-          "phonetic": "[swɪtʃ]"
+          "word": "movement",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "运动，动作",
+          "phonetic": "['muːvmənt]"
         }
       ],
-      "zh_summary": "（使）转换",
+      "zh_summary": "运动",
       "multi": false,
       "unit": "B1U5"
     },
     {
-      "sort": 26,
+      "sort": 18,
       "headword": "initiative",
       "word": "initiative",
       "forms": [
@@ -477,7 +342,7 @@
       "unit": "B1U5"
     },
     {
-      "sort": 27,
+      "sort": 19,
       "headword": "launch",
       "word": "launch",
       "forms": [
@@ -494,7 +359,7 @@
       "unit": "B1U5"
     },
     {
-      "sort": 28,
+      "sort": 20,
       "headword": "campaign",
       "word": "campaign",
       "forms": [
@@ -511,7 +376,7 @@
       "unit": "B1U5"
     },
     {
-      "sort": 29,
+      "sort": 21,
       "headword": "community",
       "word": "community",
       "forms": [
@@ -528,7 +393,7 @@
       "unit": "B1U5"
     },
     {
-      "sort": 30,
+      "sort": 22,
       "headword": "observe",
       "word": "observe",
       "forms": [
@@ -545,41 +410,7 @@
       "unit": "B1U5"
     },
     {
-      "sort": 31,
-      "headword": "billion",
-      "word": "billion",
-      "forms": [
-        {
-          "word": "billion",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "十亿",
-          "phonetic": "['bɪljən]"
-        }
-      ],
-      "zh_summary": "十亿",
-      "multi": false,
-      "unit": "B1U5"
-    },
-    {
-      "sort": 32,
-      "headword": "respond",
-      "word": "respond",
-      "forms": [
-        {
-          "word": "respond",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "回应，作出反应",
-          "phonetic": "[rɪ'spɒnd]"
-        }
-      ],
-      "zh_summary": "回应",
-      "multi": false,
-      "unit": "B1U5"
-    },
-    {
-      "sort": 33,
+      "sort": 23,
       "headword": "participate",
       "word": "participate",
       "forms": [
@@ -596,92 +427,7 @@
       "unit": "B1U5"
     },
     {
-      "sort": 34,
-      "headword": "celebrate",
-      "word": "celebrate",
-      "forms": [
-        {
-          "word": "celebrate",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "庆祝",
-          "phonetic": "['selɪbreɪt]"
-        }
-      ],
-      "zh_summary": "庆祝",
-      "multi": false,
-      "unit": "B1U5"
-    },
-    {
-      "sort": 35,
-      "headword": "universe",
-      "word": "universe",
-      "forms": [
-        {
-          "word": "universe",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "宇宙，世界",
-          "phonetic": "['juːnɪvɜːs]"
-        }
-      ],
-      "zh_summary": "宇宙",
-      "multi": false,
-      "unit": "B1U5"
-    },
-    {
-      "sort": 36,
-      "headword": "solar",
-      "word": "solar",
-      "forms": [
-        {
-          "word": "solar",
-          "pos": "adj.",
-          "pos_zh": "形容词",
-          "zh": "太阳的，日光的",
-          "phonetic": "['səʊlə]"
-        }
-      ],
-      "zh_summary": "太阳的",
-      "multi": false,
-      "unit": "B1U5"
-    },
-    {
-      "sort": 37,
-      "headword": "incredible",
-      "word": "incredible",
-      "forms": [
-        {
-          "word": "incredible",
-          "pos": "adj.",
-          "pos_zh": "形容词",
-          "zh": "难以置信的，惊人的",
-          "phonetic": "[ɪn'kredəbl]"
-        }
-      ],
-      "zh_summary": "难以置信的",
-      "multi": false,
-      "unit": "B1U5"
-    },
-    {
-      "sort": 38,
-      "headword": "remind",
-      "word": "remind",
-      "forms": [
-        {
-          "word": "remind",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "提醒，使记起",
-          "phonetic": "[rɪ'maɪnd]"
-        }
-      ],
-      "zh_summary": "提醒",
-      "multi": false,
-      "unit": "B1U5"
-    },
-    {
-      "sort": 39,
+      "sort": 24,
       "headword": "preserve",
       "word": "preserve",
       "forms": [
@@ -698,24 +444,7 @@
       "unit": "B1U5"
     },
     {
-      "sort": 40,
-      "headword": "pollution",
-      "word": "pollution",
-      "forms": [
-        {
-          "word": "pollution",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "污染",
-          "phonetic": "[pə'luːʃn]"
-        }
-      ],
-      "zh_summary": "污染",
-      "multi": false,
-      "unit": "B1U5"
-    },
-    {
-      "sort": 41,
+      "sort": 25,
       "headword": "festival",
       "word": "festival",
       "forms": [
@@ -739,7 +468,7 @@
       "unit": "B1U5"
     },
     {
-      "sort": 42,
+      "sort": 26,
       "headword": "computer",
       "word": "computer",
       "forms": [
@@ -756,7 +485,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 43,
+      "sort": 27,
       "headword": "expense",
       "word": "expense",
       "forms": [
@@ -773,24 +502,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 44,
-      "headword": "earn",
-      "word": "earn",
-      "forms": [
-        {
-          "word": "earn",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "赚，挣得",
-          "phonetic": "[ɜːn]"
-        }
-      ],
-      "zh_summary": "赚",
-      "multi": false,
-      "unit": "B1U6"
-    },
-    {
-      "sort": 45,
+      "sort": 28,
       "headword": "wander",
       "word": "wander",
       "forms": [
@@ -807,7 +519,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 46,
+      "sort": 29,
       "headword": "candidate",
       "word": "candidate",
       "forms": [
@@ -824,7 +536,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 47,
+      "sort": 30,
       "headword": "employ",
       "word": "employ",
       "forms": [
@@ -848,24 +560,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 48,
-      "headword": "check",
-      "word": "check",
-      "forms": [
-        {
-          "word": "check",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "检查，核对",
-          "phonetic": "[tʃek]"
-        }
-      ],
-      "zh_summary": "检查",
-      "multi": false,
-      "unit": "B1U6"
-    },
-    {
-      "sort": 49,
+      "sort": 31,
       "headword": "ideal",
       "word": "ideal",
       "forms": [
@@ -882,41 +577,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 50,
-      "headword": "countryside",
-      "word": "countryside",
-      "forms": [
-        {
-          "word": "countryside",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "乡下，农村",
-          "phonetic": "['kʌntrɪsaɪd]"
-        }
-      ],
-      "zh_summary": "乡下",
-      "multi": false,
-      "unit": "B1U6"
-    },
-    {
-      "sort": 51,
-      "headword": "hunt",
-      "word": "hunt",
-      "forms": [
-        {
-          "word": "hunt",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "搜寻；打猎",
-          "phonetic": "[hʌnt]"
-        }
-      ],
-      "zh_summary": "搜寻",
-      "multi": false,
-      "unit": "B1U6"
-    },
-    {
-      "sort": 52,
+      "sort": 32,
       "headword": "swear",
       "word": "swear",
       "forms": [
@@ -933,41 +594,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 53,
-      "headword": "search",
-      "word": "search",
-      "forms": [
-        {
-          "word": "search",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "搜寻，查找",
-          "phonetic": "[sɜːtʃ]"
-        }
-      ],
-      "zh_summary": "搜寻",
-      "multi": false,
-      "unit": "B1U6"
-    },
-    {
-      "sort": 54,
-      "headword": "vacation",
-      "word": "vacation",
-      "forms": [
-        {
-          "word": "vacation",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "假期",
-          "phonetic": "[və'keɪʃn]"
-        }
-      ],
-      "zh_summary": "假期",
-      "multi": false,
-      "unit": "B1U6"
-    },
-    {
-      "sort": 55,
+      "sort": 33,
       "headword": "opportunity",
       "word": "opportunity",
       "forms": [
@@ -984,7 +611,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 56,
+      "sort": 34,
       "headword": "profession",
       "word": "profession",
       "forms": [
@@ -1001,7 +628,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 57,
+      "sort": 35,
       "headword": "mention",
       "word": "mention",
       "forms": [
@@ -1018,24 +645,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 58,
-      "headword": "charge",
-      "word": "charge",
-      "forms": [
-        {
-          "word": "charge",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "掌管，负责",
-          "phonetic": "[tʃɑːdʒ]"
-        }
-      ],
-      "zh_summary": "掌管",
-      "multi": false,
-      "unit": "B1U6"
-    },
-    {
-      "sort": 59,
+      "sort": 36,
       "headword": "rescue",
       "word": "rescue",
       "forms": [
@@ -1052,24 +662,7 @@
       "unit": "B1U6"
     },
     {
-      "sort": 60,
-      "headword": "spring",
-      "word": "spring",
-      "forms": [
-        {
-          "word": "spring",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "泉",
-          "phonetic": "[sprɪŋ]"
-        }
-      ],
-      "zh_summary": "泉",
-      "multi": false,
-      "unit": "B1U6"
-    },
-    {
-      "sort": 61,
+      "sort": 37,
       "headword": "fitness",
       "word": "fitness",
       "forms": [
@@ -1093,41 +686,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 62,
-      "headword": "method",
-      "word": "method",
-      "forms": [
-        {
-          "word": "method",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "方法",
-          "phonetic": "['meθəd]"
-        }
-      ],
-      "zh_summary": "方法",
-      "multi": false,
-      "unit": "B1U7"
-    },
-    {
-      "sort": 63,
-      "headword": "amount",
-      "word": "amount",
-      "forms": [
-        {
-          "word": "amount",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "数量",
-          "phonetic": "[ə'maʊnt]"
-        }
-      ],
-      "zh_summary": "数量",
-      "multi": false,
-      "unit": "B1U7"
-    },
-    {
-      "sort": 64,
+      "sort": 38,
       "headword": "balance",
       "word": "balance",
       "forms": [
@@ -1144,7 +703,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 65,
+      "sort": 39,
       "headword": "muscle",
       "word": "muscle",
       "forms": [
@@ -1161,24 +720,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 66,
-      "headword": "weigh",
-      "word": "weigh",
-      "forms": [
-        {
-          "word": "weigh",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "重量为，重",
-          "phonetic": "[weɪ]"
-        }
-      ],
-      "zh_summary": "重量为",
-      "multi": false,
-      "unit": "B1U7"
-    },
-    {
-      "sort": 67,
+      "sort": 40,
       "headword": "miracle",
       "word": "miracle",
       "forms": [
@@ -1195,7 +737,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 68,
+      "sort": 41,
       "headword": "ad",
       "word": "ad",
       "forms": [
@@ -1212,24 +754,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 69,
-      "headword": "product",
-      "word": "product",
-      "forms": [
-        {
-          "word": "product",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "产品，产物",
-          "phonetic": "['prɒdʌkt]"
-        }
-      ],
-      "zh_summary": "产品",
-      "multi": false,
-      "unit": "B1U7"
-    },
-    {
-      "sort": 70,
+      "sort": 42,
       "headword": "calorie",
       "word": "calorie",
       "forms": [
@@ -1246,24 +771,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 71,
-      "headword": "fool",
-      "word": "fool",
-      "forms": [
-        {
-          "word": "fool",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "愚弄，欺骗",
-          "phonetic": "[fuːl]"
-        }
-      ],
-      "zh_summary": "愚弄",
-      "multi": false,
-      "unit": "B1U7"
-    },
-    {
-      "sort": 72,
+      "sort": 43,
       "headword": "activity",
       "word": "activity",
       "forms": [
@@ -1287,7 +795,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 73,
+      "sort": 44,
       "headword": "expert",
       "word": "expert",
       "forms": [
@@ -1304,7 +812,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 74,
+      "sort": 45,
       "headword": "joint",
       "word": "joint",
       "forms": [
@@ -1321,41 +829,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 75,
-      "headword": "improve",
-      "word": "improve",
-      "forms": [
-        {
-          "word": "improve",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "改善，改进",
-          "phonetic": "[ɪm'pruːv]"
-        }
-      ],
-      "zh_summary": "改善",
-      "multi": false,
-      "unit": "B1U7"
-    },
-    {
-      "sort": 76,
-      "headword": "special",
-      "word": "special",
-      "forms": [
-        {
-          "word": "special",
-          "pos": "adj.",
-          "pos_zh": "形容词",
-          "zh": "特别的，特殊的",
-          "phonetic": "['speʃl]"
-        }
-      ],
-      "zh_summary": "特别的",
-      "multi": false,
-      "unit": "B1U7"
-    },
-    {
-      "sort": 77,
+      "sort": 46,
       "headword": "equipment",
       "word": "equipment",
       "forms": [
@@ -1372,7 +846,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 78,
+      "sort": 47,
       "headword": "tense",
       "word": "tense",
       "forms": [
@@ -1389,24 +863,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 79,
-      "headword": "swing",
-      "word": "swing",
-      "forms": [
-        {
-          "word": "swing",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "摇摆，摆动",
-          "phonetic": "[swɪŋ]"
-        }
-      ],
-      "zh_summary": "摇摆",
-      "multi": false,
-      "unit": "B1U7"
-    },
-    {
-      "sort": 80,
+      "sort": 48,
       "headword": "experiment",
       "word": "experiment",
       "forms": [
@@ -1423,7 +880,7 @@
       "unit": "B1U7"
     },
     {
-      "sort": 81,
+      "sort": 49,
       "headword": "pronounce",
       "word": "pronounce",
       "forms": [
@@ -1440,75 +897,7 @@
       "unit": "B1U8"
     },
     {
-      "sort": 82,
-      "headword": "reunion",
-      "word": "reunion",
-      "forms": [
-        {
-          "word": "reunion",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "团圆，重聚",
-          "phonetic": "[ˌriː'juːnjən]"
-        }
-      ],
-      "zh_summary": "团圆",
-      "multi": false,
-      "unit": "B1U8"
-    },
-    {
-      "sort": 83,
-      "headword": "chat",
-      "word": "chat",
-      "forms": [
-        {
-          "word": "chat",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "聊天",
-          "phonetic": "[tʃæt]"
-        }
-      ],
-      "zh_summary": "聊天",
-      "multi": false,
-      "unit": "B1U8"
-    },
-    {
-      "sort": 84,
-      "headword": "custom",
-      "word": "custom",
-      "forms": [
-        {
-          "word": "custom",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "风俗，习俗",
-          "phonetic": "['kʌstəm]"
-        }
-      ],
-      "zh_summary": "风俗",
-      "multi": false,
-      "unit": "B1U8"
-    },
-    {
-      "sort": 85,
-      "headword": "dumpling",
-      "word": "dumpling",
-      "forms": [
-        {
-          "word": "dumpling",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "饺子",
-          "phonetic": "['dʌmplɪŋ]"
-        }
-      ],
-      "zh_summary": "饺子",
-      "multi": false,
-      "unit": "B1U8"
-    },
-    {
-      "sort": 86,
+      "sort": 50,
       "headword": "ban",
       "word": "ban",
       "forms": [
@@ -1525,24 +914,7 @@
       "unit": "B1U8"
     },
     {
-      "sort": 87,
-      "headword": "accident",
-      "word": "accident",
-      "forms": [
-        {
-          "word": "accident",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "事故",
-          "phonetic": "['æksɪdənt]"
-        }
-      ],
-      "zh_summary": "事故",
-      "multi": false,
-      "unit": "B1U8"
-    },
-    {
-      "sort": 88,
+      "sort": 51,
       "headword": "threat",
       "word": "threat",
       "forms": [
@@ -1559,92 +931,7 @@
       "unit": "B1U8"
     },
     {
-      "sort": 89,
-      "headword": "quality",
-      "word": "quality",
-      "forms": [
-        {
-          "word": "quality",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "质量",
-          "phonetic": "['kwɒlɪti]"
-        }
-      ],
-      "zh_summary": "质量",
-      "multi": false,
-      "unit": "B1U8"
-    },
-    {
-      "sort": 90,
-      "headword": "dragon",
-      "word": "dragon",
-      "forms": [
-        {
-          "word": "dragon",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "龙",
-          "phonetic": "['dræɡən]"
-        }
-      ],
-      "zh_summary": "龙",
-      "multi": false,
-      "unit": "B1U8"
-    },
-    {
-      "sort": 91,
-      "headword": "lantern",
-      "word": "lantern",
-      "forms": [
-        {
-          "word": "lantern",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "灯笼",
-          "phonetic": "['læntən]"
-        }
-      ],
-      "zh_summary": "灯笼",
-      "multi": false,
-      "unit": "B1U8"
-    },
-    {
-      "sort": 92,
-      "headword": "Christmas",
-      "word": "Christmas",
-      "forms": [
-        {
-          "word": "Christmas",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "圣诞节",
-          "phonetic": "['krɪsməs]"
-        }
-      ],
-      "zh_summary": "圣诞节",
-      "multi": false,
-      "unit": "B1U8"
-    },
-    {
-      "sort": 93,
-      "headword": "lack",
-      "word": "lack",
-      "forms": [
-        {
-          "word": "lack",
-          "pos": "v.",
-          "pos_zh": "动词",
-          "zh": "缺乏，没有",
-          "phonetic": "[læk]"
-        }
-      ],
-      "zh_summary": "缺乏",
-      "multi": false,
-      "unit": "B1U8"
-    },
-    {
-      "sort": 94,
+      "sort": 52,
       "headword": "intend",
       "word": "intend",
       "forms": [
@@ -1661,24 +948,7 @@
       "unit": "B1U8"
     },
     {
-      "sort": 95,
-      "headword": "relative",
-      "word": "relative",
-      "forms": [
-        {
-          "word": "relative",
-          "pos": "n.",
-          "pos_zh": "名词",
-          "zh": "亲戚",
-          "phonetic": "['relətɪv]"
-        }
-      ],
-      "zh_summary": "亲戚",
-      "multi": false,
-      "unit": "B1U8"
-    },
-    {
-      "sort": 96,
+      "sort": 53,
       "headword": "realize",
       "word": "realize",
       "forms": [
@@ -1695,7 +965,7 @@
       "unit": "B1U8"
     },
     {
-      "sort": 97,
+      "sort": 54,
       "headword": "remove",
       "word": "remove",
       "forms": [
@@ -1712,7 +982,7 @@
       "unit": "B1U8"
     },
     {
-      "sort": 98,
+      "sort": 55,
       "headword": "perfect",
       "word": "perfect",
       "forms": [
@@ -1736,7 +1006,7 @@
       "unit": "B1U8"
     },
     {
-      "sort": 99,
+      "sort": 56,
       "headword": "insist",
       "word": "insist",
       "forms": [

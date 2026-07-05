@@ -5,7 +5,7 @@ from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 
-from vocab_filter import filter_cards, unit_short
+from vocab_filter import DEFAULT_PROFILE, filter_cards, profile_meta, unit_short
 
 SRC = Path(__file__).parent.parent.parent / "welearn-output" / "7月4日" / "WE Learn_B1U4-U8_iWords_20260704.json"
 TIERS_FILE = Path(__file__).parent / "curriculum_vocab_tiers.json"
@@ -245,17 +245,19 @@ def main():
     families = build_families(rows)
     all_cards = build_cards(families)
     attach_unit(all_cards, rows)
-    cards = filter_cards(all_cards, tiers)
+    cards = filter_cards(all_cards, tiers, DEFAULT_PROFILE)
     multi = sum(1 for c in cards if c["multi"])
 
-    title = f"WE Learn B1U4~U8 单词速记（重点{len(cards)}词）"
+    meta = profile_meta(DEFAULT_PROFILE, len(cards), multi)
+    title = meta["title"]
     deck = {
         "title": title,
         "exported_at": datetime.now().isoformat(),
         "source": "实用综合教程(第三版)1 ISBN 9787544677301 · WE Learn iWords",
         "quiz_type": "vocab_flashcard",
-        "description": f"共 {len(cards)} 张 · {multi} 张词族 · 课标2021+AB级考点精选",
-        "filter_criteria": "教育部《高职英语课标2021》词汇等级 + 教材iWords + PRETCO B级导向，每单元约18词",
+        "description": meta["description"],
+        "filter_criteria": meta["filter_criteria"],
+        "filter_profile": DEFAULT_PROFILE,
         "cards": cards,
     }
     OUT_FILE.write_text(json.dumps(deck, ensure_ascii=False, indent=2), encoding="utf-8")
