@@ -31,6 +31,8 @@
     .answer-card-btn.correct { background-color: #22c55e; border-color: #22c55e; color: #fff; }
     .answer-card-btn.partial { background-color: #f59e0b; border-color: #f59e0b; color: #fff; }
     .answer-card-btn.wrong { background-color: #ef4444; border-color: #ef4444; color: #fff; }
+    .answer-card-btn.essay-review { background-color: #3b82f6; border-color: #3b82f6; color: #fff; }
+    .answer-card-btn.essay-review.current { box-shadow: 0 0 0 2px #fff; }
     .review-filter-chip {
       border-color: #e5e7eb;
       color: #6b7280;
@@ -256,7 +258,7 @@
           </h2>
           <div id="review-filter-bar" class="hidden flex gap-2 mb-3">
             <button type="button" id="review-filter-all-desktop" class="review-filter-chip active text-xs px-2.5 py-1 rounded-full border">全部</button>
-            <button type="button" id="review-filter-wrong-desktop" class="review-filter-chip text-xs px-2.5 py-1 rounded-full border">仅错题</button>
+            <button type="button" id="review-filter-wrong-desktop" class="review-filter-chip text-xs px-2.5 py-1 rounded-full border">待复习</button>
           </div>
           <div class="answer-card-scroll max-h-44 overflow-y-auto overscroll-contain px-1.5 py-1.5 lg:max-h-none lg:overflow-visible lg:px-0 lg:py-0">
             <div id="answer-card" class="grid grid-cols-5 sm:grid-cols-6 lg:grid-cols-5 gap-1.5 sm:gap-2"></div>
@@ -297,7 +299,7 @@
       <div class="flex items-stretch gap-1.5 max-w-lg mx-auto">
         <button id="btn-review-prev-wrong" type="button" class="flex-1 flex flex-col items-center justify-center py-2 rounded-xl border border-gray-200 text-gray-600 disabled:opacity-40 min-h-[3.25rem]">
           <span class="text-lg leading-none">‹</span>
-          <span class="text-[11px] mt-0.5">上一错题</span>
+          <span class="text-[11px] mt-0.5">上一待复习</span>
         </button>
         <button id="btn-review-sheet" type="button" class="flex-[1.15] flex flex-col items-center justify-center py-2 rounded-xl bg-primary/5 border border-primary/25 text-primary min-h-[3.25rem]">
           <span class="text-sm font-semibold leading-tight">答题卡</span>
@@ -305,7 +307,7 @@
         </button>
         <button id="btn-review-next-wrong" type="button" class="flex-1 flex flex-col items-center justify-center py-2 rounded-xl bg-primary text-white disabled:opacity-40 min-h-[3.25rem]">
           <span class="text-lg leading-none">›</span>
-          <span class="text-[11px] mt-0.5">下一错题</span>
+          <span class="text-[11px] mt-0.5">下一待复习</span>
         </button>
       </div>
     </div>
@@ -323,11 +325,12 @@
         </div>
         <div id="answer-sheet-filter-row" class="hidden flex items-center gap-2 px-4 pb-3 flex-wrap">
           <button type="button" id="review-filter-all" class="review-filter-chip active text-xs px-3 py-1.5 rounded-full border">全部</button>
-          <button type="button" id="review-filter-wrong" class="review-filter-chip text-xs px-3 py-1.5 rounded-full border">仅错题</button>
+          <button type="button" id="review-filter-wrong" class="review-filter-chip text-xs px-3 py-1.5 rounded-full border">待复习</button>
           <span id="answer-sheet-legend" class="ml-auto text-[11px] text-gray-400 flex items-center gap-2.5">
             <span class="inline-flex items-center gap-1"><i class="w-2 h-2 rounded-sm bg-green-500 inline-block"></i>对</span>
             <span class="inline-flex items-center gap-1"><i class="w-2 h-2 rounded-sm bg-amber-500 inline-block"></i>部分</span>
             <span class="inline-flex items-center gap-1"><i class="w-2 h-2 rounded-sm bg-red-500 inline-block"></i>错</span>
+            <span class="inline-flex items-center gap-1"><i class="w-2 h-2 rounded-sm bg-blue-500 inline-block"></i>问答</span>
           </span>
         </div>
         <div id="review-sheet-scroll" class="flex-1 overflow-y-auto overscroll-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
@@ -509,6 +512,6 @@
   <script src="js/ai-config.js?v=202607042400"></script>
   <script src="js/ai-config.local.js?v=202607042400" onerror=""></script>
   <script src="js/ai.js?v=202607052200"></script>
-  <script src="js/app.js?v=202607060401"></script>
+  <script src="js/app.js?v=202607060500"></script>
 </body>
 </html>

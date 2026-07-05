@@ -90,7 +90,15 @@ with sync_playwright() as p:
 
     page.locator("#btn-review").click()
     page.wait_for_timeout(300)
-    check("解析模式显示正确答案", "正确答案" in page.locator("#question-container").inner_text())
+    current_idx = page.evaluate(
+        """() => {
+          const btn = document.querySelector('#answer-card button.current');
+          return btn ? Number(btn.dataset.index) : -1;
+        }"""
+    )
+    check("全对时查看解析优先进入问答题", current_idx == 5, str(current_idx))
+    review_text = page.locator("#question-container").inner_text()
+    check("问答题纳入待复习导航", "待复习" in review_text and "对照参考" in review_text)
 
     for idx, q in enumerate(quiz["questions"]):
         if q["type"] != "问答题":

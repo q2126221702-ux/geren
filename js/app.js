@@ -294,11 +294,36 @@
       .map(({ i }) => i);
   }
 
+  /** 解析导航：客观错题 + 无法自动判分的问答题（需对照参考，非自评） */
+  function getReviewFocusIndices() {
+    if (!state.quiz) return [];
+    return state.quiz.questions
+      .map((q, i) => ({ q, i }))
+      .filter(({ q, i }) => isEssayQuestion(q) || !gradeQuestion(q, state.answers[i]).correct)
+      .map(({ i }) => i);
+  }
+
+  function formatReviewFocusSummary() {
+    const total = state.quiz?.questions.length || 0;
+    const focus = getReviewFocusIndices();
+    if (!focus.length) return `共 ${total} 题 · 全部正确`;
+    const wrong = getReviewWrongIndices();
+    const essayCount = focus.filter((i) => isEssayQuestion(state.quiz.questions[i])).length;
+    const parts = [];
+    if (wrong.length) parts.push(`错题 ${wrong.length} 道`);
+    if (essayCount) parts.push(`问答题 ${essayCount} 道待对照`);
+    return `共 ${total} 题 · ${parts.join(' · ')}`;
+  }
+
   function getQuestionReviewStatus(idx) {
     const q = state.quiz?.questions[idx];
     if (!q) return { label: '—', tone: 'neutral', badgeClass: 'bg-gray-100 text-gray-600 border-gray-200' };
     if (isEssayQuestion(q)) {
-      return { label: '问答题', tone: 'essay', badgeClass: 'bg-blue-50 text-blue-700 border-blue-200' };
+      return {
+        label: '问答题 · 对照参考',
+        tone: 'essay',
+        badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
+      };
     }
     const result = gradeQuestion(q, state.answers[idx]);
     if (!isAnswered(idx)) {
@@ -314,16 +339,16 @@
   }
 
   function findAdjacentWrongIndex(from, direction) {
-    const wrong = getReviewWrongIndices();
-    if (!wrong.length) return null;
+    const focus = getReviewFocusIndices();
+    if (!focus.length) return null;
     if (direction > 0) {
-      for (const i of wrong) if (i > from) return i;
-      return wrong[0];
+      for (const i of focus) if (i > from) return i;
+      return focus[0];
     }
-    for (let k = wrong.length - 1; k >= 0; k--) {
-      if (wrong[k] < from) return wrong[k];
+    for (let k = focus.length - 1; k >= 0; k--) {
+      if (focus[k] < from) return focus[k];
     }
-    return wrong[wrong.length - 1];
+    return focus[focus.length - 1];
   }
 
   function answerCardButtonClass(i) {
@@ -331,7 +356,9 @@
       'answer-card-btn review-sheet-btn h-10 w-full rounded border border-gray-200 text-sm hover:border-primary flex items-center justify-center';
     if (i === state.currentIndex) cls += ' current';
     const q = state.quiz.questions[i];
-    if (state.submitted && !isEssayQuestion(q)) {
+    if (state.submitted && isEssayQuestion(q)) {
+      cls += ' essay-review';
+    } else if (state.submitted && !isEssayQuestion(q)) {
       const result = gradeQuestion(q, state.answers[i]);
       if (result.correct) cls += ' correct';
       else if (result.partial) cls += ' partial';
@@ -387,18 +414,17 @@
     if (!grid || !state.quiz) return;
 
     const wrong = getReviewWrongIndices();
+    const focus = getReviewFocusIndices();
     const total = state.quiz.questions.length;
     const answered = countAnswered();
-    const indices = state.submitted && state.reviewFilterWrong ? wrong : state.quiz.questions.map((_, i) => i);
+    const indices = state.submitted && state.reviewFilterWrong ? focus : state.quiz.questions.map((_, i) => i);
 
     if (title) title.textContent = state.submitted ? '答题卡 · 解析' : '答题卡';
     if (filterRow) filterRow.classList.toggle('hidden', !state.submitted);
 
     if (summary) {
       summary.textContent = state.submitted
-        ? wrong.length === 0
-          ? `共 ${total} 题 · 全部正确`
-          : `共 ${total} 题 · 错题 ${wrong.length} 道`
+        ? formatReviewFocusSummary() + ' · 点击题号跳转'
         : `已答 ${answered} / ${total} 题 · 点击题号跳转`;
     }
 
@@ -443,8 +469,8 @@
 
   function buildReviewBanner(idx) {
     const status = getQuestionReviewStatus(idx);
-    const wrong = getReviewWrongIndices();
-    const wrongPos = wrong.indexOf(idx);
+    const focus = getReviewFocusIndices();
+    const focusPos = focus.indexOf(idx);
     const total = state.quiz.questions.length;
     const tones = {
       correct: 'border-green-500 bg-green-50',
@@ -462,12 +488,12 @@
       essay: '译',
       neutral: '·',
     };
-    const wrongHint = wrongPos >= 0 ? ` · 错题 ${wrongPos + 1}/${wrong.length}` : '';
+    const focusHint = focusPos >= 0 ? ` · 待复习 ${focusPos + 1}/${focus.length}` : '';
     return `
       <div class="review-banner mb-4 px-4 py-3 rounded-lg border-l-4 ${tones[status.tone] || tones.neutral}">
         <div class="flex items-center justify-between gap-3">
           <p class="text-sm font-semibold text-gray-800">${icons[status.tone] || '·'} ${status.label}</p>
-          <p class="text-xs text-gray-500 shrink-0">第 ${idx + 1} / ${total} 题${wrongHint}</p>
+          <p class="text-xs text-gray-500 shrink-0">第 ${idx + 1} / ${total} 题${focusHint}</p>
         </div>
       </div>`;
   }
@@ -482,9 +508,10 @@
     const filterBar = $('review-filter-bar');
     const navRow = page?.querySelector('.quiz-nav-row');
     const wrong = getReviewWrongIndices();
+    const focus = getReviewFocusIndices();
     const total = state.quiz?.questions.length || 0;
     const idx = state.currentIndex;
-    const wrongPos = wrong.indexOf(idx);
+    const focusPos = focus.indexOf(idx);
 
     if (hint) hint.classList.toggle('hidden', !review);
     if (filterBar) filterBar.classList.toggle('hidden', !review || mobile);
@@ -494,7 +521,11 @@
     if (progressEl && state.quiz) {
       if (review) {
         let text = `题目解析 · 第 ${idx + 1}/${total} 题`;
-        if (wrong.length) text += ` · 错题 ${wrong.length} 道`;
+        if (focus.length) {
+          if (wrong.length) text += ` · 错题 ${wrong.length} 道`;
+          const essayCount = focus.filter((i) => isEssayQuestion(state.quiz.questions[i])).length;
+          if (essayCount) text += ` · 问答 ${essayCount} 道`;
+        }
         progressEl.textContent = text;
       } else {
         progressEl.textContent = `第 ${idx + 1}/${total} 题 · 已答 ${countAnswered()} 题`;
@@ -506,12 +537,12 @@
       const meta = $('review-dock-meta');
       if (meta) {
         meta.textContent =
-          wrongPos >= 0
-            ? `错题 ${wrongPos + 1}/${wrong.length}`
+          focusPos >= 0
+            ? `待复习 ${focusPos + 1}/${focus.length}`
             : `第 ${idx + 1} / ${total} 题`;
       }
-      $('btn-review-prev-wrong')?.toggleAttribute('disabled', wrong.length === 0);
-      $('btn-review-next-wrong')?.toggleAttribute('disabled', wrong.length === 0);
+      $('btn-review-prev-wrong')?.toggleAttribute('disabled', focus.length === 0);
+      $('btn-review-next-wrong')?.toggleAttribute('disabled', focus.length === 0);
     }
 
     if (review && state.reviewSheetOpen) renderReviewSheet();
@@ -1370,6 +1401,7 @@
       reviewBlock = `
         <div class="mt-5 pt-5 border-t border-gray-100">
           ${scoreLine}
+          <p class="text-xs text-blue-600 mb-2">本题无法自动判分，请对照参考答案；已纳入「待复习」导航。</p>
           <p class="text-sm text-gray-500 mb-1">参考答案</p>
           <p class="text-sm text-gray-700 bg-gray-50 rounded-lg p-3">${escapeHtml(q.correct_answer)}</p>
         </div>`;
@@ -1470,12 +1502,13 @@
   function renderAnswerCard() {
     const card = $('answer-card');
     const wrong = getReviewWrongIndices();
+    const focus = getReviewFocusIndices();
     const indices = state.submitted && state.reviewFilterWrong
-      ? wrong
+      ? focus
       : state.quiz.questions.map((_, i) => i);
 
     if (!indices.length && state.submitted && state.reviewFilterWrong) {
-      card.innerHTML = `<p class="col-span-5 text-center text-xs text-gray-400 py-4">没有错题</p>`;
+      card.innerHTML = `<p class="col-span-5 text-center text-xs text-gray-400 py-4">没有待复习题目</p>`;
     } else {
       card.innerHTML = indices
         .map(
@@ -2516,9 +2549,9 @@
     $('btn-submit-mobile')?.addEventListener('click', submitQuiz);
 
     $('btn-review').addEventListener('click', () => {
-      const wrong = getReviewWrongIndices();
+      const focus = getReviewFocusIndices();
       showPage('quiz');
-      goToQuestion(wrong.length ? wrong[0] : 0);
+      goToQuestion(focus.length ? focus[0] : 0);
     });
 
     $('btn-review-prev-wrong')?.addEventListener('click', () => goToAdjacentWrong(-1));
