@@ -33,22 +33,25 @@ def main():
         clip = page.evaluate(
             """() => {
               const btn = document.querySelector('#answer-card button.current');
-              const box = document.getElementById('answer-card');
+              const box = document.querySelector('.answer-card-scroll') || document.getElementById('answer-card');
               if (!btn || !box) return { ok: false };
               const br = btn.getBoundingClientRect();
               const cr = box.getBoundingClientRect();
               const style = getComputedStyle(btn);
-              const borderTop = parseFloat(style.borderTopWidth) || 0;
+              const spread = 2;
               return {
-                ok: br.top - borderTop >= cr.top - 0.5 && br.left - borderTop >= cr.left - 0.5,
-                borderTop,
-                topGap: br.top - cr.top,
+                ok: br.top - spread >= cr.top + 0.5
+                  && br.left - spread >= cr.left + 0.5
+                  && br.bottom + spread <= cr.bottom + 0.5
+                  && br.right + spread <= cr.right + 0.5,
+                boxShadow: style.boxShadow,
+                paddingTop: getComputedStyle(box).paddingTop,
               };
             }"""
         )
-        print(f"current border visible: {clip}")
+        print(f"current highlight visible: {clip}")
         if not clip.get("ok"):
-            issues.append("current question border clipped by answer card container")
+            issues.append("current question highlight clipped by answer card container")
 
         grid = page.locator("#answer-card")
         grid_box = grid.bounding_box()
