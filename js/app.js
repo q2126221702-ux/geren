@@ -130,12 +130,36 @@
   }
 
   function scrollToQuestionArea() {
-    const el = $('question-container');
+    const q = state.quiz?.questions[state.currentIndex];
+    let el = $('question-container');
+    if (q && isEssayQuestion(q)) {
+      el = document.querySelector('.essay-prompt') || el;
+    }
     if (!el) return;
     const header = pages.quiz?.querySelector('header');
     const offset = header ? header.offsetHeight + 12 : 0;
     const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
     window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  }
+
+  function bindEssayInputScrollGuard(textarea) {
+    if (!textarea || textarea.dataset.scrollGuard === '1') return;
+    textarea.dataset.scrollGuard = '1';
+    let lockY = null;
+    const restore = () => {
+      if (lockY === null) return;
+      window.scrollTo({ top: lockY, left: 0, behavior: 'instant' });
+    };
+    textarea.addEventListener('focus', () => {
+      if (!window.matchMedia('(max-width: 1023px)').matches) return;
+      lockY = window.scrollY;
+      restore();
+      requestAnimationFrame(restore);
+      [50, 120, 250, 400].forEach((ms) => setTimeout(restore, ms));
+    });
+    textarea.addEventListener('blur', () => {
+      lockY = null;
+    });
   }
 
   function normalizeText(text) {
@@ -511,6 +535,7 @@
     const review = state.submitted;
 
     let body = '';
+    let essayLead = '';
 
     if (isSelectableQuestion(q)) {
       body = renderSelectableOptions(q, idx, review);
@@ -527,15 +552,22 @@
           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         />`;
     } else if (isEssayQuestion(q)) {
+      const { lead, passage } = parseEssayTitle(q.title);
       const val = state.answers[idx] || '';
+      const promptBlock = passage
+        ? `<div class="essay-prompt mb-4 rounded-lg border border-gray-200 bg-gray-50 p-4 max-h-[min(42vh,18rem)] overflow-y-auto text-[15px] leading-relaxed whitespace-pre-line text-gray-800">${escapeHtml(passage)}</div>`
+        : '';
       body = `
+        ${promptBlock}
+        <label for="essay-input" class="block text-sm font-medium text-gray-600 mb-2">你的翻译</label>
         <textarea
           id="essay-input"
           rows="6"
-          placeholder="请输入你的回答（问答题需自行对照参考答案）"
+          placeholder="对照上方英文，在此输入中文翻译"
           ${disabled}
-          class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary resize-y"
+          class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary resize-y scroll-mt-28"
         >${escapeHtml(val)}</textarea>`;
+      essayLead = lead;
     } else {
       body = `<p class="text-sm text-gray-500">暂不支持「${escapeHtml(typeLabel(q.type))}」题型，请跳过此题。</p>`;
     }
@@ -594,7 +626,7 @@
         <span class="text-xs px-2 py-0.5 rounded bg-primary-light text-primary font-medium">${typeLabel(q.type)}</span>
         <span class="text-sm text-gray-400">${idx + 1} / ${state.quiz.questions.length}</span>
       </div>
-      <h2 class="${questionTitleClass(q)}">${formatQuestionTitle(q)}</h2>
+      <h2 class="${questionTitleClass(q)}">${essayLead ? escapeHtml(decodeHtml(essayLead)) : formatQuestionTitle(q)}</h2>
       ${body}
       ${reviewBlock}
       ${aiBlock}`;
@@ -645,6 +677,7 @@
 
       const essayInput = container.querySelector('#essay-input');
       if (essayInput) {
+        bindEssayInputScrollGuard(essayInput);
         essayInput.addEventListener('input', (e) => {
           state.answers[idx] = e.target.value;
           renderAnswerCard();
@@ -1565,6 +1598,18 @@
       $('btn-test-ai').disabled = false;
       updateTestButtonLabel();
     }
+  }
+
+  function parseEssayTitle(title) {
+    const text = decodeHtml(String(title || ''));
+    const splitAt = text.indexOf('\n\n');
+    if (splitAt === -1) {
+      return { lead: text.trim(), passage: '' };
+    }
+    return {
+      lead: text.slice(0, splitAt).trim(),
+      passage: text.slice(splitAt + 2).trim(),
+    };
   }
 
   function formatFillTitle(title) {
