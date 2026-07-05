@@ -207,7 +207,15 @@
     const q = state.quiz?.questions[state.currentIndex];
     let el = $('question-container');
     if (q && isEssayQuestion(q)) {
-      el = document.querySelector('.essay-prompt') || el;
+      if (state.submitted) {
+        el =
+          document.querySelector('#ai-explain-output') ||
+          document.querySelector('#btn-ai-explain') ||
+          document.querySelector('.essay-prompt-fold') ||
+          el;
+      } else {
+        el = document.querySelector('.essay-prompt') || el;
+      }
     }
     if (!el) return;
     const header = pages.quiz?.querySelector('header');
@@ -629,19 +637,33 @@
     } else if (isEssayQuestion(q)) {
       const { lead, passage } = parseEssayTitle(q.title);
       const val = state.answers[idx] || '';
-      const promptBlock = passage
-        ? `<div class="essay-prompt mb-4 rounded-lg border border-gray-200 bg-gray-50 p-4 max-h-[min(42vh,18rem)] overflow-y-auto text-[15px] leading-relaxed whitespace-pre-line text-gray-800">${escapeHtml(passage)}</div>`
-        : '';
+      let promptBlock = '';
+      if (passage) {
+        if (review) {
+          promptBlock = `
+        <details class="essay-prompt-fold mb-4 rounded-lg border border-gray-200 bg-gray-50">
+          <summary class="text-sm font-medium text-gray-600 px-4 py-3">英文原文（点击展开 / 收起）</summary>
+          <div class="essay-prompt px-4 pb-4 max-h-[min(50vh,16rem)] overflow-y-auto text-[15px] leading-relaxed whitespace-pre-line text-gray-800 border-t border-gray-100">${escapeHtml(passage)}</div>
+        </details>`;
+        } else {
+          promptBlock = `
+        <div class="essay-prompt mb-4 rounded-lg border border-gray-200 bg-gray-50 p-4 max-h-[min(42vh,18rem)] overflow-y-auto text-[15px] leading-relaxed whitespace-pre-line text-gray-800">${escapeHtml(passage)}</div>`;
+        }
+      }
       body = `
         ${promptBlock}
-        <label for="essay-input" class="block text-sm font-medium text-gray-600 mb-2">你的翻译</label>
-        <textarea
+        <p class="text-sm font-medium text-gray-600 mb-2">你的翻译</p>
+        ${
+          review
+            ? `<div class="text-sm text-gray-700 bg-gray-50 rounded-lg p-3 whitespace-pre-line border border-gray-200 mb-2 min-h-[3rem]">${val ? escapeHtml(val) : '<span class="text-gray-400">（未作答）</span>'}</div>`
+            : `<textarea
           id="essay-input"
           rows="6"
           placeholder="对照上方英文，在此输入中文翻译"
           ${disabled}
-          class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary resize-y scroll-mt-28"
-        >${escapeHtml(val)}</textarea>`;
+          class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary resize-y"
+        >${escapeHtml(val)}</textarea>`
+        }`;
       essayLead = lead;
     } else {
       body = `<p class="text-sm text-gray-500">暂不支持「${escapeHtml(typeLabel(q.type))}」题型，请跳过此题。</p>`;
