@@ -10,6 +10,7 @@
     answers: {},
     submitted: false,
     aiCache: {},
+    aiScoreCache: {},
     lastResult: null,
     aiExplainLoading: false,
     aiAnalysisLoading: false,
@@ -112,6 +113,79 @@
     if (lang === 'en') return '填英文单词，小写即可；短语按原样填写';
     if (lang === 'zh') return '填中文释义，关键词即可';
     return '请输入答案';
+  }
+
+  function formatAiScoreBadge(idx) {
+    const s = state.aiScoreCache[idx];
+    if (!s || s.score === null || s.score === undefined) return '';
+    const scoreText = window.QuizAI
+      ? QuizAI.formatScoreNumber(s.score)
+      : String(s.score);
+    return `
+      <div id="ai-score-badge" class="mt-3 rounded-lg border border-violet-200 bg-violet-100/80 px-4 py-3">
+        <p class="text-xs text-violet-700">AI 评分</p>
+        <p class="text-2xl font-bold text-violet-800">${escapeHtml(scoreText)}<span class="text-base font-normal text-violet-600"> / ${escapeHtml(String(s.maxScore))} 分</span></p>
+      </div>`;
+  }
+
+  function applyAiExplainResult(idx, result, outputEl) {
+    if (!window.QuizAI) return;
+    const q = state.quiz.questions[idx];
+    const maxScore = QuizAI.getSelfGradeMaxScore(q);
+    let text = result?.text ?? result;
+    let score = result?.score ?? null;
+    let max = result?.maxScore ?? maxScore;
+
+    if (QuizAI.needsAiScore(q) && typeof text === 'string') {
+      const parsed = QuizAI.parseAiScore(text, maxScore);
+      text = parsed.body || text;
+      if (parsed.score !== null) {
+        score = parsed.score;
+        max = parsed.maxScore;
+      }
+    }
+
+    state.aiCache[idx] = text;
+    if (QuizAI.needsAiScore(q)) {
+      if (score !== null) {
+        state.aiScoreCache[idx] = { score, maxScore: max };
+      }
+    }
+
+    if (outputEl) {
+      outputEl.innerHTML = QuizAI.formatAiHtml(text);
+    }
+  }
+
+  function updateAiScoreBadgeDom(idx) {
+    const container = $('question-container');
+    if (!container) return;
+    let badge = container.querySelector('#ai-score-badge');
+    const html = formatAiScoreBadge(idx);
+    if (html) {
+      if (badge) {
+        badge.outerHTML = html;
+      } else {
+        const btn = container.querySelector('#btn-ai-explain');
+        if (btn) btn.insertAdjacentHTML('afterend', html);
+      }
+    } else if (badge) {
+      badge.remove();
+    }
+  }
+
+  function aiExplainButtonLabel(q, idx) {
+    if (!window.QuizAI) return 'AI 解析';
+    const needScore = QuizAI.needsAiScore(q);
+    const cached = state.aiCache[idx];
+    const hasScore = state.aiScoreCache[idx]?.score !== null && state.aiScoreCache[idx]?.score !== undefined;
+    if (state.aiExplainLoading) {
+      return needScore ? '评分与解析生成中…' : '解析生成中…';
+    }
+    if (cached || hasScore) {
+      return needScore ? '重新评分与解析' : '重新生成 AI 解析';
+    }
+    return needScore ? 'AI 解析与评分' : 'AI 解析';
   }
 
   const pages = {
@@ -404,6 +478,7 @@
         state.answers = {};
         state.submitted = false;
         state.aiCache = {};
+        state.aiScoreCache = {};
         state.lastResult = null;
         state.wrongDrillMode = false;
         state.parentQuiz = null;
@@ -601,8 +676,14 @@
           }
         </div>`;
     } else if (review && isEssayQuestion(q)) {
+      const aiScore = state.aiScoreCache[idx];
+      const scoreLine =
+        aiScore && aiScore.score !== null && aiScore.score !== undefined
+          ? `<p class="text-sm font-medium text-violet-700 mb-3 rounded-lg bg-violet-50 border border-violet-100 px-3 py-2">AI 评分：${escapeHtml(QuizAI.formatScoreNumber(aiScore.score))} / ${escapeHtml(String(aiScore.maxScore))} 分</p>`
+          : '';
       reviewBlock = `
         <div class="mt-5 pt-5 border-t border-gray-100">
+          ${scoreLine}
           <p class="text-sm text-gray-500 mb-1">参考答案</p>
           <p class="text-sm text-gray-700 bg-gray-50 rounded-lg p-3">${escapeHtml(q.correct_answer)}</p>
         </div>`;
@@ -612,11 +693,13 @@
     if (review && window.QuizAI) {
       const cached = state.aiCache[idx];
       const showOutput = Boolean(cached || state.aiExplainLoading);
+      const scoreBadge = formatAiScoreBadge(idx);
       aiBlock = `
         <div class="mt-4 pt-4 border-t border-gray-100">
           <button type="button" id="btn-ai-explain" class="text-sm px-4 py-2 rounded bg-violet-600 text-white hover:bg-violet-700 disabled:opacity-50" ${state.aiExplainLoading ? 'disabled' : ''}>
-            ${state.aiExplainLoading ? '解析生成中…' : cached ? '重新生成 AI 解析' : 'AI 解析'}
+            ${escapeHtml(aiExplainButtonLabel(q, idx))}
           </button>
+          ${scoreBadge}
           <div id="ai-explain-output" class="${showOutput ? 'ai-output mt-3 text-sm text-gray-700 bg-violet-50 rounded-lg p-4 border border-violet-100' : 'hidden'}">${cached ? QuizAI.formatAiHtml(cached) : ''}</div>
         </div>`;
     }
@@ -1085,6 +1168,7 @@
     state.answers = {};
     state.submitted = false;
     state.aiCache = {};
+    state.aiScoreCache = {};
     state.lastResult = null;
 
     $('quiz-title').textContent = state.quiz.title;
@@ -1151,7 +1235,9 @@
 
     const q = state.quiz.questions[idx];
     const gradeResult = gradeQuestion(q, state.answers[idx]);
+    const maxScore = QuizAI.getSelfGradeMaxScore(q);
     state.aiExplainLoading = true;
+    delete state.aiScoreCache[idx];
     renderQuestion();
 
     let outputEl = $('question-container').querySelector('#ai-explain-output');
@@ -1161,17 +1247,26 @@
     }
 
     try {
-      const text = await QuizAI.explainQuestion(
+      const result = await QuizAI.explainQuestion(
         q,
         state.answers[idx],
         gradeResult,
         (partial) => {
-          if (outputEl) {
+          if (!outputEl) return;
+          if (QuizAI.needsAiScore(q)) {
+            const parsed = QuizAI.parseAiScore(partial, maxScore);
+            if (parsed.score !== null) {
+              state.aiScoreCache[idx] = { score: parsed.score, maxScore: parsed.maxScore };
+              updateAiScoreBadgeDom(idx);
+            }
+            outputEl.innerHTML = QuizAI.formatAiHtml(parsed.body || partial);
+          } else {
             outputEl.innerHTML = QuizAI.formatAiHtml(partial);
           }
         }
       );
-      state.aiCache[idx] = text;
+      applyAiExplainResult(idx, result, outputEl);
+      updateAiScoreBadgeDom(idx);
     } catch (err) {
       if (outputEl) {
         outputEl.innerHTML = `<span class="text-red-600">${escapeHtml(err.message)}</span>`;
@@ -1691,6 +1786,7 @@
       state.answers = {};
       state.submitted = false;
       state.aiCache = {};
+      state.aiScoreCache = {};
       state.lastResult = null;
       state.wrongDrillMode = false;
       state.parentQuiz = null;

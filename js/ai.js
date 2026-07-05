@@ -716,6 +716,36 @@
       .replace(/\n/g, '<br>');
   }
 
+  function needsAiScore(q) {
+    return q && q.type === '问答题';
+  }
+
+  function getSelfGradeMaxScore(q) {
+    const max = parseFloat(q?.full_score);
+    return max > 0 ? max : 10;
+  }
+
+  function parseAiScore(text, maxScore) {
+    const raw = String(text || '').trim();
+    const match = raw.match(/【得分】\s*(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)/);
+    if (!match) {
+      return { score: null, maxScore, body: raw };
+    }
+    const score = Math.min(parseFloat(match[1]), maxScore);
+    const body = raw.replace(match[0], '').replace(/^\s*\n+/, '').trim();
+    return {
+      score: Number.isFinite(score) ? score : null,
+      maxScore: parseFloat(match[2]) || maxScore,
+      body,
+    };
+  }
+
+  function formatScoreNumber(score) {
+    if (score === null || score === undefined || Number.isNaN(score)) return '—';
+    const n = Number(score);
+    return n % 1 === 0 ? String(n) : n.toFixed(1);
+  }
+
   function buildQuestionPrompt(q, userAnswer, gradeResult, options) {
     const full = options && options.full;
     const parts = [
@@ -753,7 +783,16 @@
     } else if (gradeResult && gradeResult.correct === false) {
       parts.push('判题结果：错误');
     } else if (q.type === '问答题') {
-      parts.push('判题结果：问答题（请对照参考答案点评学生译文/回答）');
+      const maxScore = options?.scoreMax ?? getSelfGradeMaxScore(q);
+      parts.push(`判题结果：问答题（请对照参考答案为学生译文/回答评分并点评）`);
+      parts.push(
+        '',
+        `【评分要求】本题由你评分，满分 ${maxScore} 分。`,
+        '评分维度：关键信息是否译出/答全、语义是否准确、表达是否通顺；未作答或完全无关给 0 分。',
+        `你必须在全文**第一行且仅第一行**输出：【得分】X/${maxScore}`,
+        '（X 为 0 到满分的整数或一位小数）',
+        '从第二行起再写解析内容，不要在小标题里重复得分。'
+      );
     }
 
     if (full) {
@@ -878,12 +917,26 @@
 
   async function explainQuestion(q, userAnswer, gradeResult, onChunk) {
     const full = hasOwnKey();
-    const prompt = buildQuestionPrompt(q, userAnswer, gradeResult, { full });
-    return chatCompletion([{ role: 'user', content: prompt }], onChunk, {
-      maxTokens: full ? 4096 : 512,
+    const scoreMax = getSelfGradeMaxScore(q);
+    const prompt = buildQuestionPrompt(q, userAnswer, gradeResult, {
+      full,
+      scoreMax: needsAiScore(q) ? scoreMax : undefined,
+    });
+    const raw = await chatCompletion([{ role: 'user', content: prompt }], onChunk, {
+      maxTokens: full ? 4096 : needsAiScore(q) ? 768 : 512,
       temperature: full ? 0.6 : 0.5,
       stream: Boolean(onChunk) && full,
     });
+    const text = String(raw || '').trim();
+    if (needsAiScore(q)) {
+      const parsed = parseAiScore(text, scoreMax);
+      return {
+        text: parsed.body || text,
+        score: parsed.score,
+        maxScore: parsed.maxScore,
+      };
+    }
+    return { text, score: null, maxScore: null };
   }
 
   async function analyzeResult(quiz, answers, stats, onChunk) {
@@ -942,6 +995,10 @@
     getProviderInfo,
     getActiveModel,
     formatAiHtml,
+    formatScoreNumber,
+    needsAiScore,
+    getSelfGradeMaxScore,
+    parseAiScore,
     testConnection,
     explainQuestion,
     analyzeResult,
