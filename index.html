@@ -97,7 +97,7 @@
 
     <div class="flex-1 max-w-6xl mx-auto w-full px-4 py-6 flex flex-col lg:flex-row gap-6">
       <!-- 题目区 -->
-      <main class="flex-1 min-w-0">
+      <main class="flex-1 min-w-0 order-1">
         <div id="question-container" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"></div>
 
         <div class="flex items-center justify-between mt-4 gap-3">
@@ -110,11 +110,11 @@
         </div>
       </main>
 
-      <!-- 答题卡 -->
-      <aside class="lg:w-56 shrink-0">
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sticky top-28">
+      <!-- 答题卡（移动端在题目下方，高度受限可滚动） -->
+      <aside class="lg:w-56 shrink-0 order-2 lg:order-none">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:sticky lg:top-28">
           <h2 class="text-sm font-semibold text-gray-600 mb-3">答题卡</h2>
-          <div id="answer-card" class="grid grid-cols-5 gap-2"></div>
+          <div id="answer-card" class="grid grid-cols-5 gap-2 max-h-40 overflow-y-auto lg:max-h-none lg:overflow-visible"></div>
           <div class="mt-4 pt-4 border-t border-gray-100 space-y-2">
             <p class="text-xs text-gray-500">已答 <span id="answered-count">0</span> / <span id="total-count">0</span></p>
             <button id="btn-submit" class="w-full py-2.5 rounded bg-primary text-white text-sm font-medium hover:bg-primary-dark">
@@ -240,6 +240,6 @@
   <script src="js/ai-config.js?v=202607042400"></script>
   <script src="js/ai-config.local.js?v=202607042400" onerror=""></script>
   <script src="js/ai.js?v=202607042400"></script>
-  <script src="js/app.js?v=202607042410"></script>
+  <script src="js/app.js?v=202607051000"></script>
 </body>
 </html>

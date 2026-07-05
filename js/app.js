@@ -124,6 +124,18 @@
   function showPage(name) {
     Object.values(pages).forEach((el) => el.classList.add('hidden'));
     pages[name].classList.remove('hidden');
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
+
+  function scrollToQuestionArea() {
+    const el = $('question-container');
+    if (!el) return;
+    const header = pages.quiz?.querySelector('header');
+    const offset = header ? header.offsetHeight + 12 : 0;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
   }
 
   function normalizeText(text) {
@@ -377,6 +389,7 @@
         renderQuestion();
         renderAnswerCard();
         updateProgress();
+        scrollToQuestionArea();
       })
       .catch((err) => alert(err.message));
   }
@@ -476,6 +489,7 @@
       renderQuestion();
       renderAnswerCard();
       updateProgress();
+      if (window.matchMedia('(max-width: 1023px)').matches) scrollToQuestionArea();
     }
   }
 
@@ -667,6 +681,7 @@
         renderQuestion();
         renderAnswerCard();
         updateProgress();
+        if (window.matchMedia('(max-width: 1023px)').matches) scrollToQuestionArea();
       });
     });
 
@@ -1565,6 +1580,7 @@
         renderQuestion();
         renderAnswerCard();
         updateProgress();
+        if (window.matchMedia('(max-width: 1023px)').matches) scrollToQuestionArea();
       }
     });
 
@@ -1574,6 +1590,7 @@
         renderQuestion();
         renderAnswerCard();
         updateProgress();
+        if (window.matchMedia('(max-width: 1023px)').matches) scrollToQuestionArea();
       }
     });
 
