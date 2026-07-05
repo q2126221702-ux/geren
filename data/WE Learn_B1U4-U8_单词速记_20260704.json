@@ -1,0 +1,5477 @@
+{
+  "title": "WE Learn B1U4~U8 单词速记",
+  "exported_at": "2026-07-05T18:04:10.186425",
+  "source": "WE Learn iWords 截图整理（7月4日）",
+  "quiz_type": "vocab_flashcard",
+  "description": "共 284 个单词 · 含 9 张词性转化 · 纯背诵",
+  "cards": [
+    {
+      "sort": 1,
+      "word": "empire",
+      "phonetic": "['empaɪə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "帝国",
+      "forms": [
+        {
+          "word": "empire",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "帝国",
+          "phonetic": "['empaɪə]",
+          "role": "base"
+        }
+      ],
+      "hook": "empire = 帝国（名词，6 字母，首字母 E）"
+    },
+    {
+      "sort": 2,
+      "word": "found",
+      "phonetic": "[faʊnd]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "建立，创办",
+      "forms": [
+        {
+          "word": "found",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "建立，创办",
+          "phonetic": "[faʊnd]",
+          "role": "base"
+        }
+      ],
+      "hook": "found = 建立（动词，5 字母，首字母 F）"
+    },
+    {
+      "sort": 3,
+      "word": "mouse",
+      "phonetic": "[maʊs]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "（复数 mice）老鼠",
+      "forms": [
+        {
+          "word": "mouse",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "（复数 mice）老鼠",
+          "phonetic": "[maʊs]",
+          "role": "base"
+        }
+      ],
+      "hook": "mouse = （复数 mice）老鼠（名词，5 字母，首字母 M）"
+    },
+    {
+      "sort": 4,
+      "word": "studio",
+      "phonetic": "['stjuːdiəʊ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "画室，工作室；制片厂",
+      "forms": [
+        {
+          "word": "studio",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "画室，工作室；制片厂",
+          "phonetic": "['stjuːdiəʊ]",
+          "role": "base"
+        }
+      ],
+      "hook": "studio = 画室（名词，6 字母，首字母 S）"
+    },
+    {
+      "sort": 5,
+      "word": "wastebasket",
+      "phonetic": "['weɪstˌbæskɪt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "废纸篓",
+      "forms": [
+        {
+          "word": "wastebasket",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "废纸篓",
+          "phonetic": "['weɪstˌbæskɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "wastebasket = 废纸篓（名词，11 字母，首字母 W）"
+    },
+    {
+      "sort": 6,
+      "word": "cage",
+      "phonetic": "[keɪdʒ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "笼",
+      "forms": [
+        {
+          "word": "cage",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "笼",
+          "phonetic": "[keɪdʒ]",
+          "role": "base"
+        }
+      ],
+      "hook": "cage = 笼（名词，4 字母，首字母 C）"
+    },
+    {
+      "sort": 7,
+      "word": "particular",
+      "phonetic": "[pə'tɪkjələ]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "特殊的，独特的",
+      "forms": [
+        {
+          "word": "particular",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "特殊的，独特的",
+          "phonetic": "[pə'tɪkjələ]",
+          "role": "base"
+        }
+      ],
+      "hook": "particular = 特殊的（形容词，10 字母，首字母 P）"
+    },
+    {
+      "sort": 8,
+      "word": "cartoon",
+      "phonetic": "[kɑː'tuːn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "卡通片，动画片",
+      "forms": [
+        {
+          "word": "cartoon",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "卡通片，动画片",
+          "phonetic": "[kɑː'tuːn]",
+          "role": "base"
+        }
+      ],
+      "hook": "cartoon = 卡通片（名词，7 字母，首字母 C）"
+    },
+    {
+      "sort": 9,
+      "word": "character",
+      "phonetic": "['kærəktə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "人物，角色",
+      "forms": [
+        {
+          "word": "character",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "人物，角色",
+          "phonetic": "['kærəktə]",
+          "role": "base"
+        }
+      ],
+      "hook": "character = 人物（名词，9 字母，首字母 C）"
+    },
+    {
+      "sort": 10,
+      "word": "appear",
+      "phonetic": "[ə'pɪə]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "出现",
+      "forms": [
+        {
+          "word": "appear",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "出现",
+          "phonetic": "[ə'pɪə]",
+          "role": "base"
+        }
+      ],
+      "hook": "appear = 出现（动词，6 字母，首字母 A）"
+    },
+    {
+      "sort": 11,
+      "word": "immediately",
+      "phonetic": "[ɪ'miːdiətli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "立即，马上",
+      "forms": [
+        {
+          "word": "immediately",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "立即，马上",
+          "phonetic": "[ɪ'miːdiətli]",
+          "role": "base"
+        }
+      ],
+      "hook": "immediately = 立即（副词，11 字母，首字母 I）"
+    },
+    {
+      "sort": 12,
+      "word": "screen",
+      "phonetic": "[skriːn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "银幕",
+      "forms": [
+        {
+          "word": "screen",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "银幕",
+          "phonetic": "[skriːn]",
+          "role": "base"
+        }
+      ],
+      "hook": "screen = 银幕（名词，6 字母，首字母 S）"
+    },
+    {
+      "sort": 13,
+      "word": "dwarf",
+      "phonetic": "[dwɔːf]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "矮子，侏儒",
+      "forms": [
+        {
+          "word": "dwarf",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "矮子，侏儒",
+          "phonetic": "[dwɔːf]",
+          "role": "base"
+        }
+      ],
+      "hook": "dwarf = 矮子（名词，5 字母，首字母 D）"
+    },
+    {
+      "sort": 14,
+      "word": "amusement",
+      "phonetic": "[ə'mjuːzmənt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "娱乐，消遣",
+      "forms": [
+        {
+          "word": "amusement",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "娱乐，消遣",
+          "phonetic": "[ə'mjuːzmənt]",
+          "role": "base"
+        }
+      ],
+      "hook": "amusement = 娱乐（名词，9 字母，首字母 A）"
+    },
+    {
+      "sort": 15,
+      "word": "laughter",
+      "phonetic": "['lɑːftə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "笑，笑声",
+      "forms": [
+        {
+          "word": "laughter",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "笑，笑声",
+          "phonetic": "['lɑːftə]",
+          "role": "base"
+        }
+      ],
+      "hook": "laughter = 笑（名词，8 字母，首字母 L）"
+    },
+    {
+      "sort": 16,
+      "word": "popular",
+      "phonetic": "['pɒpjʊlə]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "流行的，受欢迎的",
+      "forms": [
+        {
+          "word": "popular",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "流行的，受欢迎的",
+          "phonetic": "['pɒpjʊlə]",
+          "role": "base"
+        }
+      ],
+      "hook": "popular = 流行的（形容词，7 字母，首字母 P）"
+    },
+    {
+      "sort": 17,
+      "word": "favorite",
+      "phonetic": "['feɪvərɪt]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "喜爱的，偏爱的",
+      "forms": [
+        {
+          "word": "favorite",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "喜爱的，偏爱的",
+          "phonetic": "['feɪvərɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "favorite = 喜爱的（形容词，8 字母，首字母 F）"
+    },
+    {
+      "sort": 18,
+      "word": "create",
+      "phonetic": "[kriː'eɪt]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "创造，创作",
+      "forms": [
+        {
+          "word": "create",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "创造，创作",
+          "phonetic": "[kriː'eɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "create = 创造（动词，6 字母，首字母 C）"
+    },
+    {
+      "sort": 19,
+      "word": "complete",
+      "phonetic": "[kəm'pliːt]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "完成",
+      "forms": [
+        {
+          "word": "complete",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "完成",
+          "phonetic": "[kəm'pliːt]",
+          "role": "base"
+        }
+      ],
+      "hook": "complete = 完成（动词，8 字母，首字母 C）"
+    },
+    {
+      "sort": 20,
+      "word": "expand",
+      "phonetic": "[ɪk'spænd]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "扩张，扩展",
+      "forms": [
+        {
+          "word": "expand",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "扩张，扩展",
+          "phonetic": "[ɪk'spænd]",
+          "role": "base"
+        }
+      ],
+      "hook": "expand = 扩张（动词，6 字母，首字母 E）"
+    },
+    {
+      "sort": 21,
+      "word": "Asia",
+      "phonetic": "['eɪʃə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "亚洲",
+      "forms": [
+        {
+          "word": "Asia",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "亚洲",
+          "phonetic": "['eɪʃə]",
+          "role": "base"
+        }
+      ],
+      "hook": "Asia = 亚洲（名词，4 字母，首字母 A）"
+    },
+    {
+      "sort": 22,
+      "word": "Europe",
+      "phonetic": "['jʊərəp]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "欧洲",
+      "forms": [
+        {
+          "word": "Europe",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "欧洲",
+          "phonetic": "['jʊərəp]",
+          "role": "base"
+        }
+      ],
+      "hook": "Europe = 欧洲（名词，6 字母，首字母 E）"
+    },
+    {
+      "sort": 23,
+      "word": "completion",
+      "phonetic": "[kəm'pliːʃən]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "完成，结束",
+      "forms": [
+        {
+          "word": "completion",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "完成，结束",
+          "phonetic": "[kəm'pliːʃən]",
+          "role": "base"
+        },
+        {
+          "word": "complete",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "完成",
+          "phonetic": "[kəm'pliːt]",
+          "rule": "v → n：-tion"
+        }
+      ],
+      "hook": "词性链：completion(n.) → complete(v.)"
+    },
+    {
+      "sort": 24,
+      "word": "lifelike",
+      "phonetic": "['laɪflaɪk]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "逼真的",
+      "forms": [
+        {
+          "word": "lifelike",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "逼真的",
+          "phonetic": "['laɪflaɪk]",
+          "role": "base"
+        }
+      ],
+      "hook": "lifelike = 逼真的（形容词，8 字母，首字母 L）"
+    },
+    {
+      "sort": 25,
+      "word": "unveil",
+      "phonetic": "[ʌn'veɪl]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "揭开蒙布，展示",
+      "forms": [
+        {
+          "word": "unveil",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "揭开蒙布，展示",
+          "phonetic": "[ʌn'veɪl]",
+          "role": "base"
+        }
+      ],
+      "hook": "unveil = 揭开蒙布（动词，6 字母，首字母 U）"
+    },
+    {
+      "sort": 26,
+      "word": "wax",
+      "phonetic": "[wæks]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "蜡，蜡制品",
+      "forms": [
+        {
+          "word": "wax",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "蜡，蜡制品",
+          "phonetic": "[wæks]",
+          "role": "base"
+        }
+      ],
+      "hook": "wax = 蜡（名词，3 字母，首字母 W）"
+    },
+    {
+      "sort": 27,
+      "word": "star",
+      "phonetic": "[stɑː]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "主演",
+      "forms": [
+        {
+          "word": "star",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "主演",
+          "phonetic": "[stɑː]",
+          "role": "base"
+        }
+      ],
+      "hook": "star = 主演（动词，4 字母，首字母 S）"
+    },
+    {
+      "sort": 28,
+      "word": "racial",
+      "phonetic": "['reɪʃəl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "种族的，种族间的",
+      "forms": [
+        {
+          "word": "racial",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "种族的，种族间的",
+          "phonetic": "['reɪʃəl]",
+          "role": "base"
+        }
+      ],
+      "hook": "racial = 种族的（形容词，6 字母，首字母 R）"
+    },
+    {
+      "sort": 29,
+      "word": "barrier",
+      "phonetic": "['bæriə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "障碍，隔阂",
+      "forms": [
+        {
+          "word": "barrier",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "障碍，隔阂",
+          "phonetic": "['bæriə]",
+          "role": "base"
+        }
+      ],
+      "hook": "barrier = 障碍（名词，7 字母，首字母 B）"
+    },
+    {
+      "sort": 30,
+      "word": "stereotype",
+      "phonetic": "['steriətaɪp]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "典型，刻板印象",
+      "forms": [
+        {
+          "word": "stereotype",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "典型，刻板印象",
+          "phonetic": "['steriətaɪp]",
+          "role": "base"
+        }
+      ],
+      "hook": "stereotype = 典型（名词，10 字母，首字母 S）"
+    },
+    {
+      "sort": 31,
+      "word": "contribution",
+      "phonetic": "[ˌkɒntrɪ'bjuːʃən]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "贡献",
+      "forms": [
+        {
+          "word": "contribution",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "贡献",
+          "phonetic": "[ˌkɒntrɪ'bjuːʃən]",
+          "role": "base"
+        }
+      ],
+      "hook": "contribution = 贡献（名词，12 字母，首字母 C）"
+    },
+    {
+      "sort": 32,
+      "word": "martial",
+      "phonetic": "['mɑːʃəl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "武术的",
+      "forms": [
+        {
+          "word": "martial",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "武术的",
+          "phonetic": "['mɑːʃəl]",
+          "role": "base"
+        }
+      ],
+      "hook": "martial = 武术的（形容词，7 字母，首字母 M）"
+    },
+    {
+      "sort": 33,
+      "word": "teen",
+      "phonetic": "[tiːn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "青少年（13至19岁）",
+      "forms": [
+        {
+          "word": "teen",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "青少年（13至19岁）",
+          "phonetic": "[tiːn]",
+          "role": "base"
+        }
+      ],
+      "hook": "teen = 青少年（13至19岁）（名词，4 字母，首字母 T）"
+    },
+    {
+      "sort": 34,
+      "word": "traditional",
+      "phonetic": "[trə'dɪʃənəl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "传统的，惯例的",
+      "forms": [
+        {
+          "word": "traditional",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "传统的，惯例的",
+          "phonetic": "[trə'dɪʃənəl]",
+          "role": "base"
+        },
+        {
+          "word": "tradition",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "传统，惯例",
+          "phonetic": "[trə'dɪʃn]",
+          "rule": "n → adj：-al"
+        }
+      ],
+      "hook": "词性链：traditional(adj.) → tradition(n.)"
+    },
+    {
+      "sort": 35,
+      "word": "rouse",
+      "phonetic": "[raʊz]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "激起，唤起",
+      "forms": [
+        {
+          "word": "rouse",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "激起，唤起",
+          "phonetic": "[raʊz]",
+          "role": "base"
+        }
+      ],
+      "hook": "rouse = 激起（动词，5 字母，首字母 R）"
+    },
+    {
+      "sort": 36,
+      "word": "direction",
+      "phonetic": "[dɪ'rekʃən]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "导演，指导",
+      "forms": [
+        {
+          "word": "direction",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "导演，指导",
+          "phonetic": "[dɪ'rekʃən]",
+          "role": "base"
+        }
+      ],
+      "hook": "direction = 导演（名词，9 字母，首字母 D）"
+    },
+    {
+      "sort": 37,
+      "word": "tone",
+      "phonetic": "[təʊn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "风格，语气",
+      "forms": [
+        {
+          "word": "tone",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "风格，语气",
+          "phonetic": "[təʊn]",
+          "role": "base"
+        }
+      ],
+      "hook": "tone = 风格（名词，4 字母，首字母 T）"
+    },
+    {
+      "sort": 38,
+      "word": "legacy",
+      "phonetic": "['legəsɪ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "遗产，遗物",
+      "forms": [
+        {
+          "word": "legacy",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "遗产，遗物",
+          "phonetic": "['legəsɪ]",
+          "role": "base"
+        }
+      ],
+      "hook": "legacy = 遗产（名词，6 字母，首字母 L）"
+    },
+    {
+      "sort": 39,
+      "word": "international",
+      "phonetic": "[ˌɪntə'næʃənəl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "国际的",
+      "forms": [
+        {
+          "word": "international",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "国际的",
+          "phonetic": "[ˌɪntə'næʃənəl]",
+          "role": "base"
+        }
+      ],
+      "hook": "international = 国际的（形容词，13 字母，首字母 I）"
+    },
+    {
+      "sort": 40,
+      "word": "smash",
+      "phonetic": "[smæʃ]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "打碎，粉碎",
+      "forms": [
+        {
+          "word": "smash",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "打碎，粉碎",
+          "phonetic": "[smæʃ]",
+          "role": "base"
+        }
+      ],
+      "hook": "smash = 打碎（动词，5 字母，首字母 S）"
+    },
+    {
+      "sort": 41,
+      "word": "reason",
+      "phonetic": "['riːzn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "理由，原因",
+      "forms": [
+        {
+          "word": "reason",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "理由，原因",
+          "phonetic": "['riːzn]",
+          "role": "base"
+        }
+      ],
+      "hook": "reason = 理由（名词，6 字母，首字母 R）"
+    },
+    {
+      "sort": 42,
+      "word": "generation",
+      "phonetic": "[ˌdʒenə'reɪʃən]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "一代人",
+      "forms": [
+        {
+          "word": "generation",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "一代人",
+          "phonetic": "[ˌdʒenə'reɪʃən]",
+          "role": "base"
+        }
+      ],
+      "hook": "generation = 一代人（名词，10 字母，首字母 G）"
+    },
+    {
+      "sort": 43,
+      "word": "heritage",
+      "phonetic": "['herɪtɪdʒ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "遗产，传统",
+      "forms": [
+        {
+          "word": "heritage",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "遗产，传统",
+          "phonetic": "['herɪtɪdʒ]",
+          "role": "base"
+        }
+      ],
+      "hook": "heritage = 遗产（名词，8 字母，首字母 H）"
+    },
+    {
+      "sort": 44,
+      "word": "refer",
+      "phonetic": "[rɪ'fɜː]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "提及，谈到",
+      "forms": [
+        {
+          "word": "refer",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "提及，谈到",
+          "phonetic": "[rɪ'fɜː]",
+          "role": "base"
+        }
+      ],
+      "hook": "refer = 提及（动词，5 字母，首字母 R）"
+    },
+    {
+      "sort": 45,
+      "word": "mystery",
+      "phonetic": "['mɪstəri]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "神秘的事，难以理解的事物",
+      "forms": [
+        {
+          "word": "mystery",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "神秘的事，难以理解的事物",
+          "phonetic": "['mɪstəri]",
+          "role": "base"
+        }
+      ],
+      "hook": "mystery = 神秘的事（名词，7 字母，首字母 M）"
+    },
+    {
+      "sort": 46,
+      "word": "extraordinary",
+      "phonetic": "[ɪk'strɔːdnəri]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "非凡的，特别的",
+      "forms": [
+        {
+          "word": "extraordinary",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "非凡的，特别的",
+          "phonetic": "[ɪk'strɔːdnəri]",
+          "role": "base"
+        }
+      ],
+      "hook": "extraordinary = 非凡的（形容词，13 字母，首字母 E）"
+    },
+    {
+      "sort": 47,
+      "word": "simplicity",
+      "phonetic": "[sɪm'plɪsɪti]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "简单，简洁",
+      "forms": [
+        {
+          "word": "simplicity",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "简单，简洁",
+          "phonetic": "[sɪm'plɪsɪti]",
+          "role": "base"
+        }
+      ],
+      "hook": "simplicity = 简单（名词，10 字母，首字母 S）"
+    },
+    {
+      "sort": 48,
+      "word": "unnatural",
+      "phonetic": "[ʌn'nætʃərəl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "不自然的，反常的",
+      "forms": [
+        {
+          "word": "unnatural",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "不自然的，反常的",
+          "phonetic": "[ʌn'nætʃərəl]",
+          "role": "base"
+        },
+        {
+          "word": "natural",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "自然的，自然界的",
+          "phonetic": "['nætʃrəl]",
+          "rule": "反义：un-"
+        }
+      ],
+      "hook": "词性链：unnatural(adj.) → natural(adj.)"
+    },
+    {
+      "sort": 49,
+      "word": "iconic",
+      "phonetic": "[aɪ'kɒnɪk]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "符号的，偶像的",
+      "forms": [
+        {
+          "word": "iconic",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "符号的，偶像的",
+          "phonetic": "[aɪ'kɒnɪk]",
+          "role": "base"
+        }
+      ],
+      "hook": "iconic = 符号的（形容词，6 字母，首字母 I）"
+    },
+    {
+      "sort": 50,
+      "word": "throughout",
+      "phonetic": "[θruː'aʊt]",
+      "pos": "prep.",
+      "pos_zh": "介词",
+      "zh": "遍及，贯穿",
+      "forms": [
+        {
+          "word": "throughout",
+          "pos": "prep.",
+          "pos_zh": "介词",
+          "zh": "遍及，贯穿",
+          "phonetic": "[θruː'aʊt]",
+          "role": "base"
+        }
+      ],
+      "hook": "throughout = 遍及（介词，10 字母，首字母 T）"
+    },
+    {
+      "sort": 51,
+      "word": "fund",
+      "phonetic": "[fʌnd]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "基金，专款",
+      "forms": [
+        {
+          "word": "fund",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "基金，专款",
+          "phonetic": "[fʌnd]",
+          "role": "base"
+        }
+      ],
+      "hook": "fund = 基金（名词，4 字母，首字母 F）"
+    },
+    {
+      "sort": 52,
+      "word": "supporter",
+      "phonetic": "[sə'pɔːtə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "支持者",
+      "forms": [
+        {
+          "word": "supporter",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "支持者",
+          "phonetic": "[sə'pɔːtə]",
+          "role": "base"
+        }
+      ],
+      "hook": "supporter = 支持者（名词，9 字母，首字母 S）"
+    },
+    {
+      "sort": 53,
+      "word": "global",
+      "phonetic": "['ɡləʊbəl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "全球的，全世界的",
+      "forms": [
+        {
+          "word": "global",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "全球的，全世界的",
+          "phonetic": "['ɡləʊbəl]",
+          "role": "base"
+        }
+      ],
+      "hook": "global = 全球的（形容词，6 字母，首字母 G）"
+    },
+    {
+      "sort": 54,
+      "word": "conservation",
+      "phonetic": "[ˌkɒnsə'veɪʃən]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "自然环境保护；保存",
+      "forms": [
+        {
+          "word": "conservation",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "自然环境保护；保存",
+          "phonetic": "[ˌkɒnsə'veɪʃən]",
+          "role": "base"
+        }
+      ],
+      "hook": "conservation = 自然环境保护（名词，12 字母，首字母 C）"
+    },
+    {
+      "sort": 55,
+      "word": "stand",
+      "phonetic": "[stænd]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "立场，观点",
+      "forms": [
+        {
+          "word": "stand",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "立场，观点",
+          "phonetic": "[stænd]",
+          "role": "base"
+        }
+      ],
+      "hook": "stand = 立场（名词，5 字母，首字母 S）"
+    },
+    {
+      "sort": 56,
+      "word": "climate",
+      "phonetic": "['klaɪmɪt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "气候",
+      "forms": [
+        {
+          "word": "climate",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "气候",
+          "phonetic": "['klaɪmɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "climate = 气候（名词，7 字母，首字母 C）"
+    },
+    {
+      "sort": 57,
+      "word": "movement",
+      "phonetic": "['muːvmənt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "运动，动作",
+      "forms": [
+        {
+          "word": "movement",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "运动，动作",
+          "phonetic": "['muːvmənt]",
+          "role": "base"
+        }
+      ],
+      "hook": "movement = 运动（名词，8 字母，首字母 M）"
+    },
+    {
+      "sort": 58,
+      "word": "landmark",
+      "phonetic": "['lændmɑːk]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "地标，陆标",
+      "forms": [
+        {
+          "word": "landmark",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "地标，陆标",
+          "phonetic": "['lændmɑːk]",
+          "role": "base"
+        }
+      ],
+      "hook": "landmark = 地标（名词，8 字母，首字母 L）"
+    },
+    {
+      "sort": 59,
+      "word": "harbor",
+      "phonetic": "['hɑːbə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "海港，港口",
+      "forms": [
+        {
+          "word": "harbor",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "海港，港口",
+          "phonetic": "['hɑːbə]",
+          "role": "base"
+        }
+      ],
+      "hook": "harbor = 海港（名词，6 字母，首字母 H）"
+    },
+    {
+      "sort": 60,
+      "word": "darkness",
+      "phonetic": "['dɑːknɪs]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "黑暗",
+      "forms": [
+        {
+          "word": "darkness",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "黑暗",
+          "phonetic": "['dɑːknɪs]",
+          "role": "base"
+        }
+      ],
+      "hook": "darkness = 黑暗（名词，8 字母，首字母 D）"
+    },
+    {
+      "sort": 61,
+      "word": "symbol",
+      "phonetic": "['sɪmbəl]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "象征，标志",
+      "forms": [
+        {
+          "word": "symbol",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "象征，标志",
+          "phonetic": "['sɪmbəl]",
+          "role": "base"
+        }
+      ],
+      "hook": "symbol = 象征（名词，6 字母，首字母 S）"
+    },
+    {
+      "sort": 62,
+      "word": "cause",
+      "phonetic": "[kɔːz]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "事业；原因",
+      "forms": [
+        {
+          "word": "cause",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "事业；原因",
+          "phonetic": "[kɔːz]",
+          "role": "base"
+        }
+      ],
+      "hook": "cause = 事业（名词，5 字母，首字母 C）"
+    },
+    {
+      "sort": 63,
+      "word": "urgent",
+      "phonetic": "['ɜːdʒənt]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "紧急的，紧迫的",
+      "forms": [
+        {
+          "word": "urgent",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "紧急的，紧迫的",
+          "phonetic": "['ɜːdʒənt]",
+          "role": "base"
+        }
+      ],
+      "hook": "urgent = 紧急的（形容词，6 字母，首字母 U）"
+    },
+    {
+      "sort": 64,
+      "word": "switch",
+      "phonetic": "[swɪtʃ]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "（使）转换，使改变",
+      "forms": [
+        {
+          "word": "switch",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "（使）转换，使改变",
+          "phonetic": "[swɪtʃ]",
+          "role": "base"
+        }
+      ],
+      "hook": "switch = （使）转换（动词，6 字母，首字母 S）"
+    },
+    {
+      "sort": 65,
+      "word": "pledge",
+      "phonetic": "[pledʒ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "誓言，保证",
+      "forms": [
+        {
+          "word": "pledge",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "誓言，保证",
+          "phonetic": "[pledʒ]",
+          "role": "base"
+        }
+      ],
+      "hook": "pledge = 誓言（名词，6 字母，首字母 P）"
+    },
+    {
+      "sort": 66,
+      "word": "initiative",
+      "phonetic": "[ɪ'nɪʃiətɪv]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "倡议；主动性",
+      "forms": [
+        {
+          "word": "initiative",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "倡议；主动性",
+          "phonetic": "[ɪ'nɪʃiətɪv]",
+          "role": "base"
+        }
+      ],
+      "hook": "initiative = 倡议（名词，10 字母，首字母 I）"
+    },
+    {
+      "sort": 67,
+      "word": "record",
+      "phonetic": "['rekɔːd]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "创纪录的",
+      "forms": [
+        {
+          "word": "record",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "创纪录的",
+          "phonetic": "['rekɔːd]",
+          "role": "base"
+        }
+      ],
+      "hook": "record = 创纪录的（形容词，6 字母，首字母 R）"
+    },
+    {
+      "sort": 68,
+      "word": "display",
+      "phonetic": "[dɪ'spleɪ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "展示，陈列",
+      "forms": [
+        {
+          "word": "display",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "展示，陈列",
+          "phonetic": "[dɪ'spleɪ]",
+          "role": "base"
+        }
+      ],
+      "hook": "display = 展示（名词，7 字母，首字母 D）"
+    },
+    {
+      "sort": 69,
+      "word": "opera",
+      "phonetic": "['ɒpərə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "歌剧",
+      "forms": [
+        {
+          "word": "opera",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "歌剧",
+          "phonetic": "['ɒpərə]",
+          "role": "base"
+        }
+      ],
+      "hook": "opera = 歌剧（名词，5 字母，首字母 O）"
+    },
+    {
+      "sort": 70,
+      "word": "event",
+      "phonetic": "[ɪ'vent]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "活动，事件",
+      "forms": [
+        {
+          "word": "event",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "活动，事件",
+          "phonetic": "[ɪ'vent]",
+          "role": "base"
+        }
+      ],
+      "hook": "event = 活动（名词，5 字母，首字母 E）"
+    },
+    {
+      "sort": 71,
+      "word": "launch",
+      "phonetic": "[lɔːntʃ]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "开始，发起",
+      "forms": [
+        {
+          "word": "launch",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "开始，发起",
+          "phonetic": "[lɔːntʃ]",
+          "role": "base"
+        }
+      ],
+      "hook": "launch = 开始（动词，6 字母，首字母 L）"
+    },
+    {
+      "sort": 72,
+      "word": "campaign",
+      "phonetic": "[kæm'peɪn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "（政治性或商业性的）运动，宣传活动",
+      "forms": [
+        {
+          "word": "campaign",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "（政治性或商业性的）运动，宣传活动",
+          "phonetic": "[kæm'peɪn]",
+          "role": "base"
+        }
+      ],
+      "hook": "campaign = （政治性或商业性的）运动（名词，8 字母，首字母 C）"
+    },
+    {
+      "sort": 73,
+      "word": "community",
+      "phonetic": "[kə'mjuːnɪti]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "社区，团体",
+      "forms": [
+        {
+          "word": "community",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "社区，团体",
+          "phonetic": "[kə'mjuːnɪti]",
+          "role": "base"
+        }
+      ],
+      "hook": "community = 社区（名词，9 字母，首字母 C）"
+    },
+    {
+      "sort": 74,
+      "word": "publicly",
+      "phonetic": "['pʌblɪkli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "公开地",
+      "forms": [
+        {
+          "word": "publicly",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "公开地",
+          "phonetic": "['pʌblɪkli]",
+          "role": "base"
+        }
+      ],
+      "hook": "publicly = 公开地（副词，8 字母，首字母 P）"
+    },
+    {
+      "sort": 75,
+      "word": "observe",
+      "phonetic": "[əb'zɜːv]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "庆祝，庆贺",
+      "forms": [
+        {
+          "word": "observe",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "庆祝，庆贺",
+          "phonetic": "[əb'zɜːv]",
+          "role": "base"
+        }
+      ],
+      "hook": "observe = 庆祝（动词，7 字母，首字母 O）"
+    },
+    {
+      "sort": 76,
+      "word": "billion",
+      "phonetic": "['bɪljən]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "十亿",
+      "forms": [
+        {
+          "word": "billion",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "十亿",
+          "phonetic": "['bɪljən]",
+          "role": "base"
+        }
+      ],
+      "hook": "billion = 十亿（名词，7 字母，首字母 B）"
+    },
+    {
+      "sort": 77,
+      "word": "respond",
+      "phonetic": "[rɪ'spɒnd]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "回应，作出反应",
+      "forms": [
+        {
+          "word": "respond",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "回应，作出反应",
+          "phonetic": "[rɪ'spɒnd]",
+          "role": "base"
+        }
+      ],
+      "hook": "respond = 回应（动词，7 字母，首字母 R）"
+    },
+    {
+      "sort": 78,
+      "word": "miss",
+      "phonetic": "[mɪs]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "错过",
+      "forms": [
+        {
+          "word": "miss",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "错过",
+          "phonetic": "[mɪs]",
+          "role": "base"
+        }
+      ],
+      "hook": "miss = 错过（动词，4 字母，首字母 M）"
+    },
+    {
+      "sort": 79,
+      "word": "participate",
+      "phonetic": "[pɑː'tɪsɪpeɪt]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "参加，参与",
+      "forms": [
+        {
+          "word": "participate",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "参加，参与",
+          "phonetic": "[pɑː'tɪsɪpeɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "participate = 参加（动词，11 字母，首字母 P）"
+    },
+    {
+      "sort": 80,
+      "word": "simply",
+      "phonetic": "['sɪmpli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "仅仅，只",
+      "forms": [
+        {
+          "word": "simply",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "仅仅，只",
+          "phonetic": "['sɪmpli]",
+          "role": "base"
+        }
+      ],
+      "hook": "simply = 仅仅（副词，6 字母，首字母 S）"
+    },
+    {
+      "sort": 81,
+      "word": "electric",
+      "phonetic": "[ɪ'lektrɪk]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "电的，用电的",
+      "forms": [
+        {
+          "word": "electric",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "电的，用电的",
+          "phonetic": "[ɪ'lektrɪk]",
+          "role": "base"
+        }
+      ],
+      "hook": "electric = 电的（形容词，8 字母，首字母 E）"
+    },
+    {
+      "sort": 82,
+      "word": "appliance",
+      "phonetic": "[ə'plaɪəns]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "器具",
+      "forms": [
+        {
+          "word": "appliance",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "器具",
+          "phonetic": "[ə'plaɪəns]",
+          "role": "base"
+        }
+      ],
+      "hook": "appliance = 器具（名词，9 字母，首字母 A）"
+    },
+    {
+      "sort": 83,
+      "word": "sustainable",
+      "phonetic": "[sə'steɪnəbl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "可持续的",
+      "forms": [
+        {
+          "word": "sustainable",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "可持续的",
+          "phonetic": "[sə'steɪnəbl]",
+          "role": "base"
+        }
+      ],
+      "hook": "sustainable = 可持续的（形容词，11 字母，首字母 S）"
+    },
+    {
+      "sort": 84,
+      "word": "celebrate",
+      "phonetic": "['selɪbreɪt]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "庆祝",
+      "forms": [
+        {
+          "word": "celebrate",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "庆祝",
+          "phonetic": "['selɪbreɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "celebrate = 庆祝（动词，9 字母，首字母 C）"
+    },
+    {
+      "sort": 85,
+      "word": "unique",
+      "phonetic": "[juː'niːk]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "独特的，唯一的",
+      "forms": [
+        {
+          "word": "unique",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "独特的，唯一的",
+          "phonetic": "[juː'niːk]",
+          "role": "base"
+        }
+      ],
+      "hook": "unique = 独特的（形容词，6 字母，首字母 U）"
+    },
+    {
+      "sort": 86,
+      "word": "universe",
+      "phonetic": "['juːnɪvɜːs]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "宇宙，世界",
+      "forms": [
+        {
+          "word": "universe",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "宇宙，世界",
+          "phonetic": "['juːnɪvɜːs]",
+          "role": "base"
+        }
+      ],
+      "hook": "universe = 宇宙（名词，8 字母，首字母 U）"
+    },
+    {
+      "sort": 87,
+      "word": "solar",
+      "phonetic": "['səʊlə]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "太阳的，日光的",
+      "forms": [
+        {
+          "word": "solar",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "太阳的，日光的",
+          "phonetic": "['səʊlə]",
+          "role": "base"
+        }
+      ],
+      "hook": "solar = 太阳的（形容词，5 字母，首字母 S）"
+    },
+    {
+      "sort": 88,
+      "word": "incredible",
+      "phonetic": "[ɪn'kredəbl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "难以置信的，惊人的",
+      "forms": [
+        {
+          "word": "incredible",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "难以置信的，惊人的",
+          "phonetic": "[ɪn'kredəbl]",
+          "role": "base"
+        }
+      ],
+      "hook": "incredible = 难以置信的（形容词，10 字母，首字母 I）"
+    },
+    {
+      "sort": 89,
+      "word": "biodiversity",
+      "phonetic": "[ˌbaɪəʊdaɪ'vɜːsəti]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "生物多样性",
+      "forms": [
+        {
+          "word": "biodiversity",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "生物多样性",
+          "phonetic": "[ˌbaɪəʊdaɪ'vɜːsəti]",
+          "role": "base"
+        }
+      ],
+      "hook": "biodiversity = 生物多样性（名词，12 字母，首字母 B）"
+    },
+    {
+      "sort": 90,
+      "word": "remind",
+      "phonetic": "[rɪ'maɪnd]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "提醒，使记起",
+      "forms": [
+        {
+          "word": "remind",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "提醒，使记起",
+          "phonetic": "[rɪ'maɪnd]",
+          "role": "base"
+        }
+      ],
+      "hook": "remind = 提醒（动词，6 字母，首字母 R）"
+    },
+    {
+      "sort": 91,
+      "word": "responsibility",
+      "phonetic": "[rɪˌspɒnsə'bɪləti]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "责任，职责",
+      "forms": [
+        {
+          "word": "responsibility",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "责任，职责",
+          "phonetic": "[rɪˌspɒnsə'bɪləti]",
+          "role": "base"
+        }
+      ],
+      "hook": "responsibility = 责任（名词，14 字母，首字母 R）"
+    },
+    {
+      "sort": 92,
+      "word": "environmental",
+      "phonetic": "[ɪnˌvaɪərən'mentl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "环境的",
+      "forms": [
+        {
+          "word": "environmental",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "环境的",
+          "phonetic": "[ɪnˌvaɪərən'mentl]",
+          "role": "base"
+        }
+      ],
+      "hook": "environmental = 环境的（形容词，13 字母，首字母 E）"
+    },
+    {
+      "sort": 93,
+      "word": "challenge",
+      "phonetic": "['tʃælɪndʒ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "挑战",
+      "forms": [
+        {
+          "word": "challenge",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "挑战",
+          "phonetic": "['tʃælɪndʒ]",
+          "role": "base"
+        }
+      ],
+      "hook": "challenge = 挑战（名词，9 字母，首字母 C）"
+    },
+    {
+      "sort": 94,
+      "word": "solve",
+      "phonetic": "[sɒlv]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "解决，解答",
+      "forms": [
+        {
+          "word": "solve",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "解决，解答",
+          "phonetic": "[sɒlv]",
+          "role": "base"
+        }
+      ],
+      "hook": "solve = 解决（动词，5 字母，首字母 S）"
+    },
+    {
+      "sort": 95,
+      "word": "practice",
+      "phonetic": "['præktɪs]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "实行，实践",
+      "forms": [
+        {
+          "word": "practice",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "实行，实践",
+          "phonetic": "['præktɪs]",
+          "role": "base"
+        }
+      ],
+      "hook": "practice = 实行（动词，8 字母，首字母 P）"
+    },
+    {
+      "sort": 96,
+      "word": "rally",
+      "phonetic": "['ræli]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "集会",
+      "forms": [
+        {
+          "word": "rally",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "集会",
+          "phonetic": "['ræli]",
+          "role": "base"
+        }
+      ],
+      "hook": "rally = 集会（名词，5 字母，首字母 R）"
+    },
+    {
+      "sort": 97,
+      "word": "slogan",
+      "phonetic": "['sləʊɡən]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "口号，标语",
+      "forms": [
+        {
+          "word": "slogan",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "口号，标语",
+          "phonetic": "['sləʊɡən]",
+          "role": "base"
+        }
+      ],
+      "hook": "slogan = 口号（名词，6 字母，首字母 S）"
+    },
+    {
+      "sort": 98,
+      "word": "preserve",
+      "phonetic": "[prɪ'zɜːv]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "保护，保持",
+      "forms": [
+        {
+          "word": "preserve",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "保护，保持",
+          "phonetic": "[prɪ'zɜːv]",
+          "role": "base"
+        }
+      ],
+      "hook": "preserve = 保护（动词，8 字母，首字母 P）"
+    },
+    {
+      "sort": 99,
+      "word": "distinguished",
+      "phonetic": "[dɪ'stɪŋɡwɪʃt]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "高贵的，著名的",
+      "forms": [
+        {
+          "word": "distinguished",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "高贵的，著名的",
+          "phonetic": "[dɪ'stɪŋɡwɪʃt]",
+          "role": "base"
+        }
+      ],
+      "hook": "distinguished = 高贵的（形容词，13 字母，首字母 D）"
+    },
+    {
+      "sort": 100,
+      "word": "pollution",
+      "phonetic": "[pə'luːʃn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "污染",
+      "forms": [
+        {
+          "word": "pollution",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "污染",
+          "phonetic": "[pə'luːʃn]",
+          "role": "base"
+        }
+      ],
+      "hook": "pollution = 污染（名词，9 字母，首字母 P）"
+    },
+    {
+      "sort": 101,
+      "word": "central",
+      "phonetic": "['sentrəl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "中心的，中央的",
+      "forms": [
+        {
+          "word": "central",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "中心的，中央的",
+          "phonetic": "['sentrəl]",
+          "role": "base"
+        }
+      ],
+      "hook": "central = 中心的（形容词，7 字母，首字母 C）"
+    },
+    {
+      "sort": 102,
+      "word": "block",
+      "phonetic": "[blɒk]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "阻碍，封锁",
+      "forms": [
+        {
+          "word": "block",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "阻碍，封锁",
+          "phonetic": "[blɒk]",
+          "role": "base"
+        }
+      ],
+      "hook": "block = 阻碍（动词，5 字母，首字母 B）"
+    },
+    {
+      "sort": 103,
+      "word": "site",
+      "phonetic": "[saɪt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "地点，场所",
+      "forms": [
+        {
+          "word": "site",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "地点，场所",
+          "phonetic": "[saɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "site = 地点（名词，4 字母，首字母 S）"
+    },
+    {
+      "sort": 104,
+      "word": "festival",
+      "phonetic": "['festɪvl]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "节日",
+      "forms": [
+        {
+          "word": "festival",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "节日",
+          "phonetic": "['festɪvl]",
+          "role": "base"
+        },
+        {
+          "word": "festive",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "喜庆的，节日的",
+          "phonetic": "['festɪv]",
+          "rule": "n → adj：-al"
+        }
+      ],
+      "hook": "词性链：festival(n.) → festive(adj.)"
+    },
+    {
+      "sort": 105,
+      "word": "exhibit",
+      "phonetic": "[ɪɡ'zɪbɪt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "展览品，陈列品",
+      "forms": [
+        {
+          "word": "exhibit",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "展览品，陈列品",
+          "phonetic": "[ɪɡ'zɪbɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "exhibit = 展览品（名词，7 字母，首字母 E）"
+    },
+    {
+      "sort": 106,
+      "word": "theme",
+      "phonetic": "[θiːm]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "题目，主题",
+      "forms": [
+        {
+          "word": "theme",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "题目，主题",
+          "phonetic": "[θiːm]",
+          "role": "base"
+        }
+      ],
+      "hook": "theme = 题目（名词，5 字母，首字母 T）"
+    },
+    {
+      "sort": 107,
+      "word": "relic",
+      "phonetic": "['relɪk]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "遗物，遗迹",
+      "forms": [
+        {
+          "word": "relic",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "遗物，遗迹",
+          "phonetic": "['relɪk]",
+          "role": "base"
+        }
+      ],
+      "hook": "relic = 遗物（名词，5 字母，首字母 R）"
+    },
+    {
+      "sort": 108,
+      "word": "resource",
+      "phonetic": "[rɪ'sɔːs]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "资源，财力",
+      "forms": [
+        {
+          "word": "resource",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "资源，财力",
+          "phonetic": "[rɪ'sɔːs]",
+          "role": "base"
+        }
+      ],
+      "hook": "resource = 资源（名词，8 字母，首字母 R）"
+    },
+    {
+      "sort": 109,
+      "word": "computer",
+      "phonetic": "[kəm'pjuːtə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "计算机，电脑",
+      "forms": [
+        {
+          "word": "computer",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "计算机，电脑",
+          "phonetic": "[kəm'pjuːtə]",
+          "role": "base"
+        }
+      ],
+      "hook": "computer = 计算机（名词，8 字母，首字母 C）"
+    },
+    {
+      "sort": 110,
+      "word": "sensible",
+      "phonetic": "['sensəbl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "明智的，有判断力的",
+      "forms": [
+        {
+          "word": "sensible",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "明智的，有判断力的",
+          "phonetic": "['sensəbl]",
+          "role": "base"
+        }
+      ],
+      "hook": "sensible = 明智的（形容词，8 字母，首字母 S）"
+    },
+    {
+      "sort": 111,
+      "word": "solution",
+      "phonetic": "[sə'luːʃn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "解决办法，解答",
+      "forms": [
+        {
+          "word": "solution",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "解决办法，解答",
+          "phonetic": "[sə'luːʃn]",
+          "role": "base"
+        }
+      ],
+      "hook": "solution = 解决办法（名词，8 字母，首字母 S）"
+    },
+    {
+      "sort": 112,
+      "word": "burden",
+      "phonetic": "['bɜːdn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "负担",
+      "forms": [
+        {
+          "word": "burden",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "负担",
+          "phonetic": "['bɜːdn]",
+          "role": "base"
+        }
+      ],
+      "hook": "burden = 负担（名词，6 字母，首字母 B）"
+    },
+    {
+      "sort": 113,
+      "word": "expense",
+      "phonetic": "[ɪk'spens]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "费用，开支",
+      "forms": [
+        {
+          "word": "expense",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "费用，开支",
+          "phonetic": "[ɪk'spens]",
+          "role": "base"
+        }
+      ],
+      "hook": "expense = 费用（名词，7 字母，首字母 E）"
+    },
+    {
+      "sort": 114,
+      "word": "earn",
+      "phonetic": "[ɜːn]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "赚，挣得",
+      "forms": [
+        {
+          "word": "earn",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "赚，挣得",
+          "phonetic": "[ɜːn]",
+          "role": "base"
+        }
+      ],
+      "hook": "earn = 赚（动词，4 字母，首字母 E）"
+    },
+    {
+      "sort": 115,
+      "word": "wander",
+      "phonetic": "['wɒndə]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "漫步，徘徊",
+      "forms": [
+        {
+          "word": "wander",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "漫步，徘徊",
+          "phonetic": "['wɒndə]",
+          "role": "base"
+        }
+      ],
+      "hook": "wander = 漫步（动词，6 字母，首字母 W）"
+    },
+    {
+      "sort": 116,
+      "word": "p.m.",
+      "phonetic": "[ˌpiː 'em]",
+      "pos": "abbr.",
+      "pos_zh": "缩写",
+      "zh": "下午，午后（post meridiem，亦作 pm/PM/P.M.）",
+      "forms": [
+        {
+          "word": "p.m.",
+          "pos": "abbr.",
+          "pos_zh": "缩写",
+          "zh": "下午，午后（post meridiem，亦作 pm/PM/P.M.）",
+          "phonetic": "[ˌpiː 'em]",
+          "role": "base"
+        }
+      ],
+      "hook": "p.m. = 下午（缩写，4 字母，首字母 P）"
+    },
+    {
+      "sort": 117,
+      "word": "male",
+      "phonetic": "[meɪl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "男的，雄性的",
+      "forms": [
+        {
+          "word": "male",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "男的，雄性的",
+          "phonetic": "[meɪl]",
+          "role": "base"
+        }
+      ],
+      "hook": "male = 男的（形容词，4 字母，首字母 M）"
+    },
+    {
+      "sort": 118,
+      "word": "candidate",
+      "phonetic": "['kændɪdeɪt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "候选人",
+      "forms": [
+        {
+          "word": "candidate",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "候选人",
+          "phonetic": "['kændɪdeɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "candidate = 候选人（名词，9 字母，首字母 C）"
+    },
+    {
+      "sort": 119,
+      "word": "boss",
+      "phonetic": "[bɒs]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "老板，上司",
+      "forms": [
+        {
+          "word": "boss",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "老板，上司",
+          "phonetic": "[bɒs]",
+          "role": "base"
+        }
+      ],
+      "hook": "boss = 老板（名词，4 字母，首字母 B）"
+    },
+    {
+      "sort": 120,
+      "word": "obviously",
+      "phonetic": "['ɒbvɪəsli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "明显地",
+      "forms": [
+        {
+          "word": "obviously",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "明显地",
+          "phonetic": "['ɒbvɪəsli]",
+          "role": "base"
+        }
+      ],
+      "hook": "obviously = 明显地（副词，9 字母，首字母 O）"
+    },
+    {
+      "sort": 121,
+      "word": "employ",
+      "phonetic": "[ɪm'plɔɪ]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "雇用",
+      "forms": [
+        {
+          "word": "employ",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "雇用",
+          "phonetic": "[ɪm'plɔɪ]",
+          "role": "base"
+        }
+      ],
+      "hook": "employ = 雇用（动词，6 字母，首字母 E）"
+    },
+    {
+      "sort": 122,
+      "word": "check",
+      "phonetic": "[tʃek]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "检查，核对",
+      "forms": [
+        {
+          "word": "check",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "检查，核对",
+          "phonetic": "[tʃek]",
+          "role": "base"
+        }
+      ],
+      "hook": "check = 检查（动词，5 字母，首字母 C）"
+    },
+    {
+      "sort": 123,
+      "word": "reference",
+      "phonetic": "['refərəns]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "介绍信；参考",
+      "forms": [
+        {
+          "word": "reference",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "介绍信；参考",
+          "phonetic": "['refərəns]",
+          "role": "base"
+        },
+        {
+          "word": "refer",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "提及，谈到",
+          "phonetic": "[rɪ'fɜː]",
+          "rule": "v → n：-ence"
+        }
+      ],
+      "hook": "词性链：reference(n.) → refer(v.)"
+    },
+    {
+      "sort": 124,
+      "word": "decision",
+      "phonetic": "[dɪ'sɪʒn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "决定",
+      "forms": [
+        {
+          "word": "decision",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "决定",
+          "phonetic": "[dɪ'sɪʒn]",
+          "role": "base"
+        }
+      ],
+      "hook": "decision = 决定（名词，8 字母，首字母 D）"
+    },
+    {
+      "sort": 125,
+      "word": "ideal",
+      "phonetic": "[aɪ'diːəl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "理想的，完美的",
+      "forms": [
+        {
+          "word": "ideal",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "理想的，完美的",
+          "phonetic": "[aɪ'diːəl]",
+          "role": "base"
+        }
+      ],
+      "hook": "ideal = 理想的（形容词，5 字母，首字母 I）"
+    },
+    {
+      "sort": 126,
+      "word": "besides",
+      "phonetic": "[bɪ'saɪdz]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "此外",
+      "forms": [
+        {
+          "word": "besides",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "此外",
+          "phonetic": "[bɪ'saɪdz]",
+          "role": "base"
+        }
+      ],
+      "hook": "besides = 此外（副词，7 字母，首字母 B）"
+    },
+    {
+      "sort": 127,
+      "word": "badly",
+      "phonetic": "['bædli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "非常，严重地",
+      "forms": [
+        {
+          "word": "badly",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "非常，严重地",
+          "phonetic": "['bædli]",
+          "role": "base"
+        }
+      ],
+      "hook": "badly = 非常（副词，5 字母，首字母 B）"
+    },
+    {
+      "sort": 128,
+      "word": "countryside",
+      "phonetic": "['kʌntrɪsaɪd]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "乡下，农村",
+      "forms": [
+        {
+          "word": "countryside",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "乡下，农村",
+          "phonetic": "['kʌntrɪsaɪd]",
+          "role": "base"
+        }
+      ],
+      "hook": "countryside = 乡下（名词，11 字母，首字母 C）"
+    },
+    {
+      "sort": 129,
+      "word": "trial",
+      "phonetic": "['traɪəl]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "试验，考验",
+      "forms": [
+        {
+          "word": "trial",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "试验，考验",
+          "phonetic": "['traɪəl]",
+          "role": "base"
+        }
+      ],
+      "hook": "trial = 试验（名词，5 字母，首字母 T）"
+    },
+    {
+      "sort": 130,
+      "word": "habit",
+      "phonetic": "['hæbɪt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "习惯",
+      "forms": [
+        {
+          "word": "habit",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "习惯",
+          "phonetic": "['hæbɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "habit = 习惯（名词，5 字母，首字母 H）"
+    },
+    {
+      "sort": 131,
+      "word": "tiring",
+      "phonetic": "['taɪərɪŋ]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "累人的",
+      "forms": [
+        {
+          "word": "tiring",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "累人的",
+          "phonetic": "['taɪərɪŋ]",
+          "role": "base"
+        }
+      ],
+      "hook": "tiring = 累人的（形容词，6 字母，首字母 T）"
+    },
+    {
+      "sort": 132,
+      "word": "hunt",
+      "phonetic": "[hʌnt]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "搜寻；打猎",
+      "forms": [
+        {
+          "word": "hunt",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "搜寻；打猎",
+          "phonetic": "[hʌnt]",
+          "role": "base"
+        }
+      ],
+      "hook": "hunt = 搜寻（动词，4 字母，首字母 H）"
+    },
+    {
+      "sort": 133,
+      "word": "tidy",
+      "phonetic": "['taɪdi]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "整齐的，整洁的",
+      "forms": [
+        {
+          "word": "tidy",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "整齐的，整洁的",
+          "phonetic": "['taɪdi]",
+          "role": "base"
+        }
+      ],
+      "hook": "tidy = 整齐的（形容词，4 字母，首字母 T）"
+    },
+    {
+      "sort": 134,
+      "word": "swear",
+      "phonetic": "[sweə]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "发誓，宣誓",
+      "forms": [
+        {
+          "word": "swear",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "发誓，宣誓",
+          "phonetic": "[sweə]",
+          "role": "base"
+        }
+      ],
+      "hook": "swear = 发誓（动词，5 字母，首字母 S）"
+    },
+    {
+      "sort": 135,
+      "word": "lower",
+      "phonetic": "['ləʊə]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "降低，放低",
+      "forms": [
+        {
+          "word": "lower",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "降低，放低",
+          "phonetic": "['ləʊə]",
+          "role": "base"
+        }
+      ],
+      "hook": "lower = 降低（动词，5 字母，首字母 L）"
+    },
+    {
+      "sort": 136,
+      "word": "thankfully",
+      "phonetic": "['θæŋkfəli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "感谢地，感激地",
+      "forms": [
+        {
+          "word": "thankfully",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "感谢地，感激地",
+          "phonetic": "['θæŋkfəli]",
+          "role": "base"
+        }
+      ],
+      "hook": "thankfully = 感谢地（副词，10 字母，首字母 T）"
+    },
+    {
+      "sort": 137,
+      "word": "goodness",
+      "phonetic": "['ɡʊdnɪs]",
+      "pos": "int.",
+      "pos_zh": "感叹词",
+      "zh": "天哪",
+      "forms": [
+        {
+          "word": "goodness",
+          "pos": "int.",
+          "pos_zh": "感叹词",
+          "zh": "天哪",
+          "phonetic": "['ɡʊdnɪs]",
+          "role": "base"
+        }
+      ],
+      "hook": "goodness = 天哪（感叹词，8 字母，首字母 G）"
+    },
+    {
+      "sort": 138,
+      "word": "tradition",
+      "phonetic": "[trə'dɪʃn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "传统，惯例",
+      "forms": [
+        {
+          "word": "tradition",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "传统，惯例",
+          "phonetic": "[trə'dɪʃn]",
+          "role": "base"
+        }
+      ],
+      "hook": "tradition = 传统（名词，9 字母，首字母 T）"
+    },
+    {
+      "sort": 139,
+      "word": "search",
+      "phonetic": "[sɜːtʃ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "搜寻，查找",
+      "forms": [
+        {
+          "word": "search",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "搜寻，查找",
+          "phonetic": "[sɜːtʃ]",
+          "role": "base"
+        }
+      ],
+      "hook": "search = 搜寻（名词，6 字母，首字母 S）"
+    },
+    {
+      "sort": 140,
+      "word": "vacation",
+      "phonetic": "[və'keɪʃn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "假期",
+      "forms": [
+        {
+          "word": "vacation",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "假期",
+          "phonetic": "[və'keɪʃn]",
+          "role": "base"
+        }
+      ],
+      "hook": "vacation = 假期（名词，8 字母，首字母 V）"
+    },
+    {
+      "sort": 141,
+      "word": "employer",
+      "phonetic": "[ɪm'plɔɪə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "雇主，老板",
+      "forms": [
+        {
+          "word": "employer",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "雇主，老板",
+          "phonetic": "[ɪm'plɔɪə]",
+          "role": "base"
+        },
+        {
+          "word": "employ",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "雇用",
+          "phonetic": "[ɪm'plɔɪ]",
+          "rule": "v → n：-er"
+        }
+      ],
+      "hook": "词性链：employer(n.) → employ(v.)"
+    },
+    {
+      "sort": 142,
+      "word": "opportunity",
+      "phonetic": "[ˌɒpə'tjuːnɪti]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "机会",
+      "forms": [
+        {
+          "word": "opportunity",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "机会",
+          "phonetic": "[ˌɒpə'tjuːnɪti]",
+          "role": "base"
+        }
+      ],
+      "hook": "opportunity = 机会（名词，11 字母，首字母 O）"
+    },
+    {
+      "sort": 143,
+      "word": "chosen",
+      "phonetic": "['tʃəʊzn]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "选择的",
+      "forms": [
+        {
+          "word": "chosen",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "选择的",
+          "phonetic": "['tʃəʊzn]",
+          "role": "base"
+        }
+      ],
+      "hook": "chosen = 选择的（形容词，6 字母，首字母 C）"
+    },
+    {
+      "sort": 144,
+      "word": "profession",
+      "phonetic": "[prə'feʃn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "职业，专业",
+      "forms": [
+        {
+          "word": "profession",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "职业，专业",
+          "phonetic": "[prə'feʃn]",
+          "role": "base"
+        }
+      ],
+      "hook": "profession = 职业（名词，10 字母，首字母 P）"
+    },
+    {
+      "sort": 145,
+      "word": "fun",
+      "phonetic": "[fʌn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "好玩，乐趣",
+      "forms": [
+        {
+          "word": "fun",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "好玩，乐趣",
+          "phonetic": "[fʌn]",
+          "role": "base"
+        }
+      ],
+      "hook": "fun = 好玩（名词，3 字母，首字母 F）"
+    },
+    {
+      "sort": 146,
+      "word": "typist",
+      "phonetic": "['taɪpɪst]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "打字员",
+      "forms": [
+        {
+          "word": "typist",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "打字员",
+          "phonetic": "['taɪpɪst]",
+          "role": "base"
+        }
+      ],
+      "hook": "typist = 打字员（名词，6 字母，首字母 T）"
+    },
+    {
+      "sort": 147,
+      "word": "salesclerk",
+      "phonetic": "['seɪlzklɑːk]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "售货员",
+      "forms": [
+        {
+          "word": "salesclerk",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "售货员",
+          "phonetic": "['seɪlzklɑːk]",
+          "role": "base"
+        }
+      ],
+      "hook": "salesclerk = 售货员（名词，10 字母，首字母 S）"
+    },
+    {
+      "sort": 148,
+      "word": "lifeguard",
+      "phonetic": "['laɪfɡɑːd]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "救生员",
+      "forms": [
+        {
+          "word": "lifeguard",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "救生员",
+          "phonetic": "['laɪfɡɑːd]",
+          "role": "base"
+        }
+      ],
+      "hook": "lifeguard = 救生员（名词，9 字母，首字母 L）"
+    },
+    {
+      "sort": 149,
+      "word": "unusual",
+      "phonetic": "[ʌn'juːʒuəl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "不平常的，与众不同的",
+      "forms": [
+        {
+          "word": "unusual",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "不平常的，与众不同的",
+          "phonetic": "[ʌn'juːʒuəl]",
+          "role": "base"
+        }
+      ],
+      "hook": "unusual = 不平常的（形容词，7 字母，首字母 U）"
+    },
+    {
+      "sort": 150,
+      "word": "mention",
+      "phonetic": "['menʃn]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "提及，说起",
+      "forms": [
+        {
+          "word": "mention",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "提及，说起",
+          "phonetic": "['menʃn]",
+          "role": "base"
+        }
+      ],
+      "hook": "mention = 提及（动词，7 字母，首字母 M）"
+    },
+    {
+      "sort": 151,
+      "word": "ranger",
+      "phonetic": "['reɪndʒə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "护林员，巡逻员",
+      "forms": [
+        {
+          "word": "ranger",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "护林员，巡逻员",
+          "phonetic": "['reɪndʒə]",
+          "role": "base"
+        }
+      ],
+      "hook": "ranger = 护林员（名词，6 字母，首字母 R）"
+    },
+    {
+      "sort": 152,
+      "word": "charge",
+      "phonetic": "[tʃɑːdʒ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "掌管，负责",
+      "forms": [
+        {
+          "word": "charge",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "掌管，负责",
+          "phonetic": "[tʃɑːdʒ]",
+          "role": "base"
+        }
+      ],
+      "hook": "charge = 掌管（名词，6 字母，首字母 C）"
+    },
+    {
+      "sort": 153,
+      "word": "rescue",
+      "phonetic": "['reskjuː]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "援助，营救",
+      "forms": [
+        {
+          "word": "rescue",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "援助，营救",
+          "phonetic": "['reskjuː]",
+          "role": "base"
+        }
+      ],
+      "hook": "rescue = 援助（名词，6 字母，首字母 R）"
+    },
+    {
+      "sort": 154,
+      "word": "tourist",
+      "phonetic": "['tʊərɪst]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "旅行者，游客",
+      "forms": [
+        {
+          "word": "tourist",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "旅行者，游客",
+          "phonetic": "['tʊərɪst]",
+          "role": "base"
+        }
+      ],
+      "hook": "tourist = 旅行者（名词，7 字母，首字母 T）"
+    },
+    {
+      "sort": 155,
+      "word": "spring",
+      "phonetic": "[sprɪŋ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "泉",
+      "forms": [
+        {
+          "word": "spring",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "泉",
+          "phonetic": "[sprɪŋ]",
+          "role": "base"
+        }
+      ],
+      "hook": "spring = 泉（名词，6 字母，首字母 S）"
+    },
+    {
+      "sort": 156,
+      "word": "terrace",
+      "phonetic": "['terəs]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "阶地，梯田",
+      "forms": [
+        {
+          "word": "terrace",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "阶地，梯田",
+          "phonetic": "['terəs]",
+          "role": "base"
+        }
+      ],
+      "hook": "terrace = 阶地（名词，7 字母，首字母 T）"
+    },
+    {
+      "sort": 157,
+      "word": "deposit",
+      "phonetic": "[dɪ'pɒzɪt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "沉淀物",
+      "forms": [
+        {
+          "word": "deposit",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "沉淀物",
+          "phonetic": "[dɪ'pɒzɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "deposit = 沉淀物（名词，7 字母，首字母 D）"
+    },
+    {
+      "sort": 158,
+      "word": "slide",
+      "phonetic": "[slaɪd]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "幻灯片",
+      "forms": [
+        {
+          "word": "slide",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "幻灯片",
+          "phonetic": "[slaɪd]",
+          "role": "base"
+        }
+      ],
+      "hook": "slide = 幻灯片（名词，5 字母，首字母 S）"
+    },
+    {
+      "sort": 159,
+      "word": "campfire",
+      "phonetic": "['kæmpfaɪə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "营火，篝火",
+      "forms": [
+        {
+          "word": "campfire",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "营火，篝火",
+          "phonetic": "['kæmpfaɪə]",
+          "role": "base"
+        }
+      ],
+      "hook": "campfire = 营火（名词，8 字母，首字母 C）"
+    },
+    {
+      "sort": 160,
+      "word": "ranch",
+      "phonetic": "[rɑːntʃ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "大农场",
+      "forms": [
+        {
+          "word": "ranch",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "大农场",
+          "phonetic": "[rɑːntʃ]",
+          "role": "base"
+        }
+      ],
+      "hook": "ranch = 大农场（名词，5 字母，首字母 R）"
+    },
+    {
+      "sort": 161,
+      "word": "hand",
+      "phonetic": "[hænd]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "帮手，工人",
+      "forms": [
+        {
+          "word": "hand",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "帮手，工人",
+          "phonetic": "[hænd]",
+          "role": "base"
+        }
+      ],
+      "hook": "hand = 帮手（名词，4 字母，首字母 H）"
+    },
+    {
+      "sort": 162,
+      "word": "desert",
+      "phonetic": "['dezət]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "荒漠",
+      "forms": [
+        {
+          "word": "desert",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "荒漠",
+          "phonetic": "['dezət]",
+          "role": "base"
+        }
+      ],
+      "hook": "desert = 荒漠（名词，6 字母，首字母 D）"
+    },
+    {
+      "sort": 163,
+      "word": "grassland",
+      "phonetic": "['ɡrɑːslænd]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "草原",
+      "forms": [
+        {
+          "word": "grassland",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "草原",
+          "phonetic": "['ɡrɑːslænd]",
+          "role": "base"
+        }
+      ],
+      "hook": "grassland = 草原（名词，9 字母，首字母 G）"
+    },
+    {
+      "sort": 164,
+      "word": "hay",
+      "phonetic": "[heɪ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "干草",
+      "forms": [
+        {
+          "word": "hay",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "干草",
+          "phonetic": "[heɪ]",
+          "role": "base"
+        }
+      ],
+      "hook": "hay = 干草（名词，3 字母，首字母 H）"
+    },
+    {
+      "sort": 165,
+      "word": "taste",
+      "phonetic": "[teɪst]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "一丁点儿，一口；短暂体验",
+      "forms": [
+        {
+          "word": "taste",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "一丁点儿，一口；短暂体验",
+          "phonetic": "[teɪst]",
+          "role": "base"
+        }
+      ],
+      "hook": "taste = 一丁点儿（名词，5 字母，首字母 T）"
+    },
+    {
+      "sort": 166,
+      "word": "truth",
+      "phonetic": "[truːθ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "真相，真理",
+      "forms": [
+        {
+          "word": "truth",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "真相，真理",
+          "phonetic": "[truːθ]",
+          "role": "base"
+        }
+      ],
+      "hook": "truth = 真相（名词，5 字母，首字母 T）"
+    },
+    {
+      "sort": 167,
+      "word": "fitness",
+      "phonetic": "['fɪtnɪs]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "健身，健康",
+      "forms": [
+        {
+          "word": "fitness",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "健身，健康",
+          "phonetic": "['fɪtnɪs]",
+          "role": "base"
+        },
+        {
+          "word": "fit",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "（尤指经过锻炼后）健康的",
+          "phonetic": "[fɪt]",
+          "rule": "adj → n：-ness"
+        }
+      ],
+      "hook": "词性链：fitness(n.) → fit(adj.)"
+    },
+    {
+      "sort": 168,
+      "word": "myth",
+      "phonetic": "[mɪθ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "神话",
+      "forms": [
+        {
+          "word": "myth",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "神话",
+          "phonetic": "[mɪθ]",
+          "role": "base"
+        }
+      ],
+      "hook": "myth = 神话（名词，4 字母，首字母 M）"
+    },
+    {
+      "sort": 169,
+      "word": "fit",
+      "phonetic": "[fɪt]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "（尤指经过锻炼后）健康的",
+      "forms": [
+        {
+          "word": "fit",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "（尤指经过锻炼后）健康的",
+          "phonetic": "[fɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "fit = （尤指经过锻炼后）健康的（形容词，3 字母，首字母 F）"
+    },
+    {
+      "sort": 170,
+      "word": "intention",
+      "phonetic": "[ɪn'tenʃn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "打算，意图",
+      "forms": [
+        {
+          "word": "intention",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "打算，意图",
+          "phonetic": "[ɪn'tenʃn]",
+          "role": "base"
+        }
+      ],
+      "hook": "intention = 打算（名词，9 字母，首字母 I）"
+    },
+    {
+      "sort": 171,
+      "word": "method",
+      "phonetic": "['meθəd]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "方法",
+      "forms": [
+        {
+          "word": "method",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "方法",
+          "phonetic": "['meθəd]",
+          "role": "base"
+        }
+      ],
+      "hook": "method = 方法（名词，6 字母，首字母 M）"
+    },
+    {
+      "sort": 172,
+      "word": "weight",
+      "phonetic": "[weɪt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "重量，体重",
+      "forms": [
+        {
+          "word": "weight",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "重量，体重",
+          "phonetic": "[weɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "weight = 重量（名词，6 字母，首字母 W）"
+    },
+    {
+      "sort": 173,
+      "word": "unfortunately",
+      "phonetic": "[ʌn'fɔːtʃənətli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "不幸地",
+      "forms": [
+        {
+          "word": "unfortunately",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "不幸地",
+          "phonetic": "[ʌn'fɔːtʃənətli]",
+          "role": "base"
+        }
+      ],
+      "hook": "unfortunately = 不幸地（副词，13 字母，首字母 U）"
+    },
+    {
+      "sort": 174,
+      "word": "amount",
+      "phonetic": "[ə'maʊnt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "数量",
+      "forms": [
+        {
+          "word": "amount",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "数量",
+          "phonetic": "[ə'maʊnt]",
+          "role": "base"
+        }
+      ],
+      "hook": "amount = 数量（名词，6 字母，首字母 A）"
+    },
+    {
+      "sort": 175,
+      "word": "healthily",
+      "phonetic": "['helθɪli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "健康地",
+      "forms": [
+        {
+          "word": "healthily",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "健康地",
+          "phonetic": "['helθɪli]",
+          "role": "base"
+        }
+      ],
+      "hook": "healthily = 健康地（副词，9 字母，首字母 H）"
+    },
+    {
+      "sort": 176,
+      "word": "balance",
+      "phonetic": "['bæləns]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "平衡",
+      "forms": [
+        {
+          "word": "balance",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "平衡",
+          "phonetic": "['bæləns]",
+          "role": "base"
+        }
+      ],
+      "hook": "balance = 平衡（名词，7 字母，首字母 B）"
+    },
+    {
+      "sort": 177,
+      "word": "aerobic",
+      "phonetic": "[eə'rəʊbɪk]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "有氧的，有氧健身的",
+      "forms": [
+        {
+          "word": "aerobic",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "有氧的，有氧健身的",
+          "phonetic": "[eə'rəʊbɪk]",
+          "role": "base"
+        }
+      ],
+      "hook": "aerobic = 有氧的（形容词，7 字母，首字母 A）"
+    },
+    {
+      "sort": 178,
+      "word": "extra",
+      "phonetic": "['ekstrə]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "额外的，多余的",
+      "forms": [
+        {
+          "word": "extra",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "额外的，多余的",
+          "phonetic": "['ekstrə]",
+          "role": "base"
+        }
+      ],
+      "hook": "extra = 额外的（形容词，5 字母，首字母 E）"
+    },
+    {
+      "sort": 179,
+      "word": "fat",
+      "phonetic": "[fæt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "脂肪",
+      "forms": [
+        {
+          "word": "fat",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "脂肪",
+          "phonetic": "[fæt]",
+          "role": "base"
+        }
+      ],
+      "hook": "fat = 脂肪（名词，3 字母，首字母 F）"
+    },
+    {
+      "sort": 180,
+      "word": "muscle",
+      "phonetic": "['mʌsl]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "肌肉",
+      "forms": [
+        {
+          "word": "muscle",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "肌肉",
+          "phonetic": "['mʌsl]",
+          "role": "base"
+        }
+      ],
+      "hook": "muscle = 肌肉（名词，6 字母，首字母 M）"
+    },
+    {
+      "sort": 181,
+      "word": "effective",
+      "phonetic": "[ɪ'fektɪv]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "有效的",
+      "forms": [
+        {
+          "word": "effective",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "有效的",
+          "phonetic": "[ɪ'fektɪv]",
+          "role": "base"
+        }
+      ],
+      "hook": "effective = 有效的（形容词，9 字母，首字母 E）"
+    },
+    {
+      "sort": 182,
+      "word": "dense",
+      "phonetic": "[dens]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "密集的，稠密的",
+      "forms": [
+        {
+          "word": "dense",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "密集的，稠密的",
+          "phonetic": "[dens]",
+          "role": "base"
+        }
+      ],
+      "hook": "dense = 密集的（形容词，5 字母，首字母 D）"
+    },
+    {
+      "sort": 183,
+      "word": "weigh",
+      "phonetic": "[weɪ]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "重量为，重",
+      "forms": [
+        {
+          "word": "weigh",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "重量为，重",
+          "phonetic": "[weɪ]",
+          "role": "base"
+        }
+      ],
+      "hook": "weigh = 重量为（动词，5 字母，首字母 W）"
+    },
+    {
+      "sort": 184,
+      "word": "miracle",
+      "phonetic": "['mɪrəkl]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "奇迹，奇事",
+      "forms": [
+        {
+          "word": "miracle",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "奇迹，奇事",
+          "phonetic": "['mɪrəkl]",
+          "role": "base"
+        }
+      ],
+      "hook": "miracle = 奇迹（名词，7 字母，首字母 M）"
+    },
+    {
+      "sort": 185,
+      "word": "diet",
+      "phonetic": "['daɪət]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "日常饮食；膳食",
+      "forms": [
+        {
+          "word": "diet",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "日常饮食；膳食",
+          "phonetic": "['daɪət]",
+          "role": "base"
+        }
+      ],
+      "hook": "diet = 日常饮食（名词，4 字母，首字母 D）"
+    },
+    {
+      "sort": 186,
+      "word": "ad",
+      "phonetic": "[æd]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "广告（= advertisement）",
+      "forms": [
+        {
+          "word": "ad",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "广告（= advertisement）",
+          "phonetic": "[æd]",
+          "role": "base"
+        }
+      ],
+      "hook": "ad = 广告（= advertisement）（名词，2 字母，首字母 A）"
+    },
+    {
+      "sort": 187,
+      "word": "product",
+      "phonetic": "['prɒdʌkt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "产品，产物",
+      "forms": [
+        {
+          "word": "product",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "产品，产物",
+          "phonetic": "['prɒdʌkt]",
+          "role": "base"
+        }
+      ],
+      "hook": "product = 产品（名词，7 字母，首字母 P）"
+    },
+    {
+      "sort": 188,
+      "word": "fancy",
+      "phonetic": "['fænsi]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "高档的，昂贵的",
+      "forms": [
+        {
+          "word": "fancy",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "高档的，昂贵的",
+          "phonetic": "['fænsi]",
+          "role": "base"
+        }
+      ],
+      "hook": "fancy = 高档的（形容词，5 字母，首字母 F）"
+    },
+    {
+      "sort": 189,
+      "word": "calorie",
+      "phonetic": "['kæləri]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "卡路里（热量单位）",
+      "forms": [
+        {
+          "word": "calorie",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "卡路里（热量单位）",
+          "phonetic": "['kæləri]",
+          "role": "base"
+        }
+      ],
+      "hook": "calorie = 卡路里（热量单位）（名词，7 字母，首字母 C）"
+    },
+    {
+      "sort": 190,
+      "word": "confused",
+      "phonetic": "[kən'fjuːzd]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "困惑的，烦恼的",
+      "forms": [
+        {
+          "word": "confused",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "困惑的，烦恼的",
+          "phonetic": "[kən'fjuːzd]",
+          "role": "base"
+        }
+      ],
+      "hook": "confused = 困惑的（形容词，8 字母，首字母 C）"
+    },
+    {
+      "sort": 191,
+      "word": "magical",
+      "phonetic": "['mædʒɪkl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "魔术的，不可思议的",
+      "forms": [
+        {
+          "word": "magical",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "魔术的，不可思议的",
+          "phonetic": "['mædʒɪkl]",
+          "role": "base"
+        }
+      ],
+      "hook": "magical = 魔术的（形容词，7 字母，首字母 M）"
+    },
+    {
+      "sort": 192,
+      "word": "fool",
+      "phonetic": "[fuːl]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "愚弄，欺骗",
+      "forms": [
+        {
+          "word": "fool",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "愚弄，欺骗",
+          "phonetic": "[fuːl]",
+          "role": "base"
+        }
+      ],
+      "hook": "fool = 愚弄（动词，4 字母，首字母 F）"
+    },
+    {
+      "sort": 193,
+      "word": "stuff",
+      "phonetic": "[stʌf]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "东西，材料",
+      "forms": [
+        {
+          "word": "stuff",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "东西，材料",
+          "phonetic": "[stʌf]",
+          "role": "base"
+        }
+      ],
+      "hook": "stuff = 东西（名词，5 字母，首字母 S）"
+    },
+    {
+      "sort": 194,
+      "word": "related",
+      "phonetic": "[rɪ'leɪtɪd]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "有关系的，相关的",
+      "forms": [
+        {
+          "word": "related",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "有关系的，相关的",
+          "phonetic": "[rɪ'leɪtɪd]",
+          "role": "base"
+        }
+      ],
+      "hook": "related = 有关系的（形容词，7 字母，首字母 R）"
+    },
+    {
+      "sort": 195,
+      "word": "activity",
+      "phonetic": "[æk'tɪvɪti]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "活动",
+      "forms": [
+        {
+          "word": "activity",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "活动",
+          "phonetic": "[æk'tɪvɪti]",
+          "role": "base"
+        },
+        {
+          "word": "active",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "积极的",
+          "phonetic": "['æktɪv]",
+          "rule": "adj → n：-ity"
+        }
+      ],
+      "hook": "词性链：activity(n.) → active(adj.)"
+    },
+    {
+      "sort": 196,
+      "word": "lifestyle",
+      "phonetic": "['laɪfstaɪl]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "生活方式",
+      "forms": [
+        {
+          "word": "lifestyle",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "生活方式",
+          "phonetic": "['laɪfstaɪl]",
+          "role": "base"
+        }
+      ],
+      "hook": "lifestyle = 生活方式（名词，9 字母，首字母 L）"
+    },
+    {
+      "sort": 197,
+      "word": "transportation",
+      "phonetic": "[ˌtrænspɔː'teɪʃn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "交通，运输",
+      "forms": [
+        {
+          "word": "transportation",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "交通，运输",
+          "phonetic": "[ˌtrænspɔː'teɪʃn]",
+          "role": "base"
+        }
+      ],
+      "hook": "transportation = 交通（名词，14 字母，首字母 T）"
+    },
+    {
+      "sort": 198,
+      "word": "expert",
+      "phonetic": "['ekspɜːt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "专家，行家",
+      "forms": [
+        {
+          "word": "expert",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "专家，行家",
+          "phonetic": "['ekspɜːt]",
+          "role": "base"
+        }
+      ],
+      "hook": "expert = 专家（名词，6 字母，首字母 E）"
+    },
+    {
+      "sort": 199,
+      "word": "natural",
+      "phonetic": "['nætʃrəl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "自然的，自然界的",
+      "forms": [
+        {
+          "word": "natural",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "自然的，自然界的",
+          "phonetic": "['nætʃrəl]",
+          "role": "base"
+        }
+      ],
+      "hook": "natural = 自然的（形容词，7 字母，首字母 N）"
+    },
+    {
+      "sort": 200,
+      "word": "strengthen",
+      "phonetic": "['streŋθn]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "加强，巩固",
+      "forms": [
+        {
+          "word": "strengthen",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "加强，巩固",
+          "phonetic": "['streŋθn]",
+          "role": "base"
+        }
+      ],
+      "hook": "strengthen = 加强（动词，10 字母，首字母 S）"
+    },
+    {
+      "sort": 201,
+      "word": "bone",
+      "phonetic": "[bəʊn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "骨",
+      "forms": [
+        {
+          "word": "bone",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "骨",
+          "phonetic": "[bəʊn]",
+          "role": "base"
+        }
+      ],
+      "hook": "bone = 骨（名词，4 字母，首字母 B）"
+    },
+    {
+      "sort": 202,
+      "word": "joint",
+      "phonetic": "[dʒɔɪnt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "关节",
+      "forms": [
+        {
+          "word": "joint",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "关节",
+          "phonetic": "[dʒɔɪnt]",
+          "role": "base"
+        }
+      ],
+      "hook": "joint = 关节（名词，5 字母，首字母 J）"
+    },
+    {
+      "sort": 203,
+      "word": "active",
+      "phonetic": "['æktɪv]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "积极的",
+      "forms": [
+        {
+          "word": "active",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "积极的",
+          "phonetic": "['æktɪv]",
+          "role": "base"
+        }
+      ],
+      "hook": "active = 积极的（形容词，6 字母，首字母 A）"
+    },
+    {
+      "sort": 204,
+      "word": "improve",
+      "phonetic": "[ɪm'pruːv]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "改善，改进",
+      "forms": [
+        {
+          "word": "improve",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "改善，改进",
+          "phonetic": "[ɪm'pruːv]",
+          "role": "base"
+        }
+      ],
+      "hook": "improve = 改善（动词，7 字母，首字母 I）"
+    },
+    {
+      "sort": 205,
+      "word": "special",
+      "phonetic": "['speʃl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "特别的，特殊的",
+      "forms": [
+        {
+          "word": "special",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "特别的，特殊的",
+          "phonetic": "['speʃl]",
+          "role": "base"
+        }
+      ],
+      "hook": "special = 特别的（形容词，7 字母，首字母 S）"
+    },
+    {
+      "sort": 206,
+      "word": "equipment",
+      "phonetic": "[ɪ'kwɪpmənt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "装备，设备",
+      "forms": [
+        {
+          "word": "equipment",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "装备，设备",
+          "phonetic": "[ɪ'kwɪpmənt]",
+          "role": "base"
+        }
+      ],
+      "hook": "equipment = 装备（名词，9 字母，首字母 E）"
+    },
+    {
+      "sort": 207,
+      "word": "gently",
+      "phonetic": "['dʒentli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "轻轻地，和缓地",
+      "forms": [
+        {
+          "word": "gently",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "轻轻地，和缓地",
+          "phonetic": "['dʒentli]",
+          "role": "base"
+        }
+      ],
+      "hook": "gently = 轻轻地（副词，6 字母，首字母 G）"
+    },
+    {
+      "sort": 208,
+      "word": "likely",
+      "phonetic": "['laɪkli]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "很可能的",
+      "forms": [
+        {
+          "word": "likely",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "很可能的",
+          "phonetic": "['laɪkli]",
+          "role": "base"
+        }
+      ],
+      "hook": "likely = 很可能的（形容词，6 字母，首字母 L）"
+    },
+    {
+      "sort": 209,
+      "word": "tense",
+      "phonetic": "[tens]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "紧张的，拉紧的",
+      "forms": [
+        {
+          "word": "tense",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "紧张的，拉紧的",
+          "phonetic": "[tens]",
+          "role": "base"
+        }
+      ],
+      "hook": "tense = 紧张的（形容词，5 字母，首字母 T）"
+    },
+    {
+      "sort": 210,
+      "word": "footstep",
+      "phonetic": "['fʊtstep]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "脚步",
+      "forms": [
+        {
+          "word": "footstep",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "脚步",
+          "phonetic": "['fʊtstep]",
+          "role": "base"
+        }
+      ],
+      "hook": "footstep = 脚步（名词，8 字母，首字母 F）"
+    },
+    {
+      "sort": 211,
+      "word": "straight",
+      "phonetic": "[streɪt]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "直的，平直的",
+      "forms": [
+        {
+          "word": "straight",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "直的，平直的",
+          "phonetic": "[streɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "straight = 直的（形容词，8 字母，首字母 S）"
+    },
+    {
+      "sort": 212,
+      "word": "elbow",
+      "phonetic": "['elbəʊ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "肘",
+      "forms": [
+        {
+          "word": "elbow",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "肘",
+          "phonetic": "['elbəʊ]",
+          "role": "base"
+        }
+      ],
+      "hook": "elbow = 肘（名词，5 字母，首字母 E）"
+    },
+    {
+      "sort": 213,
+      "word": "swing",
+      "phonetic": "[swɪŋ]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "摇摆，摆动",
+      "forms": [
+        {
+          "word": "swing",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "摇摆，摆动",
+          "phonetic": "[swɪŋ]",
+          "role": "base"
+        }
+      ],
+      "hook": "swing = 摇摆（动词，5 字母，首字母 S）"
+    },
+    {
+      "sort": 214,
+      "word": "emotional",
+      "phonetic": "[ɪ'məʊʃənl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "情绪的，情感的",
+      "forms": [
+        {
+          "word": "emotional",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "情绪的，情感的",
+          "phonetic": "[ɪ'məʊʃənl]",
+          "role": "base"
+        }
+      ],
+      "hook": "emotional = 情绪的（形容词，9 字母，首字母 E）"
+    },
+    {
+      "sort": 215,
+      "word": "experiment",
+      "phonetic": "[ɪk'sperɪmənt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "实验，试验",
+      "forms": [
+        {
+          "word": "experiment",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "实验，试验",
+          "phonetic": "[ɪk'sperɪmənt]",
+          "role": "base"
+        }
+      ],
+      "hook": "experiment = 实验（名词，10 字母，首字母 E）"
+    },
+    {
+      "sort": 216,
+      "word": "level",
+      "phonetic": "['levl]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "水平，等级",
+      "forms": [
+        {
+          "word": "level",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "水平，等级",
+          "phonetic": "['levl]",
+          "role": "base"
+        }
+      ],
+      "hook": "level = 水平（名词，5 字母，首字母 L）"
+    },
+    {
+      "sort": 217,
+      "word": "tension",
+      "phonetic": "['tenʃn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "紧张，压力",
+      "forms": [
+        {
+          "word": "tension",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "紧张，压力",
+          "phonetic": "['tenʃn]",
+          "role": "base"
+        }
+      ],
+      "hook": "tension = 紧张（名词，7 字母，首字母 T）"
+    },
+    {
+      "sort": 218,
+      "word": "seriousness",
+      "phonetic": "['sɪəriəsnəs]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "严重，严重性",
+      "forms": [
+        {
+          "word": "seriousness",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "严重，严重性",
+          "phonetic": "['sɪəriəsnəs]",
+          "role": "base"
+        }
+      ],
+      "hook": "seriousness = 严重（名词，11 字母，首字母 S）"
+    },
+    {
+      "sort": 219,
+      "word": "worry",
+      "phonetic": "['wʌri]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "令人忧心的事",
+      "forms": [
+        {
+          "word": "worry",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "令人忧心的事",
+          "phonetic": "['wʌri]",
+          "role": "base"
+        }
+      ],
+      "hook": "worry = 令人忧心的事（名词，5 字母，首字母 W）"
+    },
+    {
+      "sort": 220,
+      "word": "failing",
+      "phonetic": "['feɪlɪŋ]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "失败的，衰败的",
+      "forms": [
+        {
+          "word": "failing",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "失败的，衰败的",
+          "phonetic": "['feɪlɪŋ]",
+          "role": "base"
+        }
+      ],
+      "hook": "failing = 失败的（形容词，7 字母，首字母 F）"
+    },
+    {
+      "sort": 221,
+      "word": "marriage",
+      "phonetic": "['mærɪdʒ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "婚姻",
+      "forms": [
+        {
+          "word": "marriage",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "婚姻",
+          "phonetic": "['mærɪdʒ]",
+          "role": "base"
+        }
+      ],
+      "hook": "marriage = 婚姻（名词，8 字母，首字母 M）"
+    },
+    {
+      "sort": 222,
+      "word": "threatening",
+      "phonetic": "['θretnɪŋ]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "具有威胁性的，令人生畏的",
+      "forms": [
+        {
+          "word": "threatening",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "具有威胁性的，令人生畏的",
+          "phonetic": "['θretnɪŋ]",
+          "role": "base"
+        }
+      ],
+      "hook": "threatening = 具有威胁性的（形容词，11 字母，首字母 T）"
+    },
+    {
+      "sort": 223,
+      "word": "observe",
+      "phonetic": "[əb'zɜːv]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "观察，注意",
+      "forms": [
+        {
+          "word": "observe",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "观察，注意",
+          "phonetic": "[əb'zɜːv]",
+          "role": "base"
+        }
+      ],
+      "hook": "observe = 观察（动词，7 字母，首字母 O）"
+    },
+    {
+      "sort": 224,
+      "word": "lunar",
+      "phonetic": "['luːnə]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "阴历的，月亮的",
+      "forms": [
+        {
+          "word": "lunar",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "阴历的，月亮的",
+          "phonetic": "['luːnə]",
+          "role": "base"
+        }
+      ],
+      "hook": "lunar = 阴历的（形容词，5 字母，首字母 L）"
+    },
+    {
+      "sort": 225,
+      "word": "paste",
+      "phonetic": "[peɪst]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "粘贴，粘合",
+      "forms": [
+        {
+          "word": "paste",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "粘贴，粘合",
+          "phonetic": "[peɪst]",
+          "role": "base"
+        }
+      ],
+      "hook": "paste = 粘贴（动词，5 字母，首字母 P）"
+    },
+    {
+      "sort": 226,
+      "word": "couplet",
+      "phonetic": "['kʌplɪt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "对联，对句",
+      "forms": [
+        {
+          "word": "couplet",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "对联，对句",
+          "phonetic": "['kʌplɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "couplet = 对联（名词，7 字母，首字母 C）"
+    },
+    {
+      "sort": 227,
+      "word": "ink",
+      "phonetic": "[ɪŋk]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "墨水",
+      "forms": [
+        {
+          "word": "ink",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "墨水",
+          "phonetic": "[ɪŋk]",
+          "role": "base"
+        }
+      ],
+      "hook": "ink = 墨水（名词，3 字母，首字母 I）"
+    },
+    {
+      "sort": 228,
+      "word": "scroll",
+      "phonetic": "[skrəʊl]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "卷轴",
+      "forms": [
+        {
+          "word": "scroll",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "卷轴",
+          "phonetic": "[skrəʊl]",
+          "role": "base"
+        }
+      ],
+      "hook": "scroll = 卷轴（名词，6 字母，首字母 S）"
+    },
+    {
+      "sort": 229,
+      "word": "interestingly",
+      "phonetic": "['ɪntrɪstɪŋli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "有趣的是",
+      "forms": [
+        {
+          "word": "interestingly",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "有趣的是",
+          "phonetic": "['ɪntrɪstɪŋli]",
+          "role": "base"
+        }
+      ],
+      "hook": "interestingly = 有趣的是（副词，13 字母，首字母 I）"
+    },
+    {
+      "sort": 230,
+      "word": "reverse",
+      "phonetic": "[rɪ'vɜːs]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "颠倒，扭转",
+      "forms": [
+        {
+          "word": "reverse",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "颠倒，扭转",
+          "phonetic": "[rɪ'vɜːs]",
+          "role": "base"
+        }
+      ],
+      "hook": "reverse = 颠倒（动词，7 字母，首字母 R）"
+    },
+    {
+      "sort": 231,
+      "word": "pronounce",
+      "phonetic": "[prə'naʊns]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "发音，读音",
+      "forms": [
+        {
+          "word": "pronounce",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "发音，读音",
+          "phonetic": "[prə'naʊns]",
+          "role": "base"
+        }
+      ],
+      "hook": "pronounce = 发音（动词，9 字母，首字母 P）"
+    },
+    {
+      "sort": 232,
+      "word": "reunion",
+      "phonetic": "[ˌriː'juːnjən]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "团圆，重聚",
+      "forms": [
+        {
+          "word": "reunion",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "团圆，重聚",
+          "phonetic": "[ˌriː'juːnjən]",
+          "role": "base"
+        }
+      ],
+      "hook": "reunion = 团圆（名词，7 字母，首字母 R）"
+    },
+    {
+      "sort": 233,
+      "word": "chat",
+      "phonetic": "[tʃæt]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "聊天",
+      "forms": [
+        {
+          "word": "chat",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "聊天",
+          "phonetic": "[tʃæt]",
+          "role": "base"
+        }
+      ],
+      "hook": "chat = 聊天（动词，4 字母，首字母 C）"
+    },
+    {
+      "sort": 234,
+      "word": "gala",
+      "phonetic": "['ɡɑːlə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "庆典，盛会",
+      "forms": [
+        {
+          "word": "gala",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "庆典，盛会",
+          "phonetic": "['ɡɑːlə]",
+          "role": "base"
+        }
+      ],
+      "hook": "gala = 庆典（名词，4 字母，首字母 G）"
+    },
+    {
+      "sort": 235,
+      "word": "most-watched",
+      "phonetic": "[məʊst wɒtʃt]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "收视率最高的，最受关注的",
+      "forms": [
+        {
+          "word": "most-watched",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "收视率最高的，最受关注的",
+          "phonetic": "[məʊst wɒtʃt]",
+          "role": "base"
+        }
+      ],
+      "hook": "most-watched = 收视率最高的（形容词，12 字母，首字母 M）"
+    },
+    {
+      "sort": 236,
+      "word": "greeting",
+      "phonetic": "['ɡriːtɪŋ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "问候",
+      "forms": [
+        {
+          "word": "greeting",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "问候",
+          "phonetic": "['ɡriːtɪŋ]",
+          "role": "base"
+        }
+      ],
+      "hook": "greeting = 问候（名词，8 字母，首字母 G）"
+    },
+    {
+      "sort": 237,
+      "word": "app",
+      "phonetic": "",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "应用程序（application）",
+      "forms": [
+        {
+          "word": "app",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "应用程序（application）",
+          "phonetic": "",
+          "role": "base"
+        }
+      ],
+      "hook": "app = 应用程序（application）（名词，3 字母，首字母 A）"
+    },
+    {
+      "sort": 238,
+      "word": "custom",
+      "phonetic": "['kʌstəm]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "风俗，习俗",
+      "forms": [
+        {
+          "word": "custom",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "风俗，习俗",
+          "phonetic": "['kʌstəm]",
+          "role": "base"
+        }
+      ],
+      "hook": "custom = 风俗（名词，6 字母，首字母 C）"
+    },
+    {
+      "sort": 239,
+      "word": "dumpling",
+      "phonetic": "['dʌmplɪŋ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "饺子",
+      "forms": [
+        {
+          "word": "dumpling",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "饺子",
+          "phonetic": "['dʌmplɪŋ]",
+          "role": "base"
+        }
+      ],
+      "hook": "dumpling = 饺子（名词，8 字母，首字母 D）"
+    },
+    {
+      "sort": 240,
+      "word": "packet",
+      "phonetic": "['pækɪt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "小包装袋，小包",
+      "forms": [
+        {
+          "word": "packet",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "小包装袋，小包",
+          "phonetic": "['pækɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "packet = 小包装袋（名词，6 字母，首字母 P）"
+    },
+    {
+      "sort": 241,
+      "word": "firework",
+      "phonetic": "['faɪəwɜːk]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "烟花",
+      "forms": [
+        {
+          "word": "firework",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "烟花",
+          "phonetic": "['faɪəwɜːk]",
+          "role": "base"
+        }
+      ],
+      "hook": "firework = 烟花（名词，8 字母，首字母 F）"
+    },
+    {
+      "sort": 242,
+      "word": "typical",
+      "phonetic": "['tɪpɪkl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "典型的",
+      "forms": [
+        {
+          "word": "typical",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "典型的",
+          "phonetic": "['tɪpɪkl]",
+          "role": "base"
+        }
+      ],
+      "hook": "typical = 典型的（形容词，7 字母，首字母 T）"
+    },
+    {
+      "sort": 243,
+      "word": "firecracker",
+      "phonetic": "['faɪəkrækə]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "爆竹",
+      "forms": [
+        {
+          "word": "firecracker",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "爆竹",
+          "phonetic": "['faɪəkrækə]",
+          "role": "base"
+        }
+      ],
+      "hook": "firecracker = 爆竹（名词，11 字母，首字母 F）"
+    },
+    {
+      "sort": 244,
+      "word": "ban",
+      "phonetic": "[bæn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "禁令",
+      "forms": [
+        {
+          "word": "ban",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "禁令",
+          "phonetic": "[bæn]",
+          "role": "base"
+        }
+      ],
+      "hook": "ban = 禁令（名词，3 字母，首字母 B）"
+    },
+    {
+      "sort": 245,
+      "word": "accident",
+      "phonetic": "['æksɪdənt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "事故",
+      "forms": [
+        {
+          "word": "accident",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "事故",
+          "phonetic": "['æksɪdənt]",
+          "role": "base"
+        }
+      ],
+      "hook": "accident = 事故（名词，8 字母，首字母 A）"
+    },
+    {
+      "sort": 246,
+      "word": "threat",
+      "phonetic": "[θret]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "威胁",
+      "forms": [
+        {
+          "word": "threat",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "威胁",
+          "phonetic": "[θret]",
+          "role": "base"
+        }
+      ],
+      "hook": "threat = 威胁（名词，6 字母，首字母 T）"
+    },
+    {
+      "sort": 247,
+      "word": "quality",
+      "phonetic": "['kwɒlɪti]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "质量",
+      "forms": [
+        {
+          "word": "quality",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "质量",
+          "phonetic": "['kwɒlɪti]",
+          "role": "base"
+        }
+      ],
+      "hook": "quality = 质量（名词，7 字母，首字母 Q）"
+    },
+    {
+      "sort": 248,
+      "word": "dragon",
+      "phonetic": "['dræɡən]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "龙",
+      "forms": [
+        {
+          "word": "dragon",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "龙",
+          "phonetic": "['dræɡən]",
+          "role": "base"
+        }
+      ],
+      "hook": "dragon = 龙（名词，6 字母，首字母 D）"
+    },
+    {
+      "sort": 249,
+      "word": "lantern",
+      "phonetic": "['læntən]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "灯笼",
+      "forms": [
+        {
+          "word": "lantern",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "灯笼",
+          "phonetic": "['læntən]",
+          "role": "base"
+        }
+      ],
+      "hook": "lantern = 灯笼（名词，7 字母，首字母 L）"
+    },
+    {
+      "sort": 250,
+      "word": "officially",
+      "phonetic": "[ə'fɪʃəli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "正式地，官方地",
+      "forms": [
+        {
+          "word": "officially",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "正式地，官方地",
+          "phonetic": "[ə'fɪʃəli]",
+          "role": "base"
+        }
+      ],
+      "hook": "officially = 正式地（副词，10 字母，首字母 O）"
+    },
+    {
+      "sort": 251,
+      "word": "Christmas",
+      "phonetic": "['krɪsməs]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "圣诞节",
+      "forms": [
+        {
+          "word": "Christmas",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "圣诞节",
+          "phonetic": "['krɪsməs]",
+          "role": "base"
+        }
+      ],
+      "hook": "Christmas = 圣诞节（名词，9 字母，首字母 C）"
+    },
+    {
+      "sort": 252,
+      "word": "bachelor",
+      "phonetic": "['bætʃələ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "单身汉",
+      "forms": [
+        {
+          "word": "bachelor",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "单身汉",
+          "phonetic": "['bætʃələ]",
+          "role": "base"
+        }
+      ],
+      "hook": "bachelor = 单身汉（名词，8 字母，首字母 B）"
+    },
+    {
+      "sort": 253,
+      "word": "smartphone",
+      "phonetic": "",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "智能手机",
+      "forms": [
+        {
+          "word": "smartphone",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "智能手机",
+          "phonetic": "",
+          "role": "base"
+        }
+      ],
+      "hook": "smartphone = 智能手机（名词，10 字母，首字母 S）"
+    },
+    {
+      "sort": 254,
+      "word": "Wi-Fi",
+      "phonetic": "",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "（wireless fidelity 的缩写）无线网络",
+      "forms": [
+        {
+          "word": "Wi-Fi",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "（wireless fidelity 的缩写）无线网络",
+          "phonetic": "",
+          "role": "base"
+        }
+      ],
+      "hook": "Wi-Fi = （wireless fidelity 的缩写）无线网络（名词，5 字母，首字母 W）"
+    },
+    {
+      "sort": 255,
+      "word": "lack",
+      "phonetic": "[læk]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "缺乏，没有",
+      "forms": [
+        {
+          "word": "lack",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "缺乏，没有",
+          "phonetic": "[læk]",
+          "role": "base"
+        }
+      ],
+      "hook": "lack = 缺乏（动词，4 字母，首字母 L）"
+    },
+    {
+      "sort": 256,
+      "word": "intend",
+      "phonetic": "[ɪn'tend]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "想要，打算",
+      "forms": [
+        {
+          "word": "intend",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "想要，打算",
+          "phonetic": "[ɪn'tend]",
+          "role": "base"
+        }
+      ],
+      "hook": "intend = 想要（动词，6 字母，首字母 I）"
+    },
+    {
+      "sort": 257,
+      "word": "relative",
+      "phonetic": "['relətɪv]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "亲戚",
+      "forms": [
+        {
+          "word": "relative",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "亲戚",
+          "phonetic": "['relətɪv]",
+          "role": "base"
+        }
+      ],
+      "hook": "relative = 亲戚（名词，8 字母，首字母 R）"
+    },
+    {
+      "sort": 258,
+      "word": "realize",
+      "phonetic": "['rɪəlaɪz]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "认识到，了解",
+      "forms": [
+        {
+          "word": "realize",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "认识到，了解",
+          "phonetic": "['rɪəlaɪz]",
+          "role": "base"
+        }
+      ],
+      "hook": "realize = 认识到（动词，7 字母，首字母 R）"
+    },
+    {
+      "sort": 259,
+      "word": "eve",
+      "phonetic": "[iːv]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "前夕，前夜",
+      "forms": [
+        {
+          "word": "eve",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "前夕，前夜",
+          "phonetic": "[iːv]",
+          "role": "base"
+        }
+      ],
+      "hook": "eve = 前夕（名词，3 字母，首字母 E）"
+    },
+    {
+      "sort": 260,
+      "word": "remove",
+      "phonetic": "[rɪ'muːv]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "移动；去掉",
+      "forms": [
+        {
+          "word": "remove",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "移动；去掉",
+          "phonetic": "[rɪ'muːv]",
+          "role": "base"
+        }
+      ],
+      "hook": "remove = 移动（动词，6 字母，首字母 R）"
+    },
+    {
+      "sort": 261,
+      "word": "decoration",
+      "phonetic": "[ˌdekə'reɪʃn]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "装饰，装饰品",
+      "forms": [
+        {
+          "word": "decoration",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "装饰，装饰品",
+          "phonetic": "[ˌdekə'reɪʃn]",
+          "role": "base"
+        }
+      ],
+      "hook": "decoration = 装饰（名词，10 字母，首字母 D）"
+    },
+    {
+      "sort": 262,
+      "word": "pack",
+      "phonetic": "[pæk]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "把……打包",
+      "forms": [
+        {
+          "word": "pack",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "把……打包",
+          "phonetic": "[pæk]",
+          "role": "base"
+        }
+      ],
+      "hook": "pack = 把……打包（动词，4 字母，首字母 P）"
+    },
+    {
+      "sort": 263,
+      "word": "trimming",
+      "phonetic": "['trɪmɪŋ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "配料；装饰品",
+      "forms": [
+        {
+          "word": "trimming",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "配料；装饰品",
+          "phonetic": "['trɪmɪŋ]",
+          "role": "base"
+        }
+      ],
+      "hook": "trimming = 配料（名词，8 字母，首字母 T）"
+    },
+    {
+      "sort": 264,
+      "word": "turkey",
+      "phonetic": "['tɜːki]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "火鸡",
+      "forms": [
+        {
+          "word": "turkey",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "火鸡",
+          "phonetic": "['tɜːki]",
+          "role": "base"
+        }
+      ],
+      "hook": "turkey = 火鸡（名词，6 字母，首字母 T）"
+    },
+    {
+      "sort": 265,
+      "word": "dawn",
+      "phonetic": "[dɔːn]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "破晓，（天）初亮",
+      "forms": [
+        {
+          "word": "dawn",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "破晓，（天）初亮",
+          "phonetic": "[dɔːn]",
+          "role": "base"
+        }
+      ],
+      "hook": "dawn = 破晓（动词，4 字母，首字母 D）"
+    },
+    {
+      "sort": 266,
+      "word": "perfectly",
+      "phonetic": "['pɜːfɪktli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "完美地，完全地",
+      "forms": [
+        {
+          "word": "perfectly",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "完美地，完全地",
+          "phonetic": "['pɜːfɪktli]",
+          "role": "base"
+        },
+        {
+          "word": "perfect",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "完美的，完满的",
+          "phonetic": "['pɜːfɪkt]",
+          "rule": "adj → adv：-ly"
+        }
+      ],
+      "hook": "词性链：perfectly(adv.) → perfect(adj.)"
+    },
+    {
+      "sort": 267,
+      "word": "brightly",
+      "phonetic": "['braɪtli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "明亮地",
+      "forms": [
+        {
+          "word": "brightly",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "明亮地",
+          "phonetic": "['braɪtli]",
+          "role": "base"
+        }
+      ],
+      "hook": "brightly = 明亮地（副词，8 字母，首字母 B）"
+    },
+    {
+      "sort": 268,
+      "word": "blanket",
+      "phonetic": "['blæŋkɪt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "覆盖的一层",
+      "forms": [
+        {
+          "word": "blanket",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "覆盖的一层",
+          "phonetic": "['blæŋkɪt]",
+          "role": "base"
+        }
+      ],
+      "hook": "blanket = 覆盖的一层（名词，7 字母，首字母 B）"
+    },
+    {
+      "sort": 269,
+      "word": "backseat",
+      "phonetic": "[bæk'siːt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "后座",
+      "forms": [
+        {
+          "word": "backseat",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "后座",
+          "phonetic": "[bæk'siːt]",
+          "role": "base"
+        }
+      ],
+      "hook": "backseat = 后座（名词，8 字母，首字母 B）"
+    },
+    {
+      "sort": 270,
+      "word": "silently",
+      "phonetic": "['saɪləntli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "默默地，静静地",
+      "forms": [
+        {
+          "word": "silently",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "默默地，静静地",
+          "phonetic": "['saɪləntli]",
+          "role": "base"
+        }
+      ],
+      "hook": "silently = 默默地（副词，8 字母，首字母 S）"
+    },
+    {
+      "sort": 271,
+      "word": "upset",
+      "phonetic": "[ʌp'set]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "心烦意乱的，烦恼的",
+      "forms": [
+        {
+          "word": "upset",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "心烦意乱的，烦恼的",
+          "phonetic": "[ʌp'set]",
+          "role": "base"
+        }
+      ],
+      "hook": "upset = 心烦意乱的（形容词，5 字母，首字母 U）"
+    },
+    {
+      "sort": 272,
+      "word": "insist",
+      "phonetic": "[ɪn'sɪst]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "坚持，强调",
+      "forms": [
+        {
+          "word": "insist",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "坚持，强调",
+          "phonetic": "[ɪn'sɪst]",
+          "role": "base"
+        }
+      ],
+      "hook": "insist = 坚持（动词，6 字母，首字母 I）"
+    },
+    {
+      "sort": 273,
+      "word": "otherwise",
+      "phonetic": "['ʌðəwaɪz]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "否则，不然",
+      "forms": [
+        {
+          "word": "otherwise",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "否则，不然",
+          "phonetic": "['ʌðəwaɪz]",
+          "role": "base"
+        }
+      ],
+      "hook": "otherwise = 否则（副词，9 字母，首字母 O）"
+    },
+    {
+      "sort": 274,
+      "word": "perfect",
+      "phonetic": "['pɜːfɪkt]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "完美的，完满的",
+      "forms": [
+        {
+          "word": "perfect",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "完美的，完满的",
+          "phonetic": "['pɜːfɪkt]",
+          "role": "base"
+        }
+      ],
+      "hook": "perfect = 完美的（形容词，7 字母，首字母 P）"
+    },
+    {
+      "sort": 275,
+      "word": "woods",
+      "phonetic": "[wʊdz]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "树林",
+      "forms": [
+        {
+          "word": "woods",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "树林",
+          "phonetic": "[wʊdz]",
+          "role": "base"
+        }
+      ],
+      "hook": "woods = 树林（名词，5 字母，首字母 W）"
+    },
+    {
+      "sort": 276,
+      "word": "festive",
+      "phonetic": "['festɪv]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "喜庆的，节日的",
+      "forms": [
+        {
+          "word": "festive",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "喜庆的，节日的",
+          "phonetic": "['festɪv]",
+          "role": "base"
+        }
+      ],
+      "hook": "festive = 喜庆的（形容词，7 字母，首字母 F）"
+    },
+    {
+      "sort": 277,
+      "word": "actually",
+      "phonetic": "['æktʃuəli]",
+      "pos": "adv.",
+      "pos_zh": "副词",
+      "zh": "实际上，事实上",
+      "forms": [
+        {
+          "word": "actually",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "实际上，事实上",
+          "phonetic": "['æktʃuəli]",
+          "role": "base"
+        }
+      ],
+      "hook": "actually = 实际上（副词，8 字母，首字母 A）"
+    },
+    {
+      "sort": 278,
+      "word": "dessert",
+      "phonetic": "[dɪ'zɜːt]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "餐后甜点",
+      "forms": [
+        {
+          "word": "dessert",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "餐后甜点",
+          "phonetic": "[dɪ'zɜːt]",
+          "role": "base"
+        }
+      ],
+      "hook": "dessert = 餐后甜点（名词，7 字母，首字母 D）"
+    },
+    {
+      "sort": 279,
+      "word": "final",
+      "phonetic": "['faɪnl]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "最后的，最终的",
+      "forms": [
+        {
+          "word": "final",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "最后的，最终的",
+          "phonetic": "['faɪnl]",
+          "role": "base"
+        }
+      ],
+      "hook": "final = 最后的（形容词，5 字母，首字母 F）"
+    },
+    {
+      "sort": 280,
+      "word": "flaming",
+      "phonetic": "['fleɪmɪŋ]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "有火焰的，燃烧的",
+      "forms": [
+        {
+          "word": "flaming",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "有火焰的，燃烧的",
+          "phonetic": "['fleɪmɪŋ]",
+          "role": "base"
+        }
+      ],
+      "hook": "flaming = 有火焰的（形容词，7 字母，首字母 F）"
+    },
+    {
+      "sort": 281,
+      "word": "pudding",
+      "phonetic": "['pʊdɪŋ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "布丁",
+      "forms": [
+        {
+          "word": "pudding",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "布丁",
+          "phonetic": "['pʊdɪŋ]",
+          "role": "base"
+        }
+      ],
+      "hook": "pudding = 布丁（名词，7 字母，首字母 P）"
+    },
+    {
+      "sort": 282,
+      "word": "merry",
+      "phonetic": "['meri]",
+      "pos": "adj.",
+      "pos_zh": "形容词",
+      "zh": "欢乐的，愉快的",
+      "forms": [
+        {
+          "word": "merry",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "欢乐的，愉快的",
+          "phonetic": "['meri]",
+          "role": "base"
+        }
+      ],
+      "hook": "merry = 欢乐的（形容词，5 字母，首字母 M）"
+    },
+    {
+      "sort": 283,
+      "word": "gasp",
+      "phonetic": "[ɡɑːsp]",
+      "pos": "v.",
+      "pos_zh": "动词",
+      "zh": "喘息，喘着气说",
+      "forms": [
+        {
+          "word": "gasp",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "喘息，喘着气说",
+          "phonetic": "[ɡɑːsp]",
+          "role": "base"
+        }
+      ],
+      "hook": "gasp = 喘息（动词，4 字母，首字母 G）"
+    },
+    {
+      "sort": 284,
+      "word": "joy",
+      "phonetic": "[dʒɔɪ]",
+      "pos": "n.",
+      "pos_zh": "名词",
+      "zh": "欢乐，喜悦",
+      "forms": [
+        {
+          "word": "joy",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "欢乐，喜悦",
+          "phonetic": "[dʒɔɪ]",
+          "role": "base"
+        }
+      ],
+      "hook": "joy = 欢乐（名词，3 字母，首字母 J）"
+    }
+  ]
+}

@@ -89,6 +89,13 @@
       "title": "WE Learn B1U8 Festivals iWords 词汇填空",
       "file": "WE Learn_B1U8_Festivals_iWords_20260704.json",
       "count": 91
+    },
+    {
+      "id": "welearn_b1u4u8_vocab",
+      "title": "WE Learn B1U4~U8 单词速记",
+      "file": "WE Learn_B1U4-U8_单词速记_20260704.json",
+      "count": 284,
+      "kind": "flashcard"
     }
   ]
 }

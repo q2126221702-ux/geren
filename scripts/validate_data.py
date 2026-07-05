@@ -32,6 +32,22 @@ for q in manifest["quizzes"]:
         issues.append(f"missing file: {q['file']}")
         continue
     data = json.loads(fp.read_text(encoding="utf-8"))
+    is_flashcard = data.get("quiz_type") == "vocab_flashcard" or q.get("kind") == "flashcard"
+
+    if is_flashcard:
+        actual = len(data.get("cards", []))
+        if actual != q["count"]:
+            issues.append(f"{q['id']}: manifest count {q['count']} != actual {actual}")
+        if data.get("quiz_type") != "vocab_flashcard":
+            issues.append(f"{q['id']}: expected quiz_type vocab_flashcard")
+        for card in data.get("cards", []):
+            sort = card.get("sort", "?")
+            if not card.get("word") or not card.get("zh"):
+                issues.append(f"{q['id']} card {sort} missing word/zh")
+            if not card.get("forms"):
+                issues.append(f"{q['id']} card {sort} missing forms")
+        continue
+
     actual = len(data.get("questions", []))
     if actual != q["count"]:
         issues.append(f"{q['id']}: manifest count {q['count']} != actual {actual}")

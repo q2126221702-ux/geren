@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
-  <meta name="app-version" content="202607052200">
+  <meta name="app-version" content="202607052300">
   <title>在线测验</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -98,6 +98,28 @@
       40% { content: '.'; }
       60% { content: '..'; }
       80%, 100% { content: '...'; }
+    }
+    .flashcard-scene {
+      perspective: 1200px;
+    }
+    .flashcard-inner {
+      transform-style: preserve-3d;
+      transition: transform 0.35s ease;
+    }
+    .flashcard-inner.is-flipped {
+      transform: rotateY(180deg);
+    }
+    .flashcard-face {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .flashcard-back {
+      transform: rotateY(180deg);
+    }
+    .flashcard-mode-btn.active {
+      background-color: #0080ff;
+      color: #fff;
+      border-color: #0080ff;
     }
   </style>
 </head>
@@ -229,6 +251,64 @@
     </main>
   </div>
 
+  <!-- 单词速记闪卡 -->
+  <div id="page-flashcard" class="hidden min-h-screen flex flex-col bg-gray-100">
+    <header class="bg-primary text-white shadow sticky top-0 z-20">
+      <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <div class="min-w-0">
+          <h1 id="flashcard-title" class="text-lg font-semibold truncate"></h1>
+          <p id="flashcard-progress-text" class="text-sm text-blue-100"></p>
+        </div>
+        <button id="btn-flashcard-back" type="button" class="shrink-0 text-sm px-3 py-1.5 rounded border border-white/40 hover:bg-white/10">
+          返回
+        </button>
+      </div>
+      <div class="bg-primary-dark/30">
+        <div class="max-w-3xl mx-auto px-4 py-2">
+          <div class="h-1.5 bg-white/20 rounded-full overflow-hidden">
+            <div id="flashcard-progress-bar" class="h-full bg-white rounded-full transition-all duration-300" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto w-full px-4 py-5 flex-1 flex flex-col gap-4">
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" data-fc-mode="en2zh" class="flashcard-mode-btn active text-xs px-3 py-1.5 rounded-full border border-gray-300 bg-white">英 → 中</button>
+        <button type="button" data-fc-mode="zh2en" class="flashcard-mode-btn text-xs px-3 py-1.5 rounded-full border border-gray-300 bg-white">中 → 英</button>
+        <button type="button" data-fc-mode="pos" class="flashcard-mode-btn text-xs px-3 py-1.5 rounded-full border border-gray-300 bg-white">词性转化</button>
+        <label class="ml-auto flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer select-none">
+          <input id="flashcard-shuffle" type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" />
+          随机
+        </label>
+      </div>
+
+      <div id="flashcard-scene" class="flashcard-scene flex-1 min-h-[18rem] max-h-[28rem] cursor-pointer select-none" title="点击翻转">
+        <div id="flashcard-inner" class="flashcard-inner relative w-full h-full min-h-[18rem]">
+          <div id="flashcard-front" class="flashcard-face absolute inset-0 bg-white rounded-2xl shadow-md border border-gray-200 p-6 flex flex-col items-center justify-center text-center"></div>
+          <div id="flashcard-back" class="flashcard-face flashcard-back absolute inset-0 bg-white rounded-2xl shadow-md border border-violet-200 p-6 flex flex-col items-center justify-center text-center overflow-y-auto"></div>
+        </div>
+      </div>
+
+      <p class="text-xs text-gray-500 text-center">点击卡片翻转 · 空格键翻转 · ← → 切换</p>
+
+      <div class="grid grid-cols-3 gap-2">
+        <button id="btn-fc-prev" type="button" class="py-2.5 rounded-lg border border-gray-300 bg-white text-sm hover:bg-gray-50">上一张</button>
+        <button id="btn-fc-flip" type="button" class="py-2.5 rounded-lg bg-primary text-white text-sm hover:bg-primary-dark">翻转</button>
+        <button id="btn-fc-next" type="button" class="py-2.5 rounded-lg border border-gray-300 bg-white text-sm hover:bg-gray-50">下一张</button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2">
+        <button id="btn-fc-again" type="button" class="py-2.5 rounded-lg border border-amber-300 bg-amber-50 text-amber-800 text-sm hover:bg-amber-100">再练</button>
+        <button id="btn-fc-known" type="button" class="py-2.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-800 text-sm hover:bg-emerald-100">记得 · 下一张</button>
+      </div>
+
+      <p id="flashcard-queue-hint" class="hidden text-xs text-amber-700 text-center bg-amber-50 rounded-lg px-3 py-2">
+        待复习 <span id="flashcard-queue-count">0</span> 张
+      </p>
+    </main>
+  </div>
+
   <!-- AI 设置页 -->
   <div id="page-settings" class="hidden min-h-screen">
     <header class="bg-primary text-white shadow">
@@ -299,6 +379,6 @@
   <script src="js/ai-config.js?v=202607042400"></script>
   <script src="js/ai-config.local.js?v=202607042400" onerror=""></script>
   <script src="js/ai.js?v=202607052200"></script>
-  <script src="js/app.js?v=202607052200"></script>
+  <script src="js/app.js?v=202607052300"></script>
 </body>
 </html>

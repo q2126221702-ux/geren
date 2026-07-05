@@ -22,6 +22,16 @@
     testCooldownTimer: null,
     wrongDrillMode: false,
     parentQuiz: null,
+    flashcard: {
+      deck: null,
+      order: [],
+      index: 0,
+      flipped: false,
+      mode: 'en2zh',
+      shuffle: false,
+      queue: [],
+      known: new Set(),
+    },
   };
 
   const $ = (id) => document.getElementById(id);
@@ -194,6 +204,7 @@
     quiz: $('page-quiz'),
     result: $('page-result'),
     settings: $('page-settings'),
+    flashcard: $('page-flashcard'),
   };
 
   function showPage(name) {
@@ -514,31 +525,262 @@
     state.quiz = await res.json();
   }
 
+  function resetFlashcardOrder() {
+    const fc = state.flashcard;
+    const total = fc.deck.cards.length;
+    fc.order = Array.from({ length: total }, (_, i) => i);
+    if (fc.shuffle) {
+      for (let i = fc.order.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [fc.order[i], fc.order[j]] = [fc.order[j], fc.order[i]];
+      }
+    }
+    fc.index = 0;
+    fc.flipped = false;
+  }
+
+  function currentFlashcard() {
+    const fc = state.flashcard;
+    const cardIdx = fc.order[fc.index];
+    return fc.deck?.cards?.[cardIdx] || null;
+  }
+
+  function zhShortFlash(zh) {
+    return String(zh || '')
+      .split(/[，；;,/]/)[0]
+      .trim();
+  }
+
+  function renderFlashcardForms(card, compact) {
+    const forms = card.forms || [];
+    if (forms.length <= 1) {
+      return `<p class="text-sm text-gray-600 mt-2">${escapeHtml(card.pos)} ${escapeHtml(card.pos_zh || posZhFromEn(card.pos))}</p>`;
+    }
+    const rows = forms
+      .map((f) => {
+        const ph = f.phonetic ? `<span class="text-gray-400 text-xs ml-1">${escapeHtml(f.phonetic)}</span>` : '';
+        const rule = f.rule && !compact ? `<span class="text-violet-600 text-xs ml-1">${escapeHtml(f.rule)}</span>` : '';
+        return `<li class="text-sm leading-relaxed"><span class="font-medium text-gray-900">${escapeHtml(f.word)}</span> <span class="text-gray-500">${escapeHtml(f.pos)}</span>${ph}${rule}<br><span class="text-gray-700">${escapeHtml(zhShortFlash(f.zh))}</span></li>`;
+      })
+      .join('');
+    return `<ul class="mt-3 space-y-2 text-left w-full max-w-sm mx-auto">${rows}</ul>`;
+  }
+
+  function renderFlashcardFaces() {
+    const card = currentFlashcard();
+    const fc = state.flashcard;
+    const front = $('flashcard-front');
+    const back = $('flashcard-back');
+    const inner = $('flashcard-inner');
+    if (!card || !front || !back) return;
+
+    inner?.classList.toggle('is-flipped', fc.flipped);
+
+    if (fc.mode === 'en2zh') {
+      front.innerHTML = `
+        <p class="text-xs text-gray-400 mb-2">英 → 中</p>
+        <p class="text-3xl font-bold text-gray-900">${escapeHtml(card.word)}</p>
+        ${card.phonetic ? `<p class="text-base text-gray-500 mt-2">${escapeHtml(card.phonetic)}</p>` : ''}
+        <p class="text-sm text-primary mt-3">${escapeHtml(card.pos)}</p>
+        <p class="text-xs text-gray-400 mt-6">点击翻转看释义</p>`;
+      back.innerHTML = `
+        <p class="text-xs text-violet-600 mb-2">释义</p>
+        <p class="text-2xl font-semibold text-gray-900">${escapeHtml(card.zh)}</p>
+        ${renderFlashcardForms(card)}
+        <p class="text-xs text-violet-700 mt-4 bg-violet-50 rounded-lg px-3 py-2 w-full">💡 ${escapeHtml(card.hook || '')}</p>`;
+    } else if (fc.mode === 'zh2en') {
+      front.innerHTML = `
+        <p class="text-xs text-gray-400 mb-2">中 → 英</p>
+        <p class="text-2xl font-semibold text-gray-900 leading-snug">${escapeHtml(zhShortFlash(card.zh))}</p>
+        <p class="text-sm text-primary mt-3">${escapeHtml(card.pos_zh || posZhFromEn(card.pos))}</p>
+        <p class="text-xs text-gray-400 mt-6">点击翻转看英文</p>`;
+      back.innerHTML = `
+        <p class="text-xs text-violet-600 mb-2">英文</p>
+        <p class="text-3xl font-bold text-gray-900">${escapeHtml(card.word)}</p>
+        ${card.phonetic ? `<p class="text-base text-gray-500 mt-2">${escapeHtml(card.phonetic)}</p>` : ''}
+        <p class="text-sm text-gray-600 mt-2">${escapeHtml(card.pos)} · ${escapeHtml(card.zh)}</p>
+        ${card.forms?.length > 1 ? `<div class="mt-3 w-full">${renderFlashcardForms(card, true)}</div>` : ''}
+        <p class="text-xs text-violet-700 mt-4 bg-violet-50 rounded-lg px-3 py-2 w-full">💡 ${escapeHtml(card.hook || '')}</p>`;
+    } else {
+      const others = (card.forms || []).filter((f) => f.word !== card.word);
+      front.innerHTML = `
+        <p class="text-xs text-gray-400 mb-2">词性转化</p>
+        <p class="text-2xl font-bold text-gray-900">${escapeHtml(card.word)}</p>
+        <p class="text-sm text-gray-600 mt-2">${escapeHtml(card.pos)} · ${escapeHtml(zhShortFlash(card.zh))}</p>
+        <p class="text-sm text-primary mt-4">${others.length ? '其他词性形式是？' : '这个词的词性是？'}</p>
+        <p class="text-xs text-gray-400 mt-6">点击翻转</p>`;
+      back.innerHTML = `
+        <p class="text-xs text-violet-600 mb-2">词性 & 转化</p>
+        ${renderFlashcardForms(card)}
+        <p class="text-xs text-violet-700 mt-4 bg-violet-50 rounded-lg px-3 py-2 w-full">💡 ${escapeHtml(card.hook || '')}</p>`;
+    }
+
+    updateFlashcardProgress();
+  }
+
+  function updateFlashcardProgress() {
+    const fc = state.flashcard;
+    const total = fc.deck?.cards?.length || 0;
+    const current = total ? fc.index + 1 : 0;
+    $('flashcard-title').textContent = fc.deck?.title || '单词速记';
+    $('flashcard-progress-text').textContent = total
+      ? `第 ${current} / ${total} 张 · 已掌握 ${fc.known.size} · 模式 ${fc.mode === 'en2zh' ? '英→中' : fc.mode === 'zh2en' ? '中→英' : '词性'}`
+      : '';
+    $('flashcard-progress-bar').style.width = total ? `${(current / total) * 100}%` : '0%';
+
+    const hint = $('flashcard-queue-hint');
+    const qCount = $('flashcard-queue-count');
+    if (hint && qCount) {
+      hint.classList.toggle('hidden', fc.queue.length === 0);
+      qCount.textContent = String(fc.queue.length);
+    }
+
+    document.querySelectorAll('.flashcard-mode-btn').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.fcMode === fc.mode);
+    });
+    const shuffleEl = $('flashcard-shuffle');
+    if (shuffleEl) shuffleEl.checked = fc.shuffle;
+  }
+
+  function flipFlashcard() {
+    state.flashcard.flipped = !state.flashcard.flipped;
+    $('flashcard-inner')?.classList.toggle('is-flipped', state.flashcard.flipped);
+  }
+
+  function moveFlashcard(delta) {
+    const fc = state.flashcard;
+    const total = fc.order.length;
+    if (!total) return;
+    fc.index = Math.max(0, Math.min(total - 1, fc.index + delta));
+    fc.flipped = false;
+    renderFlashcardFaces();
+  }
+
+  function markFlashcardKnown(known) {
+    const fc = state.flashcard;
+    const cardIdx = fc.order[fc.index];
+    if (known) fc.known.add(cardIdx);
+    else if (!fc.queue.includes(cardIdx)) fc.queue.push(cardIdx);
+
+    if (fc.index < fc.order.length - 1) {
+      moveFlashcard(1);
+    } else if (fc.queue.length) {
+      const next = fc.queue.shift();
+      const pos = fc.order.indexOf(next);
+      if (pos >= 0) fc.index = pos;
+      fc.flipped = false;
+      renderFlashcardFaces();
+    } else {
+      fc.flipped = false;
+      renderFlashcardFaces();
+    }
+  }
+
+  function startFlashcard(file, preloaded) {
+    const load = preloaded ? Promise.resolve(preloaded) : loadQuiz(file).then(() => state.quiz);
+    load
+      .then((deck) => {
+        if (!isFlashcardDeck(deck)) throw new Error('不是单词速记卡组');
+        state.flashcard.deck = deck;
+        state.flashcard.mode = 'en2zh';
+        state.flashcard.shuffle = false;
+        state.flashcard.queue = [];
+        state.flashcard.known = new Set();
+        resetFlashcardOrder();
+        showPage('flashcard');
+        renderFlashcardFaces();
+      })
+      .catch((err) => alert(err.message));
+  }
+
+  function bindFlashcardEvents() {
+    $('btn-flashcard-back')?.addEventListener('click', () => showPage('home'));
+    $('btn-fc-flip')?.addEventListener('click', flipFlashcard);
+    $('btn-fc-prev')?.addEventListener('click', () => moveFlashcard(-1));
+    $('btn-fc-next')?.addEventListener('click', () => moveFlashcard(1));
+    $('btn-fc-known')?.addEventListener('click', () => markFlashcardKnown(true));
+    $('btn-fc-again')?.addEventListener('click', () => markFlashcardKnown(false));
+    $('flashcard-scene')?.addEventListener('click', flipFlashcard);
+
+    document.querySelectorAll('.flashcard-mode-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.flashcard.mode = btn.dataset.fcMode || 'en2zh';
+        state.flashcard.flipped = false;
+        renderFlashcardFaces();
+      });
+    });
+
+    $('flashcard-shuffle')?.addEventListener('change', (e) => {
+      state.flashcard.shuffle = e.target.checked;
+      resetFlashcardOrder();
+      renderFlashcardFaces();
+    });
+
+    if (!window.__flashcardKeyBound) {
+      window.__flashcardKeyBound = true;
+      document.addEventListener('keydown', (e) => {
+        if (pages.flashcard?.classList.contains('hidden')) return;
+        if (e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          flipFlashcard();
+        } else if (e.key === 'ArrowLeft') {
+          moveFlashcard(-1);
+        } else if (e.key === 'ArrowRight') {
+          moveFlashcard(1);
+        }
+      });
+    }
+  }
+
+  function isFlashcardDeck(data) {
+    return data?.quiz_type === 'vocab_flashcard' && Array.isArray(data?.cards);
+  }
+
+  function manifestEntryForFile(file) {
+    return state.manifest?.quizzes?.find((q) => q.file === file);
+  }
+
   function renderQuizList() {
     const list = $('quiz-list');
     list.innerHTML = state.manifest.quizzes
-      .map(
-        (q) => `
+      .map((q) => {
+        const isFc = q.kind === 'flashcard';
+        const unitLabel = isFc ? `${q.count} 张` : `${q.count} 题`;
+        const badge = isFc
+          ? '<span class="text-xs px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 shrink-0">速记</span>'
+          : '';
+        return `
       <button
         data-file="${escapeAttr(q.file)}"
+        data-kind="${escapeAttr(q.kind || 'quiz')}"
         class="quiz-item w-full text-left bg-white rounded-lg shadow-sm border border-gray-200 px-5 py-4 hover:border-primary hover:shadow transition"
       >
         <div class="flex items-center justify-between gap-3">
           <span class="font-medium">${escapeHtml(q.title)}</span>
-          <span class="text-sm text-gray-400 shrink-0">${q.count} 题</span>
+          <div class="flex items-center gap-2 shrink-0">
+            ${badge}
+            <span class="text-sm text-gray-400">${unitLabel}</span>
+          </div>
         </div>
-      </button>`
-      )
+      </button>`;
+      })
       .join('');
 
     list.querySelectorAll('.quiz-item').forEach((btn) => {
-      btn.addEventListener('click', () => startQuiz(btn.dataset.file));
+      btn.addEventListener('click', () => {
+        if (btn.dataset.kind === 'flashcard') startFlashcard(btn.dataset.file);
+        else startQuiz(btn.dataset.file);
+      });
     });
   }
 
   function startQuiz(file) {
     loadQuiz(file)
       .then(() => {
+        if (isFlashcardDeck(state.quiz)) {
+          startFlashcard(file, state.quiz);
+          return;
+        }
         state.currentIndex = 0;
         state.answers = {};
         state.submitted = false;
@@ -1943,6 +2185,7 @@
   }
 
   function bindEvents() {
+    bindFlashcardEvents();
     $('btn-back').addEventListener('click', () => {
       if (state.wrongDrillMode && state.parentQuiz) {
         if (confirm('退出错词突击，返回成绩单？')) exitWrongDrill();
