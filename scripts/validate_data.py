@@ -1,7 +1,11 @@
 """校验 manifest 与题库 JSON 一致性."""
 import json
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from phrase_cloze_helper import phrase_cloze_title_answer
 
 DATA = Path(__file__).parent.parent / "data"
 manifest = json.loads((DATA / "manifest.json").read_text(encoding="utf-8"))
@@ -75,6 +79,21 @@ for q in manifest["quizzes"]:
                     issues.append(f"{q['id']} Q{sort} phrase_cloze title mismatch")
             if pattern == "phrase_cloze" and not is_phrase(mem.get("en", "")):
                 issues.append(f"{q['id']} Q{sort} phrase_cloze on single word")
+            if pattern == "phrase_cloze":
+                en = mem.get("en", "")
+                zh = mem.get("zh", "")
+                tag_m = re.match(r"(【[^】]+】)", qu.get("title", ""))
+                tag = tag_m.group(1) if tag_m else ""
+                expected_title, expected_ans = phrase_cloze_title_answer(en, zh, tag)
+                if qu.get("correct_answer") != expected_ans:
+                    issues.append(
+                        f"{q['id']} Q{sort} phrase_cloze answer {qu.get('correct_answer')!r} != {expected_ans!r}"
+                    )
+                cloze_line = qu.get("title", "").split("\n")[-1]
+                if "______" in cloze_line and "请填写完整" not in cloze_line:
+                    filled = cloze_line.replace("______", expected_ans)
+                    if re.sub(r"\s+", " ", filled).strip() != re.sub(r"\s+", " ", en).strip():
+                        issues.append(f"{q['id']} Q{sort} phrase_cloze fill mismatch for {en!r}")
 
 welearn = [q for q in manifest["quizzes"] if q["id"].startswith("welearn_")]
 print(f"Manifest quizzes: {len(manifest['quizzes'])}")

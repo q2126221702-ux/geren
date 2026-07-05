@@ -4,6 +4,8 @@ import re
 from datetime import datetime
 from pathlib import Path
 
+from phrase_cloze_helper import phrase_cloze_title_answer
+
 SRC = Path(__file__).parent.parent.parent / "welearn-output" / "7月4日" / "WE Learn_B1U4-U8_iWords_20260704.json"
 DATA_DIR = Path(__file__).parent.parent / "data"
 MANIFEST = DATA_DIR / "manifest.json"
@@ -159,25 +161,7 @@ def build_question(entry: dict, pattern: str, sort: int, unit: str, section: str
         answer = en
         lang = "en"
     else:  # phrase_cloze
-        if "..." in en:
-            title = f"{tag}【短语填空】\n{zh}\n请填写完整英文短语：______"
-            answer = en
-        elif " / " in en or "/" in en:
-            title = f"{tag}【短语填空】\n{zh}\n请填写完整英文短语：______"
-            answer = en
-        else:
-            words = en.split()
-            if len(words) >= 2:
-                mid = len(words) // 2
-                blank = " ".join(words[:mid]) + " ______ " + " ".join(words[mid:])
-                title = f"{tag}【短语填空】\n{zh}\n{blank}"
-                answer = " ".join(words[mid:])
-                if len(words[mid:]) > 2:
-                    answer = en
-                    title = f"{tag}【短语填空】\n{zh}\n请填写完整英文短语：______"
-            else:
-                title = f"{tag}【中→英】\n{zh}\n请填写英文：______"
-                answer = en
+        title, answer = phrase_cloze_title_answer(en, zh, tag)
         lang = "en"
 
     meta["lang"] = lang

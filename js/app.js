@@ -585,6 +585,9 @@
       return full && full !== short ? `${short}（${full}）` : short;
     }
     if (isFillQuestion(q) && q.memory?.lang === 'en') {
+      if (q.memory?.pattern === 'phrase_cloze') {
+        return q.correct_answer;
+      }
       return q.memory?.en || q.correct_answer;
     }
     return q.correct_answer;
@@ -1049,14 +1052,26 @@
         answer = en;
       } else {
         const words = en.split(/\s+/).filter(Boolean);
-        if (words.length >= 2) {
-          const mid = Math.floor(words.length / 2);
-          const blank = `${words.slice(0, mid).join(' ')} ______ ${words.slice(mid).join(' ')}`;
-          title = `${tag}【短语填空】\n${zh}\n${blank}`;
-          answer = words.slice(mid).length > 2 ? en : words.slice(mid).join(' ');
-        } else {
+        if (words.length === 1) {
           title = `${tag}【中→英】\n${zh}\n请填写英文：______`;
           answer = en;
+        } else if (words.length === 2) {
+          title = `${tag}【短语填空】\n${zh}\n${words[0]} ______`;
+          answer = words[1];
+        } else if (words.length === 3) {
+          title = `${tag}【短语填空】\n${zh}\n${words[0]} ______ ${words[2]}`;
+          answer = words[1];
+        } else {
+          const mid = Math.floor(words.length / 2);
+          const titleLine = `${words.slice(0, mid).join(' ')} ______ ${words.slice(mid + 1).join(' ')}`;
+          answer = words[mid];
+          const filled = titleLine.replace('______', answer);
+          if (filled.replace(/\s+/g, ' ').trim() !== en.replace(/\s+/g, ' ').trim()) {
+            title = `${tag}【短语填空】\n${zh}\n请填写完整英文短语：______`;
+            answer = en;
+          } else {
+            title = `${tag}【短语填空】\n${zh}\n${titleLine}`;
+          }
         }
       }
       lang = 'en';
@@ -1123,20 +1138,22 @@
         const correctDisplay = formatCorrectAnswer(q);
         const m = q.memory;
         const hook = m.hook || `${m.en} = ${zhShort(m.zh)}`;
-        const prompt = String(q.title)
-          .replace(/______/g, '___')
-          .split('\n')
-          .slice(0, 3)
-          .join(' · ');
+        const titleLines = String(q.title).split('\n');
+        const clozeLine = titleLines[titleLines.length - 1].replace(/______/g, '___');
+        const prompt = titleLines
+          .slice(0, -1)
+          .join(' · ')
+          .replace(/______/g, '___');
         return `
         <div class="memory-card border border-gray-200 rounded-lg p-4 bg-amber-50/40" data-card="${cardIdx}">
           <p class="text-xs text-gray-500 mb-1">${escapeHtml(prompt)}</p>
-          <p class="text-sm"><span class="text-red-600">你的：${escapeHtml(user)}</span>
+          <p class="text-sm font-medium text-gray-800 mb-1">${escapeHtml(clozeLine)}</p>
+          <p class="text-sm"><span class="text-red-600">你的：${escapeHtml(user || '（未填）')}</span>
             <span class="text-gray-400 mx-1">→</span>
             <span class="memory-answer text-green-700 font-medium">${escapeHtml(correctDisplay)}</span>
           </p>
           <p class="text-sm text-violet-800 mt-2 memory-hook">💡 ${escapeHtml(hook)}</p>
-          <p class="text-xs text-gray-600 mt-1">完整：${escapeHtml(m.en)} · ${escapeHtml(m.zh)}</p>
+          <p class="text-xs text-gray-600 mt-1">完整短语：${escapeHtml(m.en)} · ${escapeHtml(m.zh)}</p>
           <button type="button" class="memory-cover-btn text-xs text-primary mt-2 hover:underline" data-card="${cardIdx}">
             盖住答案，自己回忆
           </button>
