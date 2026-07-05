@@ -202,6 +202,24 @@
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+    if (name === 'quiz') updateQuizMobileChrome();
+    else $('quiz-mobile-bar')?.classList.add('hidden');
+  }
+
+  function isMobileQuiz() {
+    return window.matchMedia('(max-width: 1023px)').matches;
+  }
+
+  function updateQuizMobileChrome() {
+    const page = pages.quiz;
+    const bar = $('quiz-mobile-bar');
+    if (!page || !bar) return;
+    const showBar = !page.classList.contains('hidden') && !state.submitted && isMobileQuiz();
+    bar.classList.toggle('hidden', !showBar);
+    page.classList.toggle('quiz-mobile-actions', showBar);
+    const q = state.quiz?.questions[state.currentIndex];
+    const essayMode = showBar && q && isEssayQuestion(q);
+    page.classList.toggle('quiz-essay-mobile', essayMode);
   }
 
   function scrollToQuestionArea() {
@@ -215,7 +233,10 @@
           document.querySelector('.essay-prompt-fold') ||
           el;
       } else {
-        el = document.querySelector('.essay-prompt') || el;
+        el =
+          document.querySelector('#essay-compose') ||
+          document.querySelector('#essay-input') ||
+          el;
       }
     }
     if (!el) return;
@@ -225,23 +246,14 @@
     window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
   }
 
-  function bindEssayInputScrollGuard(textarea) {
-    if (!textarea || textarea.dataset.scrollGuard === '1') return;
-    textarea.dataset.scrollGuard = '1';
-    let lockY = null;
-    const restore = () => {
-      if (lockY === null) return;
-      window.scrollTo({ top: lockY, left: 0, behavior: 'instant' });
-    };
+  function bindEssayInputMobileFocus(textarea) {
+    if (!textarea || textarea.dataset.mobileFocus === '1') return;
+    textarea.dataset.mobileFocus = '1';
     textarea.addEventListener('focus', () => {
-      if (!window.matchMedia('(max-width: 1023px)').matches) return;
-      lockY = window.scrollY;
-      restore();
-      requestAnimationFrame(restore);
-      [50, 120, 250, 400].forEach((ms) => setTimeout(restore, ms));
-    });
-    textarea.addEventListener('blur', () => {
-      lockY = null;
+      if (!isMobileQuiz()) return;
+      window.setTimeout(() => {
+        textarea.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+      }, 320);
     });
   }
 
@@ -493,6 +505,8 @@
         state.parentQuiz = null;
         $('quiz-title').textContent = state.quiz.title;
         $('total-count').textContent = state.quiz.questions.length;
+        const totalMobile = $('total-count-mobile');
+        if (totalMobile) totalMobile.textContent = state.quiz.questions.length;
         showPage('quiz');
         renderQuestion();
         renderAnswerCard();
@@ -680,13 +694,17 @@
     } else if (isEssayQuestion(q)) {
       const { lead, passage } = parseEssayTitle(q.title);
       const val = state.answers[idx] || '';
+      const mobile = isMobileQuiz() && !review;
       let promptBlock = '';
       if (passage) {
-        if (review) {
+        if (review || mobile) {
+          const summary = review
+            ? '英文原文（点击展开 / 收起）'
+            : '英文原文（点击展开对照）';
           promptBlock = `
-        <details class="essay-prompt-fold mb-4 rounded-lg border border-gray-200 bg-gray-50">
-          <summary class="text-sm font-medium text-gray-600 px-4 py-3">英文原文（点击展开 / 收起）</summary>
-          <div class="essay-prompt px-4 pb-4 max-h-[min(50vh,16rem)] overflow-y-auto text-[15px] leading-relaxed whitespace-pre-line text-gray-800 border-t border-gray-100">${escapeHtml(passage)}</div>
+        <details class="essay-prompt-fold mb-3 rounded-lg border border-gray-200 bg-gray-50">
+          <summary class="text-sm font-medium text-gray-600 px-4 py-2.5">${summary}</summary>
+          <div class="essay-prompt px-4 pb-3 max-h-[min(36vh,14rem)] overflow-y-auto text-[15px] leading-relaxed whitespace-pre-line text-gray-800 border-t border-gray-100">${escapeHtml(passage)}</div>
         </details>`;
         } else {
           promptBlock = `
@@ -695,18 +713,20 @@
       }
       body = `
         ${promptBlock}
+        <div id="essay-compose">
         <p class="text-sm font-medium text-gray-600 mb-2">你的翻译</p>
         ${
           review
             ? `<div class="text-sm text-gray-700 bg-gray-50 rounded-lg p-3 whitespace-pre-line border border-gray-200 mb-2 min-h-[3rem]">${val ? escapeHtml(val) : '<span class="text-gray-400">（未作答）</span>'}</div>`
             : `<textarea
           id="essay-input"
-          rows="6"
-          placeholder="对照上方英文，在此输入中文翻译"
+          rows="${mobile ? 4 : 6}"
+          placeholder="对照英文原文，在此输入中文翻译"
           ${disabled}
-          class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary resize-y"
+          class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary resize-y min-h-[6.5rem]"
         >${escapeHtml(val)}</textarea>`
-        }`;
+        }
+        </div>`;
       essayLead = lead;
     } else {
       body = `<p class="text-sm text-gray-500">暂不支持「${escapeHtml(typeLabel(q.type))}」题型，请跳过此题。</p>`;
@@ -836,7 +856,7 @@
 
       const essayInput = container.querySelector('#essay-input');
       if (essayInput) {
-        bindEssayInputScrollGuard(essayInput);
+        bindEssayInputMobileFocus(essayInput);
         essayInput.addEventListener('input', (e) => {
           state.answers[idx] = e.target.value;
           renderAnswerCard();
@@ -847,6 +867,7 @@
 
     $('btn-prev').disabled = idx === 0;
     $('btn-next').disabled = idx === state.quiz.questions.length - 1;
+    updateQuizMobileChrome();
   }
 
   function renderAnswerCard() {
@@ -879,7 +900,13 @@
 
     const answered = state.quiz.questions.filter((_, i) => isAnswered(i)).length;
     $('answered-count').textContent = answered;
+    const answeredMobile = $('answered-count-mobile');
+    const totalMobile = $('total-count-mobile');
+    if (answeredMobile) answeredMobile.textContent = answered;
+    if (totalMobile) totalMobile.textContent = state.quiz.questions.length;
     $('btn-submit').classList.toggle('hidden', state.submitted);
+    $('btn-submit-mobile')?.classList.toggle('hidden', state.submitted);
+    updateQuizMobileChrome();
   }
 
   function updateProgress() {
@@ -1904,6 +1931,7 @@
     });
 
     $('btn-submit').addEventListener('click', submitQuiz);
+    $('btn-submit-mobile')?.addEventListener('click', submitQuiz);
 
     $('btn-review').addEventListener('click', () => {
       state.currentIndex = 0;

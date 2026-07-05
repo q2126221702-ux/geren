@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
-  <meta name="app-version" content="202607052010">
+  <meta name="app-version" content="202607052100">
   <title>在线测验</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -61,6 +61,27 @@
     }
     .essay-prompt-fold > summary::-webkit-details-marker {
       display: none;
+    }
+    @media (max-width: 1023px) {
+      #page-quiz.quiz-mobile-actions {
+        padding-bottom: 4.75rem;
+      }
+      #quiz-mobile-bar {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+      }
+      #page-quiz.quiz-essay-mobile #question-container {
+        padding: 1rem;
+      }
+      #page-quiz.quiz-essay-mobile aside .answer-card-scroll {
+        max-height: 4.5rem;
+      }
+      #page-quiz.quiz-essay-mobile aside > div {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+      }
+      #page-quiz.quiz-essay-mobile aside h2 {
+        margin-bottom: 0.5rem;
+      }
     }
     @keyframes ai-dots {
       0%, 20% { content: ''; }
@@ -136,12 +157,19 @@
           </div>
           <div class="mt-4 pt-4 border-t border-gray-100 space-y-2">
             <p class="text-xs text-gray-500">已答 <span id="answered-count">0</span> / <span id="total-count">0</span></p>
-            <button id="btn-submit" class="w-full py-2.5 rounded bg-primary text-white text-sm font-medium hover:bg-primary-dark">
+            <button id="btn-submit" class="hidden lg:block w-full py-2.5 rounded bg-primary text-white text-sm font-medium hover:bg-primary-dark">
               交卷
             </button>
           </div>
         </div>
       </aside>
+    </div>
+
+    <div id="quiz-mobile-bar" class="lg:hidden hidden fixed bottom-0 inset-x-0 z-30 border-t border-gray-200 bg-white/95 backdrop-blur-sm shadow-[0_-4px_16px_rgba(0,0,0,0.06)] px-4 pt-3">
+      <button id="btn-submit-mobile" type="button" class="w-full py-2.5 rounded bg-primary text-white text-sm font-medium hover:bg-primary-dark">
+        交卷
+      </button>
+      <p class="text-xs text-gray-500 text-center mt-1.5">已答 <span id="answered-count-mobile">0</span> / <span id="total-count-mobile">0</span></p>
     </div>
   </div>
 
@@ -260,7 +288,7 @@
 
   <script src="js/ai-config.js?v=202607042400"></script>
   <script src="js/ai-config.local.js?v=202607042400" onerror=""></script>
-  <script src="js/ai.js?v=202607052010"></script>
-  <script src="js/app.js?v=202607052010"></script>
+  <script src="js/ai.js?v=202607052100"></script>
+  <script src="js/app.js?v=202607052100"></script>
 </body>
 </html>
