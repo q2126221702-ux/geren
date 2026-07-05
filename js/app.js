@@ -456,7 +456,7 @@
     const q = state.quiz.questions[idx];
     const done = isAnswered(idx);
     return `
-      <div class="answer-meta mb-4 px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between gap-3">
+      <div class="answer-meta mt-4 px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between gap-3">
         <div>
           <p class="text-sm font-semibold text-gray-800">第 ${idx + 1} / ${total} 题</p>
           <p class="text-xs text-gray-500 mt-0.5">${typeLabel(q.type)}</p>
@@ -1423,7 +1423,7 @@
     }
 
     container.innerHTML = `
-      ${review ? buildReviewBanner(idx) : isMobileQuiz() ? buildAnswerMeta(idx) : ''}
+      ${review ? buildReviewBanner(idx) : ''}
       <div class="flex items-center gap-2 mb-4 ${isMobileQuiz() && !review ? 'hidden' : ''}">
         <span class="text-xs px-2 py-0.5 rounded bg-primary-light text-primary font-medium">${typeLabel(q.type)}</span>
         ${review || !isMobileQuiz() ? `<span class="text-sm text-gray-400">第 ${idx + 1} / ${state.quiz.questions.length} 题</span>` : ''}
@@ -1436,6 +1436,7 @@
             : formatQuestionTitle(q)
       }</h2>
       ${body}
+      ${!review && isMobileQuiz() ? buildAnswerMeta(idx) : ''}
       ${reviewBlock}
       ${aiBlock}`;
 
