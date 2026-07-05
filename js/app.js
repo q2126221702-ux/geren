@@ -720,9 +720,9 @@
     const cardClass = isFc
       ? 'quiz-item w-full text-left rounded-lg shadow-sm px-5 py-4 hover:shadow transition border-2 border-violet-300 bg-gradient-to-r from-violet-50 to-white hover:border-violet-400'
       : 'quiz-item w-full text-left bg-white rounded-lg shadow-sm border border-gray-200 px-5 py-4 hover:border-primary hover:shadow transition';
-    const subtitle = isFc
-      ? '<p class="text-xs text-violet-600 mt-1">纯背诵 · 翻转记忆 · 含词性转化 · 不分单元</p>'
-      : '';
+        const subtitle = isFc
+          ? '<p class="text-xs text-violet-600 mt-1">课标2021精选 · 翻转背诵 · 词族合并</p>'
+          : '';
     return `
       <button
         data-file="${escapeAttr(q.file)}"

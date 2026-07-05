@@ -1,11 +1,14 @@
-"""从 WE Learn iWords 生成单词速记闪卡（词族合并，纯背诵）."""
+"""从 WE Learn iWords 生成单词速记闪卡（词族合并 + 课标重点筛选）."""
 import json
 import re
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 
+from vocab_filter import filter_cards, unit_short
+
 SRC = Path(__file__).parent.parent.parent / "welearn-output" / "7月4日" / "WE Learn_B1U4-U8_iWords_20260704.json"
+TIERS_FILE = Path(__file__).parent / "curriculum_vocab_tiers.json"
 DATA_DIR = Path(__file__).parent.parent / "data"
 MANIFEST = DATA_DIR / "manifest.json"
 OUT_FILE = DATA_DIR / "WE Learn_B1U4-U8_单词速记_20260704.json"
@@ -100,6 +103,12 @@ def merge_rows(rows: list[dict]) -> list[dict]:
     return list(by_word.values())
 
 
+def attach_unit(cards: list[dict], rows: list[dict]) -> None:
+    word_unit = {r["word"].lower(): r["unit"] for r in rows}
+    for c in cards:
+        c["unit"] = word_unit.get(c["headword"].lower(), "B1U4")
+
+
 def form_entry(row: dict) -> dict:
     return {
         "word": row["word"],
@@ -192,11 +201,11 @@ def build_cards(families: list[list[dict]]) -> list[dict]:
     return cards
 
 
-def update_manifest(count: int):
+def update_manifest(count: int, title: str):
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     entry = {
         "id": DECK_ID,
-        "title": "WE Learn B1U4~U8 单词速记",
+        "title": title,
         "file": OUT_FILE.name,
         "count": count,
         "kind": "flashcard",
@@ -213,8 +222,10 @@ def update_manifest(count: int):
 
 def main():
     data = json.loads(SRC.read_text(encoding="utf-8"))
+    tiers = json.loads(TIERS_FILE.read_text(encoding="utf-8"))
     rows = []
     for unit in data.get("units", []):
+        us = unit_short(unit["unit"])
         for sec in unit.get("sections", []):
             for e in sec.get("words", []):
                 w = e["word"].strip()
@@ -226,25 +237,33 @@ def main():
                         "phonetic": e.get("phonetic", "").strip(),
                         "pos": e["pos"].strip(),
                         "meaning_zh": e.get("meaning_zh", "").strip(),
+                        "unit": us,
                     }
                 )
 
     rows = merge_rows(rows)
     families = build_families(rows)
-    cards = build_cards(families)
+    all_cards = build_cards(families)
+    attach_unit(all_cards, rows)
+    cards = filter_cards(all_cards, tiers)
     multi = sum(1 for c in cards if c["multi"])
 
+    title = f"WE Learn B1U4~U8 单词速记（重点{len(cards)}词）"
     deck = {
-        "title": "WE Learn B1U4~U8 单词速记",
+        "title": title,
         "exported_at": datetime.now().isoformat(),
-        "source": "WE Learn iWords 截图整理（7月4日）",
+        "source": "实用综合教程(第三版)1 ISBN 9787544677301 · WE Learn iWords",
         "quiz_type": "vocab_flashcard",
-        "description": f"共 {len(cards)} 张 · {multi} 张含词性转化 · 同词族合并",
+        "description": f"共 {len(cards)} 张 · {multi} 张词族 · 课标2021+AB级考点精选",
+        "filter_criteria": "教育部《高职英语课标2021》词汇等级 + 教材iWords + PRETCO B级导向，每单元约18词",
         "cards": cards,
     }
     OUT_FILE.write_text(json.dumps(deck, ensure_ascii=False, indent=2), encoding="utf-8")
-    update_manifest(len(cards))
-    print(f"  {OUT_FILE.name} — {len(cards)} 张（{multi} 张词族，原 {len(rows)} 词）")
+    update_manifest(len(cards), title)
+    print(f"  {OUT_FILE.name} — {len(all_cards)} -> {len(cards)} 张（{multi} 词族，原 {len(rows)} 词）")
+    from collections import Counter
+
+    print("  单元分布:", dict(Counter(c["unit"] for c in cards)))
     for c in cards:
         if c["multi"]:
             words = " / ".join(f"{f['word']} {f['pos']}" for f in c["forms"])
