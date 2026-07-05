@@ -6,10 +6,10 @@ from pathlib import Path
 SRC = Path(__file__).parent.parent.parent / "welearn-output" / "7月4日" / "WE Learn_B1U4-U8_iWords_20260704.json"
 TIERS = Path(__file__).parent / "curriculum_vocab_tiers.json"
 
-# standard: 约99张 · sprint: 考前冲刺约55–60张
+# sprint: 仅保留 ≥2 词性的词族（词性转换考点）
 PROFILES = {
-    "standard": {"per_unit_single": 18, "min_single_score": 0, "strict_tier": False},
-    "sprint": {"per_unit_single": 10, "min_single_score": 24, "strict_tier": True},
+    "standard": {"per_unit_single": 18, "min_single_score": 0, "strict_tier": False, "multi_only": False},
+    "sprint": {"per_unit_single": 0, "min_single_score": 999, "strict_tier": True, "multi_only": True},
 }
 
 DEFAULT_PROFILE = "sprint"
@@ -80,6 +80,18 @@ def score_card(card: dict, tiers: dict, profile: str = DEFAULT_PROFILE) -> int:
 
 def filter_cards(cards: list[dict], tiers: dict, profile: str = DEFAULT_PROFILE) -> list[dict]:
     cfg = PROFILES[profile]
+
+    if cfg.get("multi_only"):
+        picked = [
+            c
+            for c in cards
+            if c.get("multi") and len(c.get("forms", [])) >= 2 and len({f["pos"] for f in c["forms"]}) >= 2
+        ]
+        picked.sort(key=lambda c: (-score_card(c, tiers, profile), c.get("sort", 9999)))
+        for i, c in enumerate(picked, 1):
+            c["sort"] = i
+        return picked
+
     per_unit = cfg["per_unit_single"]
     min_score = cfg["min_single_score"]
     multi = [c for c in cards if c.get("multi")]
@@ -127,9 +139,9 @@ def filter_cards(cards: list[dict], tiers: dict, profile: str = DEFAULT_PROFILE)
 def profile_meta(profile: str, count: int, multi: int) -> dict:
     if profile == "sprint":
         return {
-            "title": f"WE Learn B1U4~U8 考前冲刺（{count}词）",
-            "description": f"共 {count} 张 · {multi} 张词族 · 课标*/** + B级冲刺",
-            "filter_criteria": "考前冲刺：词族全留，每单元约10词，优先课标*/**与B级高频",
+            "title": f"WE Learn B1U4~U8 词性转换冲刺（{count}组）",
+            "description": f"共 {count} 张 · 仅含≥2词性词族 · 词性转换考点",
+            "filter_criteria": "考前冲刺：只保留教材中两种及以上词性的同词族（如 complete/completion）",
         }
     return {
         "title": f"WE Learn B1U4~U8 单词速记（重点{count}词）",

@@ -39,7 +39,12 @@ DERIVE_RULES = [
     (r"(.+)ment$", r"\1e"),
     (r"(.+)ness$", r"\1"),
     (r"(.+)ness$", r"\1y"),
+    (r"(.+)ity$", r"\1"),
+    (r"(.+)ity$", r"\1e"),
     (r"(.+)ly$", r"\1"),
+    (r"(.+)ally$", r"\1al"),
+    (r"(.+)ally$", r"\1"),
+    (r"(.+)ily$", r"\1"),
     (r"(.+)al$", r"\1"),
     (r"(.+)al$", r"\1e"),
     (r"(.+)ive$", r"\1e"),
@@ -52,15 +57,34 @@ DERIVE_RULES = [
     (r"(.+)ist$", r"\1e"),
     (r"(.+)ance$", r"\1"),
     (r"(.+)ence$", r"\1"),
-    (r"(.+)ity$", r"\1"),
-    (r"(.+)ity$", r"\1e"),
     (r"(.+)ful$", r"\1"),
     (r"(.+)less$", r"\1"),
+    (r"(.+)ing$", r"\1"),
+    (r"(.+)ing$", r"\1e"),
     (r"^un(.+)$", r"\1"),
     (r"^in(.+)$", r"\1"),
     (r"^dis(.+)$", r"\1"),
     (r"^re(.+)$", r"\1"),
 ]
+
+# 教材 iWords 中确认的词性转化对（补充算法漏网）
+MANUAL_UNIONS = [
+    ("simplicity", "simply"),
+    ("respond", "responsibility"),
+    ("weight", "weigh"),
+    ("related", "relative"),
+    ("tense", "tension"),
+    ("threat", "threatening"),
+    ("typist", "typical"),
+    ("intend", "intention"),
+    ("remove", "movement"),
+    ("natural", "unnatural"),
+]
+
+STEM_SUFFIXES = (
+    "ically", "ally", "ily", "ness", "ment", "tion", "sion", "ence", "ance",
+    "ity", "ive", "ous", "ful", "less", "ist", "ly", "al", "er", "or", "ing", "ed", "es", "s",
+)
 
 
 def is_phrase(w: str) -> bool:
@@ -143,6 +167,49 @@ def zh_summary(forms: list[dict]) -> str:
     return "；".join(parts[:3])
 
 
+def morph_stems(w: str) -> set[str]:
+    w = w.lower()
+    out = {w}
+    for pat, repl in DERIVE_RULES:
+        if re.match(pat, w):
+            c = re.sub(pat, repl, w)
+            out.add(c)
+            out.add(c + "e")
+    cur = w
+    for _ in range(3):
+        stripped = None
+        for suf in STEM_SUFFIXES:
+            if cur.endswith(suf) and len(cur) > len(suf) + 3:
+                stripped = cur[: -len(suf)]
+                break
+        if not stripped or stripped == cur:
+            break
+        out.add(stripped)
+        out.add(stripped + "e")
+        cur = stripped
+    return {s for s in out if len(s) >= 4}
+
+
+def are_related(a: str, b: str, by_word: dict) -> bool:
+    if a == b:
+        return False
+    if a not in by_word or b not in by_word:
+        return False
+    if by_word[a]["pos"] == by_word[b]["pos"]:
+        return False
+    pair = {a, b}
+    for x, y in MANUAL_UNIONS:
+        if pair == {x.lower(), y.lower()}:
+            return True
+    if b in derive_candidates(a) or a in derive_candidates(b):
+        return True
+    sa, sb = morph_stems(a), morph_stems(b)
+    common = sa & sb
+    if any(len(s) >= 6 for s in common):
+        return True
+    return False
+
+
 def build_families(rows: list[dict]) -> list[list[dict]]:
     by_word = {r["word"].lower(): r for r in rows}
     parent = {r["word"].lower(): r["word"].lower() for r in rows}
@@ -154,28 +221,32 @@ def build_families(rows: list[dict]) -> list[list[dict]]:
         return x
 
     def union(a: str, b: str) -> None:
+        if a == b:
+            return
         ra, rb = find(a), find(b)
         if ra != rb:
             parent[rb] = ra
 
-    for row in rows:
-        w = row["word"].lower()
-        for cand in derive_candidates(w):
-            if cand in by_word:
-                union(w, cand)
+    words = [r["word"].lower() for r in rows]
+    for i, a in enumerate(words):
+        for b in words[i + 1 :]:
+            if are_related(a, b, by_word):
+                union(a, b)
 
     groups: dict[str, list[dict]] = defaultdict(list)
     for row in rows:
         groups[find(row["word"].lower())].append(row)
 
-    # Preserve source order by first appearance
     order = []
     seen_roots = set()
     for row in rows:
         root = find(row["word"].lower())
         if root not in seen_roots:
             seen_roots.add(root)
-            order.append(groups[root])
+            grp = groups[root]
+            pos_set = {r["pos"] for r in grp}
+            if len(grp) >= 2 and len(pos_set) >= 2:
+                order.append(grp)
 
     return order
 
@@ -187,6 +258,10 @@ def build_cards(families: list[list[dict]]) -> list[dict]:
         for r in group:
             uniq[r["word"].lower()] = r
         forms = sort_forms([form_entry(r) for r in uniq.values()])
+        if len(forms) < 2:
+            continue
+        if len({f["pos"] for f in forms}) < 2:
+            continue
         head = pick_headword(forms)
         cards.append(
             {
@@ -195,9 +270,11 @@ def build_cards(families: list[list[dict]]) -> list[dict]:
                 "word": head,
                 "forms": forms,
                 "zh_summary": zh_summary(forms),
-                "multi": len(forms) > 1,
+                "multi": True,
             }
         )
+    for j, c in enumerate(cards, start=1):
+        c["sort"] = j
     return cards
 
 
