@@ -36,6 +36,10 @@
 
   const $ = (id) => document.getElementById(id);
 
+  function appVersion() {
+    return document.querySelector('meta[name="app-version"]')?.content || String(Date.now());
+  }
+
   const POS_ZH_MAP = {
     'n.': '名词',
     'v.': '动词',
@@ -514,7 +518,7 @@
   }
 
   async function loadManifest() {
-    const res = await fetch('data/manifest.json');
+    const res = await fetch(`data/manifest.json?v=${encodeURIComponent(appVersion())}`);
     if (!res.ok) throw new Error('无法加载题库列表，请通过本地服务器访问本页面');
     state.manifest = await res.json();
   }
@@ -740,31 +744,62 @@
     return state.manifest?.quizzes?.find((q) => q.file === file);
   }
 
-  function renderQuizList() {
-    const list = $('quiz-list');
-    list.innerHTML = state.manifest.quizzes
-      .map((q) => {
-        const isFc = q.kind === 'flashcard';
-        const unitLabel = isFc ? `${q.count} 张` : `${q.count} 题`;
-        const badge = isFc
-          ? '<span class="text-xs px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 shrink-0">速记</span>'
-          : '';
-        return `
+  function renderQuizItem(q) {
+    const isFc = q.kind === 'flashcard';
+    const unitLabel = isFc ? `${q.count} 张` : `${q.count} 题`;
+    const badge = isFc
+      ? '<span class="text-xs px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 shrink-0">速记</span>'
+      : '';
+    const cardClass = isFc
+      ? 'quiz-item w-full text-left rounded-lg shadow-sm px-5 py-4 hover:shadow transition border-2 border-violet-300 bg-gradient-to-r from-violet-50 to-white hover:border-violet-400'
+      : 'quiz-item w-full text-left bg-white rounded-lg shadow-sm border border-gray-200 px-5 py-4 hover:border-primary hover:shadow transition';
+    const subtitle = isFc
+      ? '<p class="text-xs text-violet-600 mt-1">纯背诵 · 翻转记忆 · 含词性转化 · 不分单元</p>'
+      : '';
+    return `
       <button
         data-file="${escapeAttr(q.file)}"
         data-kind="${escapeAttr(q.kind || 'quiz')}"
-        class="quiz-item w-full text-left bg-white rounded-lg shadow-sm border border-gray-200 px-5 py-4 hover:border-primary hover:shadow transition"
+        class="${cardClass}"
       >
         <div class="flex items-center justify-between gap-3">
-          <span class="font-medium">${escapeHtml(q.title)}</span>
+          <div class="min-w-0">
+            <span class="font-medium ${isFc ? 'text-violet-900' : ''}">${escapeHtml(q.title)}</span>
+            ${subtitle}
+          </div>
           <div class="flex items-center gap-2 shrink-0">
             ${badge}
-            <span class="text-sm text-gray-400">${unitLabel}</span>
+            <span class="text-sm ${isFc ? 'text-violet-500' : 'text-gray-400'}">${unitLabel}</span>
           </div>
         </div>
       </button>`;
-      })
-      .join('');
+  }
+
+  function renderQuizList() {
+    const list = $('quiz-list');
+    const all = state.manifest.quizzes || [];
+    const flashcards = all.filter((q) => q.kind === 'flashcard');
+    const quizzes = all.filter((q) => q.kind !== 'flashcard');
+
+    let html = '';
+    if (flashcards.length) {
+      html += `
+        <section class="mb-6">
+          <h2 class="text-sm font-semibold text-violet-700 mb-2 flex items-center gap-2">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-violet-500"></span>
+            单词速记（翻转卡片，不用答题）
+          </h2>
+          <div class="space-y-3">${flashcards.map(renderQuizItem).join('')}</div>
+        </section>`;
+    }
+    if (quizzes.length) {
+      html += `
+        <section>
+          <h2 class="text-sm font-semibold text-gray-600 mb-2">测验题库</h2>
+          <div class="space-y-3">${quizzes.map(renderQuizItem).join('')}</div>
+        </section>`;
+    }
+    list.innerHTML = html;
 
     list.querySelectorAll('.quiz-item').forEach((btn) => {
       btn.addEventListener('click', () => {
