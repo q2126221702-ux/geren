@@ -104,6 +104,28 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
+  function removeRawSettings() {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function isStorageEmpty() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return true;
+    try {
+      const data = JSON.parse(raw);
+      const hasKey =
+        Boolean(data?.keyEnc) || String(data?.apiKey || '').trim().length > 0;
+      const hasModel = String(data?.model || '').trim().length > 0;
+      return !hasKey && !hasModel;
+    } catch {
+      return false;
+    }
+  }
+
   async function deriveAesKey(passphrase, salt) {
     const enc = new TextEncoder();
     const keyMaterial = await crypto.subtle.importKey(
@@ -210,23 +232,34 @@
 
     if (apiKey && encryptPassphrase) {
       const keyEnc = await encryptApiKey(apiKey, encryptPassphrase);
-      writeRawSettings({ provider, model, keyEnc });
+      writeRawSettings({ provider, model, keyEnc, savedAt: Date.now() });
       unlockedApiKey = apiKey;
       return;
     }
 
     if (apiKey) {
-      writeRawSettings({ provider, model, apiKey });
+      writeRawSettings({ provider, model, apiKey, savedAt: Date.now() });
       unlockedApiKey = apiKey;
       return;
     }
 
     if (existing?.keyEnc) {
-      writeRawSettings({ provider, model, keyEnc: existing.keyEnc });
+      writeRawSettings({ provider, model, keyEnc: existing.keyEnc, savedAt: existing.savedAt || Date.now() });
       return;
     }
 
-    writeRawSettings({ provider, model, apiKey: '' });
+    if (existing?.apiKey) {
+      writeRawSettings({
+        provider,
+        model,
+        apiKey: existing.apiKey,
+        savedAt: existing.savedAt || Date.now(),
+      });
+      unlockedApiKey = String(existing.apiKey).trim();
+      return;
+    }
+
+    writeRawSettings({ provider, model, apiKey: '', savedAt: 0 });
     unlockedApiKey = '';
   }
 
@@ -251,13 +284,32 @@
     unlockedApiKey = '';
   }
 
+  function getStoredKeyHint() {
+    const data = readRawSettings();
+    if (!data) return '';
+    if (data.keyEnc) {
+      return isKeyUnlocked() ? 'Key 已加密保存并已解锁' : 'Key 已加密保存在本机';
+    }
+    const key = String(data.apiKey || '').trim();
+    if (!key) return '';
+    if (key.length <= 8) return 'Key 已保存在本机浏览器';
+    return `Key 已保存在本机：${key.slice(0, 4)}****${key.slice(-4)}`;
+  }
+
   function clearSavedCredentials() {
-    writeRawSettings({
-      provider: loadSettings().provider,
-      model: '',
-      apiKey: '',
-    });
     unlockedApiKey = '';
+    removeRawSettings();
+    try {
+      localStorage.setItem(STORAGE_KEY, '');
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+    return !hasStoredKey() && unlockedApiKey === '' && isStorageEmpty();
+  }
+
+  function isFullyCleared() {
+    return !hasStoredKey() && unlockedApiKey === '' && isStorageEmpty();
   }
 
   function isConfigured() {
@@ -319,7 +371,7 @@
   function getAiSourceLabel() {
     if (canUseOwnKey()) {
       const name = getProviderInfo(loadSettings().provider).name;
-      const enc = loadSettings().keyEncrypted ? ' · 口令加密' : '';
+      const enc = loadSettings().keyEncrypted ? ' · 口令加密' : ' · 本机已保存';
       return `自带 Key · 完整模式（${name}${enc}）`;
     }
     if (hasStoredKey() && !isKeyUnlocked()) {
@@ -875,6 +927,8 @@
     unlockKey,
     lockKey,
     clearSavedCredentials,
+    isFullyCleared,
+    getStoredKeyHint,
     ensureUnlocked,
     isConfigured,
     isProxyAvailable,

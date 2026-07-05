@@ -1335,16 +1335,32 @@
     const s = QuizAI.loadSettings();
     const keyInput = $('ai-api-key');
     const unlockBlock = $('ai-unlock-block');
+    const savedHint = $('ai-key-saved-hint');
+    keyInput.value = '';
+
     if (s.keyEncrypted) {
-      keyInput.placeholder = '已加密保存（留空则不修改 Key）';
+      keyInput.placeholder = '已加密保存在本机（留空则不修改 Key）';
       if (!s.keyUnlocked) {
         unlockBlock.classList.remove('hidden');
       } else {
         unlockBlock.classList.add('hidden');
       }
+      if (savedHint) {
+        const hint = QuizAI.getStoredKeyHint();
+        savedHint.textContent = hint;
+        savedHint.classList.toggle('hidden', !hint);
+      }
+    } else if (s.keyStored) {
+      keyInput.placeholder = '已保存在本机浏览器（留空则不修改，输入新 Key 可替换）';
+      unlockBlock.classList.add('hidden');
+      if (savedHint) {
+        savedHint.textContent = QuizAI.getStoredKeyHint();
+        savedHint.classList.remove('hidden');
+      }
     } else {
       keyInput.placeholder = '粘贴你的 API Key';
       unlockBlock.classList.add('hidden');
+      if (savedHint) savedHint.classList.add('hidden');
     }
   }
 
@@ -1353,7 +1369,7 @@
     const s = QuizAI.loadSettings();
     populateProviderSelect();
     $('ai-provider').value = s.provider;
-    $('ai-api-key').value = s.apiKey;
+    $('ai-api-key').value = '';
     $('ai-model').value = s.model;
     $('ai-encrypt-passphrase').value = '';
     $('ai-unlock-passphrase').value = '';
@@ -1397,9 +1413,11 @@
       updateAiSourceHint();
       const s = QuizAI.loadSettings();
       if (s.keyEncrypted) {
-        setSettingsStatus('已保存（Key 已加密）。刷新后需重新解锁', 'ok');
+        setSettingsStatus('已保存到本机浏览器（Key 已加密）。刷新后需重新解锁', 'ok');
+      } else if (s.keyStored) {
+        setSettingsStatus('已保存到本机浏览器，关闭页面后仍会保留', 'ok');
       } else {
-        setSettingsStatus('已保存到本机浏览器', 'ok');
+        setSettingsStatus('已保存服务商与模型设置', 'ok');
       }
     } catch (err) {
       setSettingsStatus(err.message || '保存失败', 'err');
@@ -1421,23 +1439,42 @@
 
   function clearSettingsForm() {
     if (!window.QuizAI) return;
-    const hadKey = $('ai-api-key').value.trim() !== '' || QuizAI.hasStoredKey();
-    const hadModel = $('ai-model').value.trim() !== '';
-    if (!hadKey && !hadModel && !QuizAI.isConfigured()) {
-      setSettingsStatus('没有可清除的内容', 'err');
+    const hadKey = QuizAI.hasStoredKey();
+    const hadModel = Boolean(String($('ai-model').value || QuizAI.loadSettings().model || '').trim());
+    if (!hadKey && !hadModel) {
+      setSettingsStatus('没有可清除的本机 Key 或模型', 'err');
       return;
     }
+    if (
+      !confirm(
+        '确定清除本机浏览器中保存的 API Key 和模型吗？\n\n将删除 localStorage 中的全部相关数据，此操作不可恢复。'
+      )
+    ) {
+      return;
+    }
+
     $('ai-api-key').value = '';
     $('ai-model').value = '';
     $('ai-encrypt-passphrase').value = '';
     $('ai-unlock-passphrase').value = '';
-    QuizAI.clearSavedCredentials();
+    QuizAI.lockKey();
+    const cleared = QuizAI.clearSavedCredentials();
+    state.aiCache = {};
+    state.aiAnalysisText = '';
+    $('ai-analysis-panel')?.classList.add('hidden');
+    $('ai-analysis-output').innerHTML = '';
     updateKeyCryptoUi();
     updateAiSourceHint();
-    if (QuizAI.isProxyAvailable()) {
-      setSettingsStatus('已清除自带 Key / 模型，将使用站点默认 AI', 'ok');
+    updateTestButtonLabel();
+
+    if (cleared && QuizAI.isFullyCleared()) {
+      if (QuizAI.isProxyAvailable()) {
+        setSettingsStatus('已彻底清除本机 Key / 模型，将使用站点默认 AI', 'ok');
+      } else {
+        setSettingsStatus('已彻底清除本机 Key / 模型', 'ok');
+      }
     } else {
-      setSettingsStatus('已清除 API Key 和模型设置', 'ok');
+      setSettingsStatus('清除未完成，请刷新页面后重试', 'err');
     }
   }
 
