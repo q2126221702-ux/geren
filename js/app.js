@@ -712,6 +712,10 @@
     return q.type === '问答题';
   }
 
+  function isTranslationEssayQuestion(q) {
+    return isEssayQuestion(q) && Boolean(parseEssayTitle(q.title).passage);
+  }
+
   function isAnswered(index) {
     const val = state.answers[index];
     if (val === undefined || val === null) return false;
@@ -1373,6 +1377,11 @@
       }
     } else if (isEssayQuestion(q)) {
       const { lead, passage } = parseEssayTitle(q.title);
+      const isTranslation = Boolean(passage);
+      const essayLabel = isTranslation ? '你的翻译' : '你的作答';
+      const essayPlaceholder = isTranslation
+        ? '对照英文原文，在此输入中文翻译'
+        : '在此输入你的作答';
       const val = state.answers[idx] || '';
       const mobile = isMobileQuiz() && !review;
       let promptBlock = '';
@@ -1394,14 +1403,14 @@
       body = `
         ${promptBlock}
         <div id="essay-compose">
-        <p class="text-sm font-medium text-gray-600 mb-2">你的翻译</p>
+        <p class="text-sm font-medium text-gray-600 mb-2">${essayLabel}</p>
         ${
           review
             ? `<div class="text-sm text-gray-700 bg-gray-50 rounded-lg p-3 whitespace-pre-line border border-gray-200 mb-2 min-h-[3rem]">${val ? escapeHtml(val) : '<span class="text-gray-400">（未作答）</span>'}</div>`
             : `<textarea
           id="essay-input"
           rows="${mobile ? 4 : 6}"
-          placeholder="对照英文原文，在此输入中文翻译"
+          placeholder="${escapeAttr(essayPlaceholder)}"
           ${disabled}
           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary resize-y min-h-[6.5rem]"
         >${escapeHtml(val)}</textarea>`
