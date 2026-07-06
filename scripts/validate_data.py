@@ -28,6 +28,24 @@ def is_phrase(en: str) -> bool:
 
 for q in manifest["quizzes"]:
     fp = DATA / q["file"]
+    is_exam_pack = q.get("kind") == "exam_pack"
+    if is_exam_pack:
+        variants = q.get("variants") or []
+        if len(variants) < 2:
+            issues.append(f"{q['id']}: exam_pack needs at least 2 variants")
+        for vf in variants:
+            vfp = DATA / vf
+            if not vfp.exists():
+                issues.append(f"missing variant file: {vf}")
+                continue
+            vdata = json.loads(vfp.read_text(encoding="utf-8"))
+            vactual = len(vdata.get("questions", []))
+            if vactual != q["count"]:
+                issues.append(f"{q['id']} variant {vf}: count {vactual} != manifest {q['count']}")
+        if q["file"] not in variants:
+            issues.append(f"{q['id']}: primary file not listed in variants")
+        continue
+
     if not fp.exists():
         issues.append(f"missing file: {q['file']}")
         continue

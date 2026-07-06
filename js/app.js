@@ -1056,11 +1056,23 @@
     return data?.quiz_type === 'vocab_flashcard' && Array.isArray(data?.cards);
   }
 
-  function manifestEntryForFile(file) {
-    return state.manifest?.quizzes?.find((q) => q.file === file);
+  function manifestEntryById(id) {
+    return state.manifest?.quizzes?.find((q) => q.id === id);
   }
 
-  const INDUSTRIAL_QUIZ_IDS = new Set(['profinet', 'opc', 'modbus', 'serial', 'comprehensive']);
+  function pickExamPackFile(entry) {
+    const variants = entry?.variants?.length ? entry.variants : [entry.file];
+    return variants[Math.floor(Math.random() * variants.length)];
+  }
+
+  function quizTitleWithVariant(baseTitle, file) {
+    const variant = state.quiz?.meta?.exam_variant;
+    if (variant) return `${baseTitle} · 试卷${variant}`;
+    const m = String(file || '').match(/_([A-E])\.json$/i);
+    return m ? `${baseTitle} · 试卷${m[1].toUpperCase()}` : baseTitle;
+  }
+
+  const INDUSTRIAL_QUIZ_IDS = new Set(['profinet', 'opc', 'modbus', 'serial', 'comprehensive', 'exam100']);
 
   function getQuizCategory(entry) {
     if (INDUSTRIAL_QUIZ_IDS.has(entry.id)) return 'industrial';
@@ -1079,18 +1091,25 @@
 
   function renderQuizItem(q) {
     const isFc = q.kind === 'flashcard';
+    const isExamPack = q.kind === 'exam_pack';
     const unitLabel = isFc ? `${q.count} 张` : `${q.count} 题`;
     const badge = isFc
       ? '<span class="text-xs px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 shrink-0">速记</span>'
-      : '';
+      : isExamPack
+        ? '<span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 shrink-0">5套卷</span>'
+        : '';
     const cardClass = isFc
       ? 'quiz-item w-full text-left rounded-lg shadow-sm px-5 py-4 hover:shadow transition border-2 border-violet-300 bg-gradient-to-r from-violet-50 to-white hover:border-violet-400'
       : 'quiz-item w-full text-left bg-white rounded-lg shadow-sm border border-gray-200 px-5 py-4 hover:border-primary hover:shadow transition';
-        const subtitle = isFc
-          ? '<p class="text-xs text-violet-600 mt-1">词性转换 · 仅≥2词性词族 · 翻转背诵</p>'
-          : '';
+    let subtitle = '';
+    if (isFc) {
+      subtitle = '<p class="text-xs text-violet-600 mt-1">词性转换 · 仅≥2词性词族 · 翻转背诵</p>';
+    } else if (isExamPack) {
+      subtitle = '<p class="text-xs text-amber-700 mt-1">共 5 套等价试卷 · 进入后随机抽取一套</p>';
+    }
     return `
       <button
+        data-quiz-id="${escapeAttr(q.id)}"
         data-file="${escapeAttr(q.file)}"
         data-kind="${escapeAttr(q.kind || 'quiz')}"
         class="${cardClass}"
@@ -1172,12 +1191,17 @@
     list.querySelectorAll('.quiz-item').forEach((btn) => {
       btn.addEventListener('click', () => {
         if (btn.dataset.kind === 'flashcard') startFlashcard(btn.dataset.file);
-        else startQuiz(btn.dataset.file);
+        else {
+          const entry = manifestEntryById(btn.dataset.quizId);
+          const file =
+            entry?.kind === 'exam_pack' ? pickExamPackFile(entry) : btn.dataset.file;
+          startQuiz(file, entry);
+        }
       });
     });
   }
 
-  function startQuiz(file) {
+  function startQuiz(file, entry) {
     loadQuiz(file)
       .then(() => {
         if (isFlashcardDeck(state.quiz)) {
@@ -1193,7 +1217,7 @@
         state.wrongDrillMode = false;
         state.parentQuiz = null;
         resetReviewUI();
-        $('quiz-title').textContent = state.quiz.title;
+        $('quiz-title').textContent = quizTitleWithVariant(state.quiz.title, file);
         $('total-count').textContent = state.quiz.questions.length;
         showPage('quiz');
         renderQuestion();

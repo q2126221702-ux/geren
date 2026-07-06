@@ -1,0 +1,556 @@
+{
+  "title": "工业网络技术期末考核（满分100分）",
+  "exported_at": "2026-07-06T20:03:44.047412",
+  "meta": {
+    "exam_variant": "B",
+    "school": "漳州职业技术学院",
+    "textbook_isbn": "9787115663788",
+    "textbook": "工业网络技术（微课版）",
+    "scope": "项目1~3、5~6（不含 CANopen、ThingsBoard）",
+    "total_score": 100,
+    "difficulty_ratio": {
+      "易": "60%",
+      "中": "30%",
+      "难": "10%"
+    },
+    "structure": {
+      "单选题": "20题×2.0分",
+      "填空题(客观)": "10题×2.0分",
+      "判断题": "10题×2.0分",
+      "问答题": "4题×5.0分"
+    },
+    "module_coverage": {
+      "基础": {
+        "count": 8,
+        "score": 16.0
+      },
+      "串口": {
+        "count": 9,
+        "score": 21.0
+      },
+      "Modbus": {
+        "count": 9,
+        "score": 21.0
+      },
+      "Profinet": {
+        "count": 9,
+        "score": 21.0
+      },
+      "OPC": {
+        "count": 9,
+        "score": 21.0
+      }
+    },
+    "sources": [
+      "Profinet工业以太网测验_20260626_185300.json",
+      "OPC规范_20260626_185227.json",
+      "MODBUS协议及应用_20260626_185238.json",
+      "串口及应用_20260626_185247.json",
+      "网络及工业通信综合考核_145题.json"
+    ]
+  },
+  "questions": [
+    {
+      "sort": 1,
+      "type": "单选题",
+      "title": "工控现场工业以太网优先选用线缆类型（）",
+      "options": [
+        "非屏蔽超五类网线",
+        "屏蔽超六类工业网线",
+        "普通电话线",
+        "同轴电缆"
+      ],
+      "correct_answer": "B. 屏蔽超六类工业网线",
+      "full_score": 2.0
+    },
+    {
+      "sort": 2,
+      "type": "单选题",
+      "title": "只能一对一通信，无法组网总线通信的串口是（）",
+      "options": [
+        "RS485",
+        "RS232",
+        "RS422",
+        "三者均可"
+      ],
+      "correct_answer": "B. RS232",
+      "full_score": 2.0
+    },
+    {
+      "sort": 3,
+      "type": "单选题",
+      "title": "Modbus RTU传输格式特点是（）",
+      "options": [
+        "ASCII字符传输",
+        "二进制紧凑传输，效率高",
+        "以太网加密传输",
+        "无线传输"
+      ],
+      "correct_answer": "B. 二进制紧凑传输，效率高",
+      "full_score": 2.0
+    },
+    {
+      "sort": 4,
+      "type": "单选题",
+      "title": "Profinet归属哪家工控体系主流以太网协议（）",
+      "options": [
+        "三菱",
+        "西门子",
+        "欧姆龙",
+        "台达"
+      ],
+      "correct_answer": "B. 西门子",
+      "full_score": 2.0
+    },
+    {
+      "sort": 5,
+      "type": "单选题",
+      "title": "OPC规范最初开发的时间是( )",
+      "options": [
+        "20世纪80年代中期",
+        "20世纪90年代中期",
+        "21世纪初",
+        "21世纪10年代中期"
+      ],
+      "correct_answer": "B. 20世纪90年代中期",
+      "full_score": 2.0
+    },
+    {
+      "sort": 6,
+      "type": "单选题",
+      "title": "TCP协议的核心特性是（）",
+      "options": [
+        "无连接、不可靠",
+        "面向连接、可靠传输",
+        "广播传输",
+        "点对点单向传输"
+      ],
+      "correct_answer": "B. 面向连接、可靠传输",
+      "full_score": 2.0
+    },
+    {
+      "sort": 7,
+      "type": "单选题",
+      "title": "RS-485 通信中，为防止干扰，总线两端通常需要接",
+      "options": [
+        "上拉电阻",
+        "下拉电阻",
+        "终端电阻",
+        "滤波电容"
+      ],
+      "correct_answer": "C. 终端电阻",
+      "full_score": 2.0
+    },
+    {
+      "sort": 8,
+      "type": "单选题",
+      "title": "下列属于Modbus有线总线协议的是（）",
+      "options": [
+        "Modbus-RTU",
+        "Modbus-WiFi",
+        "Modbus-Bluetooth",
+        "Modbus-5G"
+      ],
+      "correct_answer": "A. Modbus-RTU",
+      "full_score": 2.0
+    },
+    {
+      "sort": 9,
+      "type": "单选题",
+      "title": "工业 Profinet 推荐网线为（）",
+      "options": [
+        "超五类 / 六类屏蔽",
+        "三类线",
+        "电话线",
+        "同轴"
+      ],
+      "correct_answer": "A. 超五类 / 六类屏蔽",
+      "full_score": 2.0
+    },
+    {
+      "sort": 10,
+      "type": "单选题",
+      "title": "OPC通信核心定位是（）",
+      "options": [
+        "底层硬件总线通信",
+        "工控上层数据交互标准",
+        "串口差分通信",
+        "网线路由通信"
+      ],
+      "correct_answer": "B. 工控上层数据交互标准",
+      "full_score": 2.0
+    },
+    {
+      "sort": 11,
+      "type": "单选题",
+      "title": "局域网常用交换机工作于OSI模型的（）",
+      "options": [
+        "物理层",
+        "数据链路层",
+        "网络层",
+        "应用层"
+      ],
+      "correct_answer": "B. 数据链路层",
+      "full_score": 2.0
+    },
+    {
+      "sort": 12,
+      "type": "单选题",
+      "title": "RS-232 的最大可靠传输距离通常为：",
+      "options": [
+        "15米",
+        "100 米",
+        "1200 米",
+        "2000 米"
+      ],
+      "correct_answer": "A. 15米",
+      "full_score": 2.0
+    },
+    {
+      "sort": 13,
+      "type": "单选题",
+      "title": "Modbus TCP 报文头部占（）字节",
+      "options": [
+        "5",
+        "7",
+        "10",
+        "16"
+      ],
+      "correct_answer": "B. 7",
+      "full_score": 2.0
+    },
+    {
+      "sort": 14,
+      "type": "单选题",
+      "title": "下列不属于 Profinet 常用拓扑的是（）",
+      "options": [
+        "星型",
+        "环型",
+        "总线型",
+        "蜂窝型"
+      ],
+      "correct_answer": "D. 蜂窝型",
+      "full_score": 2.0
+    },
+    {
+      "sort": 15,
+      "type": "单选题",
+      "title": "下列哪项不属于OPC UA的核心优势（ ）",
+      "options": [
+        "平台独立性",
+        "依赖Windows系统",
+        "高安全性",
+        "复杂信息建模能力"
+      ],
+      "correct_answer": "B. 依赖Windows系统",
+      "full_score": 2.0
+    },
+    {
+      "sort": 16,
+      "type": "单选题",
+      "title": "下列属于公有IP地址的是（）",
+      "options": [
+        "192.168.1.2",
+        "10.0.0.5",
+        "223.5.6.7",
+        "172.16.2.8"
+      ],
+      "correct_answer": "C. 223.5.6.7",
+      "full_score": 2.0
+    },
+    {
+      "sort": 17,
+      "type": "单选题",
+      "title": "RS485接线中A线、B线正确定义为（）",
+      "options": [
+        "A负B正",
+        "A正B负",
+        "均为地线",
+        "均为电源线"
+      ],
+      "correct_answer": "B. A正B负",
+      "full_score": 2.0
+    },
+    {
+      "sort": 18,
+      "type": "单选题",
+      "title": "Modbus RTU 常用物理接口不包括",
+      "options": [
+        "RS485",
+        "RS232",
+        "RJ45",
+        "USB转串口"
+      ],
+      "correct_answer": "C. RJ45",
+      "full_score": 2.0
+    },
+    {
+      "sort": 19,
+      "type": "单选题",
+      "title": "保证 IRT 同步的核心是（）",
+      "options": [
+        "高带宽",
+        "时钟同步与时隙划分",
+        "长距离",
+        "无线"
+      ],
+      "correct_answer": "B. 时钟同步与时隙划分",
+      "full_score": 2.0
+    },
+    {
+      "sort": 20,
+      "type": "单选题",
+      "title": "不属于OPC数据访问类型的是（）",
+      "options": [
+        "DA实时数据",
+        "HA历史数据",
+        "AE告警数据",
+        "RTU串口数据"
+      ],
+      "correct_answer": "D. RTU串口数据",
+      "full_score": 2.0
+    },
+    {
+      "sort": 21,
+      "type": "填空题(客观)",
+      "title": "TCP三次握手目的是建立________连接。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "可靠",
+      "full_score": 2.0
+    },
+    {
+      "sort": 22,
+      "type": "填空题(客观)",
+      "title": "RS485最大理论传输距离________米。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "1200",
+      "full_score": 2.0
+    },
+    {
+      "sort": 23,
+      "type": "填空题(客观)",
+      "title": "Modbus通信固定________问询，从站应答机制。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "主站",
+      "full_score": 2.0
+    },
+    {
+      "sort": 24,
+      "type": "填空题(客观)",
+      "title": "Profinet实时等级最高等级为________。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "IRT",
+      "full_score": 2.0
+    },
+    {
+      "sort": 25,
+      "type": "填空题(客观)",
+      "title": "OPC通信可实现多品牌工控设备________互通。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "异构",
+      "full_score": 2.0
+    },
+    {
+      "sort": 26,
+      "type": "填空题(客观)",
+      "title": "IP地址127.0.0.1统称为________地址。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "本地回环",
+      "full_score": 2.0
+    },
+    {
+      "sort": 27,
+      "type": "填空题(客观)",
+      "title": "无校验模式英文缩写为________。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "NONE",
+      "full_score": 2.0
+    },
+    {
+      "sort": 28,
+      "type": "填空题(客观)",
+      "title": "Modbus三大主流制式：RTU、ASCII、________。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "Modbus TCP",
+      "full_score": 2.0
+    },
+    {
+      "sort": 29,
+      "type": "填空题(客观)",
+      "title": "Profinet 用于设备命名与 IP 分配的协议是______",
+      "options": [
+        ""
+      ],
+      "correct_answer": "DCP（动态配置协议）",
+      "full_score": 2.0
+    },
+    {
+      "sort": 30,
+      "type": "填空题(客观)",
+      "title": "OPC AE专门采集设备________报警信息。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "事件",
+      "full_score": 2.0
+    },
+    {
+      "sort": 31,
+      "type": "判断题",
+      "title": "TCP协议无需建立连接直接发送数据。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "full_score": 2.0
+    },
+    {
+      "sort": 32,
+      "type": "判断题",
+      "title": "串口校验位配置不一致，会出现报文校验报错。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 33,
+      "type": "判断题",
+      "title": "Modbus 从站地址可以随意设置为 0-255 任意值",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "full_score": 2.0
+    },
+    {
+      "sort": 34,
+      "type": "判断题",
+      "title": "Profinet IRT模式可满足伺服运动控制高精度实时通信。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 35,
+      "type": "判断题",
+      "title": "OPC UA于2011年成为IEC标准，编号为IEC 62541。（ ）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 36,
+      "type": "判断题",
+      "title": "全双工以太网收发数据互不干扰。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 37,
+      "type": "判断题",
+      "title": "总线末端未加终端电阻，会导致485信号反射、通信乱码。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 38,
+      "type": "判断题",
+      "title": "Modbus从站可以主动发送数据给主站。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "full_score": 2.0
+    },
+    {
+      "sort": 39,
+      "type": "判断题",
+      "title": "Profinet设备修改IP后无需下载组态即可通信。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "full_score": 2.0
+    },
+    {
+      "sort": 40,
+      "type": "判断题",
+      "title": "OPC UA只能在局域网内部通信，无法外网传输。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "full_score": 2.0
+    },
+    {
+      "sort": 41,
+      "type": "问答题",
+      "title": "简述RS232与RS485串口通信五大核心区别。",
+      "options": [],
+      "correct_answer": "①传输距离：232最大15m，485最大1200m；②接线方式：232单端，485差分；③组网能力：232一对一，485一主多从；④抗干扰：485远强于232；⑤电平标准：二者电气电平不兼容，需转换器互通。",
+      "full_score": 5.0
+    },
+    {
+      "sort": 42,
+      "type": "问答题",
+      "title": "简述Modbus主从通信工作完整流程。",
+      "options": [],
+      "correct_answer": "①主站组装读写报文，下发指定地址从站；②总线传输报文；③从站校验地址、CRC、报文合法性；④合法报文执行读写指令；⑤从站组装应答报文回传主站；⑥主站校验报文，完成一次通信交互。",
+      "full_score": 5.0
+    },
+    {
+      "sort": 43,
+      "type": "问答题",
+      "title": "列出影响 Profinet 实时性与稳定性的 5 个关键因素",
+      "options": [],
+      "correct_answer": "网线质量、交换机性能、实时等级、拓扑结构、干扰屏蔽、时钟同步、环网冗余、地址规划、设备负载",
+      "full_score": 5.0
+    },
+    {
+      "sort": 44,
+      "type": "问答题",
+      "title": "简述OPC Classic与OPC UA核心差异及升级优势。",
+      "options": [],
+      "correct_answer": "老式OPC依托Windows DCOM，仅限Windows、组网复杂、安全性低；OPC UA跨安卓/Linux/Windows、加密通信、支持外网、标准化数据模型、适配云端工控，兼容性安全性全面升级。",
+      "full_score": 5.0
+    }
+  ]
+}

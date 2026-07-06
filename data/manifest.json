@@ -31,6 +31,20 @@
       "count": 135
     },
     {
+      "id": "exam100",
+      "title": "工业网络技术期末考核（满分100分）",
+      "file": "工业网络技术期末考核_100分_A.json",
+      "count": 44,
+      "kind": "exam_pack",
+      "variants": [
+        "工业网络技术期末考核_100分_A.json",
+        "工业网络技术期末考核_100分_B.json",
+        "工业网络技术期末考核_100分_C.json",
+        "工业网络技术期末考核_100分_D.json",
+        "工业网络技术期末考核_100分_E.json"
+      ]
+    },
+    {
       "id": "welearn_b1u4",
       "title": "WE Learn B1U4 Movies 翻译练习",
       "file": "WE Learn_B1U4_Movies_翻译题_20260703.json",

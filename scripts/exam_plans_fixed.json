@@ -1,0 +1,1332 @@
+{
+  "A": [
+    {
+      "source": "comprehensive",
+      "sort": 13,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 19,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 34,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 7,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 42,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 2,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 21,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 31,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 4,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 3,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 9,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 28,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 38,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 46,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 2,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 15,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 3,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 30,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 48,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 43,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 63,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 69,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 81,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 20,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 89,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 66,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 67,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 82,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 12,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 92,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 101,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 9,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 123,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 127,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 16,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 106,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 10,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 6,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 122,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 19,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 138,
+      "score": 5.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 134,
+      "score": 5.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 137,
+      "score": 5.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 136,
+      "score": 5.0,
+      "chapter": "OPC"
+    }
+  ],
+  "B": [
+    {
+      "source": "comprehensive",
+      "sort": 16,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 24,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 29,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 45,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 8,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 5,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 2,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 37,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 1,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 39,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 3,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 5,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 5,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 6,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 5,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 6,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 26,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 4,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 9,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 43,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 58,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 74,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 80,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 97,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 93,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 57,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 73,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 79,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 15,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 94,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 105,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 116,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 9,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 127,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 20,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 103,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 112,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 119,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 125,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 121,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 131,
+      "score": 5.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 134,
+      "score": 5.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 25,
+      "score": 5.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 136,
+      "score": 5.0,
+      "chapter": "OPC"
+    }
+  ],
+  "C": [
+    {
+      "source": "comprehensive",
+      "sort": 14,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 22,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 32,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 3,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 4,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 10,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 18,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 36,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 8,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 8,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 11,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 17,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 1,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 47,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 40,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 12,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 20,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 35,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 9,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 43,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 64,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 72,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 80,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 11,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 90,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 52,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 71,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 79,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 16,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 92,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 108,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 13,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 12,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 127,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 124,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 102,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 12,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 14,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 125,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 21,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 131,
+      "score": 5.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 134,
+      "score": 5.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 24,
+      "score": 5.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 136,
+      "score": 5.0,
+      "chapter": "OPC"
+    }
+  ],
+  "D": [
+    {
+      "source": "comprehensive",
+      "sort": 7,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 1,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 2,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 1,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 4,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 1,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 27,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 3,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 7,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 39,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 16,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 2,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 33,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 2,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 1,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 8,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 25,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 1,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 48,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 43,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 62,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 68,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 81,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 14,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 91,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 59,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 70,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 82,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 96,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 94,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 130,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 113,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 13,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 127,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 15,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 105,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 14,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 11,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 122,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 17,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 138,
+      "score": 5.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 134,
+      "score": 5.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 21,
+      "score": 5.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 136,
+      "score": 5.0,
+      "chapter": "OPC"
+    }
+  ],
+  "E": [
+    {
+      "source": "comprehensive",
+      "sort": 1,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 22,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 36,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 45,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 3,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 5,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 28,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 37,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 4,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 42,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 3,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 18,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 38,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 50,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 9,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 4,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 4,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 33,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 9,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 43,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 55,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 73,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 81,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 95,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 91,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 65,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 68,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 82,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 20,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 94,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 108,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 111,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 7,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 127,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 18,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 103,
+      "score": 2.0,
+      "chapter": "基础"
+    },
+    {
+      "source": "serial",
+      "sort": 7,
+      "score": 2.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "modbus",
+      "sort": 10,
+      "score": 2.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 122,
+      "score": 2.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "opc",
+      "sort": 23,
+      "score": 2.0,
+      "chapter": "OPC"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 131,
+      "score": 5.0,
+      "chapter": "串口"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 134,
+      "score": 5.0,
+      "chapter": "Modbus"
+    },
+    {
+      "source": "profinet",
+      "sort": 24,
+      "score": 5.0,
+      "chapter": "Profinet"
+    },
+    {
+      "source": "comprehensive",
+      "sort": 136,
+      "score": 5.0,
+      "chapter": "OPC"
+    }
+  ]
+}

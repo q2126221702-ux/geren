@@ -72,7 +72,8 @@ def grade_multi_gaokao(q, user_answer):
     return {"score": score, "correct": False, "partial": True, "maxScore": full}
 
 
-INDUSTRIAL_IDS = {"profinet", "opc", "modbus", "serial", "comprehensive"}
+INDUSTRIAL_COUNT = 6
+INDUSTRIAL_IDS = {"profinet", "opc", "modbus", "serial", "comprehensive", "exam100"}
 
 
 def open_home_category(page, category):
@@ -192,9 +193,9 @@ def test_ui(page):
     manifest = load_json(DATA / "manifest.json")
     check("首页有两类入口", page.locator("[data-home-category]").count() == 2)
     open_home_category(page, "industrial")
-    check("工业以太网题库数量", len(page.locator(".quiz-item").all()) == 5, "industrial")
+    check("工业以太网题库数量", len(page.locator(".quiz-item").all()) == INDUSTRIAL_COUNT, "industrial")
     open_home_category(page, "english")
-    check("英语题库数量", len(page.locator(".quiz-item").all()) == len(manifest["quizzes"]) - 5)
+    check("英语题库数量", len(page.locator(".quiz-item").all()) == len(manifest["quizzes"]) - INDUSTRIAL_COUNT)
 
     for entry in manifest["quizzes"]:
         quiz = load_json(DATA / entry["file"])
