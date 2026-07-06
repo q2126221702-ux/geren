@@ -204,6 +204,10 @@ def test_ui(page):
         open_home_category(page, entry_category(entry))
         page.locator(f'.quiz-item[data-file="{entry["file"]}"]').click()
         page.wait_for_timeout(400)
+        if entry.get("kind") == "exam_pack":
+            check(f"[{entry['id']}] 进入选题页", page.locator("#page-exam-pick").is_visible())
+            page.locator(f'.exam-pick-btn[data-file="{entry["file"]}"]').click()
+            page.wait_for_timeout(400)
         if is_flashcard:
             check(f"[{entry['id']}] 进入闪卡页", page.locator("#page-flashcard").is_visible())
             progress = page.locator("#flashcard-progress-text").inner_text()

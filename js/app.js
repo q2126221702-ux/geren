@@ -207,6 +207,7 @@
 
   const pages = {
     home: $('page-home'),
+    examPick: $('page-exam-pick'),
     quiz: $('page-quiz'),
     result: $('page-result'),
     settings: $('page-settings'),
@@ -1065,6 +1066,61 @@
     return variants[Math.floor(Math.random() * variants.length)];
   }
 
+  function examVariantFromFile(file) {
+    const m = String(file || '').match(/_([A-E])\.json$/i);
+    return m ? m[1].toUpperCase() : null;
+  }
+
+  function showExamPicker(entry) {
+    state.pendingExamEntry = entry;
+    $('exam-pick-title').textContent = entry.title;
+    const variants = entry.variants?.length ? entry.variants : [entry.file];
+    $('exam-pick-subtitle').textContent = `共 ${variants.length} 套等价试卷，请选择一套或随机抽卷`;
+
+    const container = $('exam-pick-buttons');
+    let html = `
+      <button
+        type="button"
+        data-choice="random"
+        class="exam-pick-btn col-span-2 w-full text-left rounded-lg shadow-sm border-2 border-amber-300 bg-gradient-to-r from-amber-50 to-white px-5 py-4 hover:border-amber-400 hover:shadow transition"
+      >
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <span class="font-semibold text-amber-900">随机抽卷</span>
+            <p class="text-xs text-amber-700 mt-1">从 ${variants.length} 套试卷中随机抽取一套</p>
+          </div>
+          <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 shrink-0">随机</span>
+        </div>
+      </button>`;
+
+    variants.forEach((file) => {
+      const variant = examVariantFromFile(file) || file;
+      html += `
+        <button
+          type="button"
+          data-file="${escapeAttr(file)}"
+          class="exam-pick-btn w-full text-left bg-white rounded-lg shadow-sm border border-gray-200 px-5 py-4 hover:border-primary hover:shadow transition"
+        >
+          <div class="flex items-center justify-between gap-3">
+            <span class="font-medium text-gray-800">试卷 ${escapeHtml(variant)}</span>
+            <span class="text-sm text-gray-400 shrink-0">${entry.count} 题</span>
+          </div>
+        </button>`;
+    });
+
+    container.innerHTML = html;
+    container.querySelectorAll('.exam-pick-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const pending = state.pendingExamEntry;
+        if (!pending) return;
+        const file = btn.dataset.choice === 'random' ? pickExamPackFile(pending) : btn.dataset.file;
+        startQuiz(file, pending);
+      });
+    });
+
+    showPage('examPick');
+  }
+
   function quizTitleWithVariant(baseTitle, file) {
     const variant = state.quiz?.meta?.exam_variant;
     if (variant) return `${baseTitle} · 试卷${variant}`;
@@ -1105,7 +1161,7 @@
     if (isFc) {
       subtitle = '<p class="text-xs text-violet-600 mt-1">词性转换 · 仅≥2词性词族 · 翻转背诵</p>';
     } else if (isExamPack) {
-      subtitle = '<p class="text-xs text-amber-700 mt-1">共 5 套等价试卷 · 进入后随机抽取一套</p>';
+      subtitle = '<p class="text-xs text-amber-700 mt-1">共 5 套等价试卷 · 进入后选择试卷或随机抽卷</p>';
     }
     return `
       <button
@@ -1193,9 +1249,8 @@
         if (btn.dataset.kind === 'flashcard') startFlashcard(btn.dataset.file);
         else {
           const entry = manifestEntryById(btn.dataset.quizId);
-          const file =
-            entry?.kind === 'exam_pack' ? pickExamPackFile(entry) : btn.dataset.file;
-          startQuiz(file, entry);
+          if (entry?.kind === 'exam_pack') showExamPicker(entry);
+          else startQuiz(btn.dataset.file, entry);
         }
       });
     });
@@ -2613,6 +2668,11 @@
 
   function bindEvents() {
     bindFlashcardEvents();
+    $('btn-exam-pick-back').addEventListener('click', () => {
+      state.pendingExamEntry = null;
+      showPage('home');
+    });
+
     $('btn-back').addEventListener('click', () => {
       if (state.wrongDrillMode && state.parentQuiz) {
         if (confirm('退出错词突击，返回成绩单？')) exitWrongDrill();
