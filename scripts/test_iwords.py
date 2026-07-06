@@ -143,6 +143,8 @@ def test_ui(page):
     quiz = load_json(DATA / entry["file"])
 
     page.goto(BASE, wait_until="networkidle", timeout=15000)
+    page.locator('[data-home-category="english"]').click()
+    page.wait_for_timeout(250)
     page.locator(f'.quiz-item[data-file="{entry["file"]}"]').click()
     page.wait_for_timeout(400)
     check("进入 iWords 答题页", page.locator("#page-quiz").is_visible())
@@ -202,6 +204,8 @@ def test_ui(page):
 
     # 故意错一题词性，检查记忆卡
     page.goto(BASE, wait_until="networkidle")
+    page.locator('[data-home-category="english"]').click()
+    page.wait_for_timeout(250)
     page.locator(f'.quiz-item[data-file="{entry["file"]}"]').click()
     page.wait_for_timeout(300)
     for idx, q in enumerate(quiz["questions"]):
@@ -225,6 +229,8 @@ def test_ui(page):
     )
     phrase_idx = quiz["questions"].index(phrase_q)
     page.goto(BASE, wait_until="networkidle")
+    page.locator('[data-home-category="english"]').click()
+    page.wait_for_timeout(250)
     page.locator(f'.quiz-item[data-file="{entry["file"]}"]').click()
     page.wait_for_timeout(300)
     page.locator(f'#answer-card button[data-index="{phrase_idx}"]').click()

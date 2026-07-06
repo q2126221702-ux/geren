@@ -31,6 +31,8 @@ def main():
         browser = p.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": 390, "height": 844})
         page.goto(BASE, wait_until="networkidle")
+        page.locator('[data-home-category="english"]').click()
+        page.wait_for_timeout(250)
         page.locator('.quiz-item[data-file*="单词速记"]').click()
         page.wait_for_timeout(500)
         assert not page.locator("#page-flashcard").evaluate("el => el.classList.contains('hidden')")

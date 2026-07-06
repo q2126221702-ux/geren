@@ -33,6 +33,8 @@ def main():
         browser = p.chromium.launch()
         page = browser.new_page(viewport={"width": 390, "height": 844})
         page.goto(BASE, wait_until="networkidle")
+        page.locator('[data-home-category="english"]').click()
+        page.wait_for_timeout(250)
         answer_wrong_quiz(page)
 
         aside_hidden = page.evaluate(

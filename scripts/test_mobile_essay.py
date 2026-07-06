@@ -55,6 +55,8 @@ with sync_playwright() as p:
         has_touch=True,
     )
     page.goto(BASE, wait_until="networkidle")
+    page.locator('[data-home-category="english"]').click()
+    page.wait_for_timeout(250)
     page.locator(f'.quiz-item[data-file="{FILE}"]').click()
     page.wait_for_selector("#question-container")
     for _ in range(5):

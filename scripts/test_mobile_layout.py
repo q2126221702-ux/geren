@@ -57,6 +57,8 @@ def main():
 
         # Mobile — essay review collapsible
         page.set_viewport_size({"width": 390, "height": 844})
+        page.locator('[data-home-category="english"]').click()
+        page.wait_for_timeout(250)
         page.locator('.quiz-item[data-file="WE Learn_B1U4_Movies_翻译题_20260703.json"]').click()
         page.wait_for_selector("#question-container")
         for _ in range(5):

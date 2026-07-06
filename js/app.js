@@ -24,6 +24,7 @@
     parentQuiz: null,
     reviewSheetOpen: false,
     reviewFilterWrong: false,
+    homeCategory: localStorage.getItem('quiz-home-category') || 'industrial',
     flashcard: {
       deck: null,
       order: [],
@@ -1055,6 +1056,23 @@
     return state.manifest?.quizzes?.find((q) => q.file === file);
   }
 
+  const INDUSTRIAL_QUIZ_IDS = new Set(['profinet', 'opc', 'modbus', 'serial', 'comprehensive']);
+
+  function getQuizCategory(entry) {
+    if (INDUSTRIAL_QUIZ_IDS.has(entry.id)) return 'industrial';
+    return 'english';
+  }
+
+  function setHomeCategory(category) {
+    if (category !== 'industrial' && category !== 'english') return;
+    state.homeCategory = category;
+    localStorage.setItem('quiz-home-category', category);
+    document.querySelectorAll('[data-home-category]').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.homeCategory === category);
+    });
+    renderQuizList();
+  }
+
   function renderQuizItem(q) {
     const isFc = q.kind === 'flashcard';
     const unitLabel = isFc ? `${q.count} 张` : `${q.count} 题`;
@@ -1086,29 +1104,64 @@
       </button>`;
   }
 
+  function renderEnglishQuizSections(items) {
+    const groups = [
+      {
+        title: '单词速记',
+        tone: 'text-violet-700',
+        dot: 'bg-violet-500',
+        filter: (q) => q.kind === 'flashcard',
+      },
+      {
+        title: '单元翻译',
+        tone: 'text-gray-600',
+        dot: 'bg-primary',
+        filter: (q) => q.file.includes('翻译题'),
+      },
+      {
+        title: '语法选择',
+        tone: 'text-gray-600',
+        dot: 'bg-primary',
+        filter: (q) => q.id.includes('grammar'),
+      },
+      {
+        title: '词汇填空',
+        tone: 'text-gray-600',
+        dot: 'bg-primary',
+        filter: (q) => q.id.endsWith('_iwords'),
+      },
+    ];
+    return groups
+      .map((group) => {
+        const section = items.filter(group.filter);
+        if (!section.length) return '';
+        return `
+          <section class="mb-6">
+            <h2 class="home-section-title ${group.tone}">
+              <span class="inline-block w-1.5 h-1.5 rounded-full ${group.dot}"></span>
+              ${group.title}
+            </h2>
+            <div class="space-y-3">${section.map(renderQuizItem).join('')}</div>
+          </section>`;
+      })
+      .join('');
+  }
+
   function renderQuizList() {
     const list = $('quiz-list');
     const all = state.manifest.quizzes || [];
-    const flashcards = all.filter((q) => q.kind === 'flashcard');
-    const quizzes = all.filter((q) => q.kind !== 'flashcard');
+    const industrial = all.filter((q) => getQuizCategory(q) === 'industrial');
+    const english = all.filter((q) => getQuizCategory(q) === 'english');
+
+    document.querySelectorAll('[data-home-category]').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.homeCategory === state.homeCategory);
+    });
 
     let html = '';
-    if (flashcards.length) {
-      html += `
-        <section class="mb-6">
-          <h2 class="text-sm font-semibold text-violet-700 mb-2 flex items-center gap-2">
-            <span class="inline-block w-1.5 h-1.5 rounded-full bg-violet-500"></span>
-            单词速记（翻转卡片，不用答题）
-          </h2>
-          <div class="space-y-3">${flashcards.map(renderQuizItem).join('')}</div>
-        </section>`;
-    }
-    if (quizzes.length) {
-      html += `
-        <section>
-          <h2 class="text-sm font-semibold text-gray-600 mb-2">测验题库</h2>
-          <div class="space-y-3">${quizzes.map(renderQuizItem).join('')}</div>
-        </section>`;
+    if (state.homeCategory === 'industrial') {
+      html = `<div class="space-y-3">${industrial.map(renderQuizItem).join('')}</div>`;
+    } else {
+      html = renderEnglishQuizSections(english);
     }
     list.innerHTML = html;
 
@@ -2602,6 +2655,9 @@
     });
 
     $('btn-open-settings').addEventListener('click', openSettings);
+    document.querySelectorAll('[data-home-category]').forEach((btn) => {
+      btn.addEventListener('click', () => setHomeCategory(btn.dataset.homeCategory));
+    });
     $('btn-settings-back').addEventListener('click', () => showPage('home'));
     $('ai-provider').addEventListener('change', updateSettingsFormHints);
     $('btn-save-settings').addEventListener('click', () => {

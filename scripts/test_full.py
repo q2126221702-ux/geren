@@ -72,6 +72,18 @@ def grade_multi_gaokao(q, user_answer):
     return {"score": score, "correct": False, "partial": True, "maxScore": full}
 
 
+INDUSTRIAL_IDS = {"profinet", "opc", "modbus", "serial", "comprehensive"}
+
+
+def open_home_category(page, category):
+    page.locator(f'[data-home-category="{category}"]').click()
+    page.wait_for_timeout(250)
+
+
+def entry_category(entry):
+    return "industrial" if entry["id"] in INDUSTRIAL_IDS else "english"
+
+
 def answer_quiz_page(page, quiz, mode="correct"):
     """mode: correct | wrong_multi_partial"""
     letter_idx = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4}
@@ -178,13 +190,17 @@ def test_ui(page):
     check("首页可访问", "在线测验" in page.title() or page.locator("#quiz-list").count() > 0)
 
     manifest = load_json(DATA / "manifest.json")
-    buttons = page.locator(".quiz-item").all()
-    check("首页题库数量", len(buttons) == len(manifest["quizzes"]), f"{len(buttons)}/{len(manifest['quizzes'])}")
+    check("首页有两类入口", page.locator("[data-home-category]").count() == 2)
+    open_home_category(page, "industrial")
+    check("工业以太网题库数量", len(page.locator(".quiz-item").all()) == 5, "industrial")
+    open_home_category(page, "english")
+    check("英语题库数量", len(page.locator(".quiz-item").all()) == len(manifest["quizzes"]) - 5)
 
     for entry in manifest["quizzes"]:
         quiz = load_json(DATA / entry["file"])
         is_flashcard = quiz.get("quiz_type") == "vocab_flashcard" or entry.get("kind") == "flashcard"
         page.goto(BASE, wait_until="networkidle")
+        open_home_category(page, entry_category(entry))
         page.locator(f'.quiz-item[data-file="{entry["file"]}"]').click()
         page.wait_for_timeout(400)
         if is_flashcard:
@@ -204,6 +220,7 @@ def test_ui(page):
     we = next(e for e in manifest["quizzes"] if e["id"] == "welearn_b1u4")
     quiz = load_json(DATA / we["file"])
     page.goto(BASE, wait_until="networkidle")
+    open_home_category(page, "english")
     page.locator(f'.quiz-item[data-file="{we["file"]}"]').click()
     page.wait_for_timeout(400)
     answer_quiz_page(page, quiz, "correct")
@@ -222,6 +239,7 @@ def test_ui(page):
     # OPC 多选部分得分 UI
     opc = load_json(DATA / "OPC规范_20260626_185227.json")
     page.goto(BASE, wait_until="networkidle")
+    open_home_category(page, "industrial")
     page.locator(".quiz-item", has_text="OPC").click()
     page.wait_for_timeout(400)
     multi_idx = next(i for i, q in enumerate(opc["questions"]) if q["type"] == "多选题")
@@ -247,6 +265,7 @@ def test_ui(page):
 
     # Profinet 填空题渲染
     page.goto(BASE, wait_until="networkidle")
+    open_home_category(page, "industrial")
     page.locator(".quiz-item", has_text="Profinet").click()
     page.wait_for_timeout(400)
     prof = load_json(DATA / "Profinet工业以太网测验_20260626_185300.json")
@@ -257,6 +276,7 @@ def test_ui(page):
 
     # MODBUS 判断题
     page.goto(BASE, wait_until="networkidle")
+    open_home_category(page, "industrial")
     page.locator(".quiz-item", has_text="MODBUS").click()
     page.wait_for_timeout(400)
     mod = load_json(DATA / "MODBUS协议及应用_20260626_185238.json")

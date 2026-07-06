@@ -22,6 +22,8 @@ def load_quiz(page):
 
 def start_welearn_quiz(page, quiz_file):
     page.goto(BASE, wait_until="networkidle")
+    page.locator('[data-home-category="english"]').click()
+    page.wait_for_timeout(250)
     page.locator(f'.quiz-item[data-file="{quiz_file}"]').click()
     page.wait_for_timeout(400)
 
@@ -58,6 +60,8 @@ with sync_playwright() as p:
             issues.append(f"第{q['sort']}题缺少参考答案")
     check("题目字段校验", not any("题" in i for i in issues))
 
+    page.locator('[data-home-category="english"]').click()
+    page.wait_for_timeout(250)
     welearn_buttons = page.locator('.quiz-item[data-file*="翻译题"]').all()
     check("首页显示 5 个 WE Learn 翻译单元", len(welearn_buttons) == 5, str(len(welearn_buttons)))
 
