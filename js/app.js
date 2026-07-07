@@ -1086,6 +1086,19 @@
     return state.sessionExamRandomDrawn[entryId];
   }
 
+  function examPickSubtitle(entry) {
+    const variants = getExamPackVariants(entry);
+    const used = getExamRandomDrawnSet(entry.id).size;
+    const total = variants.length;
+    if (used >= total && total > 0) {
+      return `本轮 ${total} 套已全部随机抽过，再次点击「随机抽卷」将重新开始`;
+    }
+    if (used > 0) {
+      return `共 ${total} 套等价试卷 · 随机已抽 ${used}/${total}（不重复），也可手动选题`;
+    }
+    return `共 ${total} 套等价试卷，请选择一套或随机抽卷`;
+  }
+
   function examRandomPickHint(entry) {
     const variants = getExamPackVariants(entry);
     const drawn = getExamRandomDrawnSet(entry.id);
@@ -1120,35 +1133,48 @@
     state.pendingExamEntry = entry;
     $('exam-pick-title').textContent = entry.title;
     const variants = getExamPackVariants(entry);
-    $('exam-pick-subtitle').textContent = `共 ${variants.length} 套等价试卷，请选择一套或随机抽卷`;
+    const drawn = getExamRandomDrawnSet(entry.id);
+    const allDrawn = drawn.size >= variants.length && variants.length > 0;
+    const subtitleEl = $('exam-pick-subtitle');
+    subtitleEl.textContent = examPickSubtitle(entry);
+    subtitleEl.classList.toggle('text-amber-200', allDrawn);
+    subtitleEl.classList.toggle('font-medium', allDrawn);
+    subtitleEl.classList.toggle('text-blue-100', !allDrawn);
 
     const container = $('exam-pick-buttons');
+    const randomBtnClass = allDrawn
+      ? 'exam-pick-btn col-span-2 w-full text-left rounded-lg shadow-sm border-2 border-amber-500 bg-gradient-to-r from-amber-100 to-amber-50 px-5 py-4 hover:border-amber-600 hover:shadow transition ring-2 ring-amber-300/60'
+      : 'exam-pick-btn col-span-2 w-full text-left rounded-lg shadow-sm border-2 border-amber-300 bg-gradient-to-r from-amber-50 to-white px-5 py-4 hover:border-amber-400 hover:shadow transition';
     let html = `
       <button
         type="button"
         data-choice="random"
-        class="exam-pick-btn col-span-2 w-full text-left rounded-lg shadow-sm border-2 border-amber-300 bg-gradient-to-r from-amber-50 to-white px-5 py-4 hover:border-amber-400 hover:shadow transition"
+        class="${randomBtnClass}"
       >
         <div class="flex items-center justify-between gap-3">
           <div>
             <span class="font-semibold text-amber-900">随机抽卷</span>
-            <p class="text-xs text-amber-700 mt-1">${escapeHtml(examRandomPickHint(entry))}</p>
+            <p class="text-xs text-amber-800 mt-1">${escapeHtml(examRandomPickHint(entry))}</p>
           </div>
-          <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 shrink-0">随机</span>
+          <span class="text-xs px-2 py-0.5 rounded-full ${allDrawn ? 'bg-amber-500 text-white' : 'bg-amber-100 text-amber-800'} shrink-0">${allDrawn ? '可重置' : '随机'}</span>
         </div>
       </button>`;
 
     variants.forEach((file) => {
       const variant = examVariantFromFile(file) || file;
+      const wasRandom = drawn.has(file);
       html += `
         <button
           type="button"
           data-file="${escapeAttr(file)}"
-          class="exam-pick-btn w-full text-left bg-white rounded-lg shadow-sm border border-gray-200 px-5 py-4 hover:border-primary hover:shadow transition"
+          class="exam-pick-btn w-full text-left rounded-lg shadow-sm border px-5 py-4 hover:shadow transition ${wasRandom ? 'border-emerald-300 bg-emerald-50/40 hover:border-emerald-400' : 'border-gray-200 bg-white hover:border-primary'}"
         >
           <div class="flex items-center justify-between gap-3">
             <span class="font-medium text-gray-800">试卷 ${escapeHtml(variant)}</span>
-            <span class="text-sm text-gray-400 shrink-0">${entry.count} 题</span>
+            <div class="flex items-center gap-2 shrink-0">
+              ${wasRandom ? '<span class="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">已随机</span>' : ''}
+              <span class="text-sm text-gray-400">${entry.count} 题</span>
+            </div>
           </div>
         </button>`;
     });
@@ -1164,6 +1190,15 @@
     });
 
     showPage('examPick');
+  }
+
+  function returnFromQuizPage() {
+    const entry = state.currentManifestEntry;
+    if (entry?.kind === 'exam_pack') {
+      showExamPicker(entry);
+      return;
+    }
+    showPage('home');
   }
 
   function quizTitleWithVariant(baseTitle, file) {
@@ -3124,7 +3159,7 @@
       if (!state.submitted && Object.keys(state.answers).length > 0) {
         if (!confirm('返回将丢失当前作答，确定吗？')) return;
       }
-      showPage('home');
+      returnFromQuizPage();
     });
 
     $('btn-prev').addEventListener('click', () => {
