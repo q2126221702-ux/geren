@@ -35,6 +35,8 @@
     homeCategory: localStorage.getItem('quiz-home-category') || 'industrial',
     /** 本次会话内已交卷的工业以太网测验 id（刷新后清空） */
     sessionDoneIndustrial: new Set(),
+    /** 本次会话各期末卷包随机已抽过的试卷文件（刷新后清空） */
+    sessionExamRandomDrawn: Object.create(null),
     flashcard: {
       deck: null,
       order: [],
@@ -1073,9 +1075,40 @@
     return state.manifest?.quizzes?.find((q) => q.id === id);
   }
 
+  function getExamPackVariants(entry) {
+    return entry?.variants?.length ? entry.variants.slice() : [entry.file];
+  }
+
+  function getExamRandomDrawnSet(entryId) {
+    if (!state.sessionExamRandomDrawn[entryId]) {
+      state.sessionExamRandomDrawn[entryId] = new Set();
+    }
+    return state.sessionExamRandomDrawn[entryId];
+  }
+
+  function examRandomPickHint(entry) {
+    const variants = getExamPackVariants(entry);
+    const drawn = getExamRandomDrawnSet(entry.id);
+    const total = variants.length;
+    const used = drawn.size;
+    if (!used) return `从 ${total} 套试卷中随机抽取一套（本次不重复）`;
+    if (used >= total) {
+      return `本轮 ${total} 套已全部随机抽过，再次点击将重新开始`;
+    }
+    return `从剩余 ${total - used} 套中随机抽取（本次已抽 ${used} 套，不重复）`;
+  }
+
   function pickExamPackFile(entry) {
-    const variants = entry?.variants?.length ? entry.variants : [entry.file];
-    return variants[Math.floor(Math.random() * variants.length)];
+    const variants = getExamPackVariants(entry);
+    const drawn = getExamRandomDrawnSet(entry.id);
+    let pool = variants.filter((file) => !drawn.has(file));
+    if (!pool.length) {
+      drawn.clear();
+      pool = variants.slice();
+    }
+    const picked = pool[Math.floor(Math.random() * pool.length)];
+    drawn.add(picked);
+    return picked;
   }
 
   function examVariantFromFile(file) {
@@ -1086,7 +1119,7 @@
   function showExamPicker(entry) {
     state.pendingExamEntry = entry;
     $('exam-pick-title').textContent = entry.title;
-    const variants = entry.variants?.length ? entry.variants : [entry.file];
+    const variants = getExamPackVariants(entry);
     $('exam-pick-subtitle').textContent = `共 ${variants.length} 套等价试卷，请选择一套或随机抽卷`;
 
     const container = $('exam-pick-buttons');
@@ -1099,7 +1132,7 @@
         <div class="flex items-center justify-between gap-3">
           <div>
             <span class="font-semibold text-amber-900">随机抽卷</span>
-            <p class="text-xs text-amber-700 mt-1">从 ${variants.length} 套试卷中随机抽取一套</p>
+            <p class="text-xs text-amber-700 mt-1">${escapeHtml(examRandomPickHint(entry))}</p>
           </div>
           <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 shrink-0">随机</span>
         </div>
