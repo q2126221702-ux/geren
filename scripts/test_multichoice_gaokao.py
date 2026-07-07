@@ -1,7 +1,12 @@
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from quiz_constants import DEFAULT_TEST_BASE
+
 from playwright.sync_api import sync_playwright
 
-BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765"
+BASE = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_TEST_BASE
 issues = []
 
 

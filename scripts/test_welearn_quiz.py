@@ -1,8 +1,13 @@
 import json
 import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from quiz_constants import DEFAULT_TEST_BASE
+
 from playwright.sync_api import sync_playwright
 
-BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765"
+BASE = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_TEST_BASE
 QUIZ_FILE = "WE Learn_B1U4_Movies_翻译题_20260703.json"
 UNIT_ID = "welearn_b1u4"
 TRANSLATION_UNIT_IDS = {f"welearn_b1u{i}" for i in range(4, 9)}

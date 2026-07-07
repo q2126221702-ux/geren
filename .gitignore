@@ -8,3 +8,5 @@ __pycache__/
 .DS_Store
 Thumbs.db
 *.log
+scripts/_*.png
+scripts/curriculum_vocab_raw.txt

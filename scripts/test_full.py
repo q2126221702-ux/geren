@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-"""quiz-web 完整测试：数据校验 + 各题库加载 + 判分逻辑 + 关键 UI 流程."""
+"""quiz-web 完整测试：manifest/题库静态校验、多选判分、18 套 UI 流程、错题集入口."""
 import json
 import sys
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765"
+from quiz_constants import DEFAULT_TEST_BASE, INDUSTRIAL_COUNT, INDUSTRIAL_QUIZ_IDS
+
+BASE = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_TEST_BASE
 ROOT = Path(__file__).parent.parent
 DATA = ROOT / "data"
 issues = []
 passed = 0
+INDUSTRIAL_IDS = set(INDUSTRIAL_QUIZ_IDS)
 
 
 def check(name, ok, detail=""):
@@ -70,10 +73,6 @@ def grade_multi_gaokao(q, user_answer):
     raw = full * k / len(correct)
     score = int(raw) if raw == int(raw) else round(raw, 1)
     return {"score": score, "correct": False, "partial": True, "maxScore": full}
-
-
-INDUSTRIAL_COUNT = 6
-INDUSTRIAL_IDS = {"profinet", "opc", "modbus", "serial", "comprehensive", "exam100"}
 
 
 def open_home_category(page, category):
@@ -289,6 +288,38 @@ def test_ui(page):
     page.locator(f'#answer-card button[data-index="{j_idx}"]').click()
     page.wait_for_timeout(150)
     check("MODBUS 判断题选项", page.locator("label.option-item").count() >= 2)
+
+    # 错题集：交卷收录 + 页面入口 + 移除
+    page.goto(BASE, wait_until="networkidle")
+    page.evaluate("localStorage.removeItem('quiz-wrong-book-v1')")
+    open_home_category(page, "industrial")
+    page.locator(".quiz-item", has_text="MODBUS").click()
+    page.wait_for_timeout(400)
+    mod = load_json(DATA / "MODBUS协议及应用_20260626_185238.json")
+    j_idx = next(i for i, q in enumerate(mod["questions"]) if q["type"] == "判断题")
+    page.locator(f'#answer-card button[data-index="{j_idx}"]').click()
+    page.wait_for_timeout(150)
+    # 故意选错：选与正确答案不同的选项
+    qj = mod["questions"][j_idx]
+    correct_idx = int(str(qj["correct_answer"]).strip()) if str(qj["correct_answer"]).strip().isdigit() else 0
+    wrong_opt = 1 - correct_idx if correct_idx in (0, 1) else 0
+    page.locator("label.option-item").nth(wrong_opt).click()
+    page.wait_for_timeout(150)
+    page.locator("#btn-submit").click()
+    page.wait_for_timeout(500)
+    check("MODBUS 交卷后收录错题集", "错题集" in page.locator("#result-rate").inner_text())
+
+    page.locator("#btn-home").click()
+    page.wait_for_timeout(300)
+    page.locator("#btn-open-wrong-book").click()
+    page.wait_for_timeout(300)
+    check("错题集页面可见", page.locator("#page-wrong-book").is_visible())
+    check("错题集列表有内容", page.locator("#wrong-book-list article").count() >= 1)
+
+    page.locator(".wrong-book-remove").first.click()
+    page.once("dialog", lambda d: d.accept())
+    page.wait_for_timeout(300)
+    check("单题移除后列表为空或隐藏空态", page.locator("#wrong-book-empty").is_visible() or page.locator("#wrong-book-list article").count() == 0)
 
 
 def main():

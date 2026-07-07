@@ -1,6 +1,6 @@
 # 在线测验
 
-静态网页题库，支持单选、多选（高考数学判分规则）、判断、填空、问答等题型。
+静态网页题库，支持单选、多选（高考数学判分规则）、判断、填空、问答等题型。数据在 `data/`，索引见 `data/manifest.json`。
 
 ## 本地运行
 
@@ -10,45 +10,69 @@ start.bat
 
 浏览器打开 http://localhost:8080
 
+## 功能概览
+
+| 模块 | 说明 |
+|------|------|
+| 首页分类 | **工业以太网** / **英语** 两类入口，记住上次选择 |
+| 工业题库 | Profinet、OPC、MODBUS、串口、综合考核 |
+| 期末卷 | 工业网络技术期末考核（100 分）· 5 套 A~E + **随机抽卷**选题页 |
+| 英语题库 | B1U4~U8 翻译、语法选择、iWords 填空、单词速记闪卡 |
+| 错题集 | 交卷自动收录客观错题，本机 `localStorage` 持久化；筛选、练习、AI 错因、导出、单题/批量移除 |
+| 错词突击 | iWords 交卷后「换形式再练错词」（仅当次会话） |
+| 待复习 | 解析模式下浏览错题与问答题（问答题对照参考，不进错题集） |
+| AI | 逐题解析、交卷学情分析；站点默认 Worker 或自带 Key |
+
 ## 题库
 
-题目数据在 `data/` 目录，索引见 `data/manifest.json`。
+当前 manifest 共 **18** 项：
 
-当前包含：
-
-- 工业通信类测验（Profinet / OPC / MODBUS / 串口 / 综合考核）
-- WE Learn 实用综合教程翻译练习（按单元拆分，每单元 6 题）：
-  - B1U4 Movies
-  - B1U5 Our Earth
-  - B1U6 Part-time jobs
-  - B1U7 Health
-  - B1U8 Festivals
+- **工业（6）**：Profinet / OPC / MODBUS / 串口 / 综合考核 / 期末 100 分（exam_pack，variants A~E）
+- **英语（12）**：5 单元翻译、语法 50 题、5 单元 iWords、B1U4~U8 单词速记
 
 从 `welearn-output/` 重新生成 WE Learn 题库：
 
 ```bat
 python scripts/import_welearn.py
+python scripts/import_iwords.py
 ```
+
+期末卷生成与审查：
+
+```bat
+python scripts/build_industrial_exam_100.py
+python scripts/deep_check_exams.py
+python scripts/audit_exam_papers.py
+```
+
+## 前端脚本结构
+
+| 文件 | 职责 |
+|------|------|
+| `js/quiz-meta.js` | 工业/英语分类等共享常量 |
+| `js/wrong-book.js` | 错题集存储、筛选、导出、组卷 |
+| `js/ai-config.js` | 站点 AI Worker 地址（无 Key） |
+| `js/ai.js` | AI 解析、学情分析、BYOK |
+| `js/app.js` | 答题流程、UI、判分 |
 
 ## AI 功能
 
 | 功能 | 说明 |
 |------|------|
-| AI 解析 | 复习模式下，逐题生成讲解 |
-| AI 学情分析 | 交卷后，根据得分与错题生成学习建议 |
-| AI 设置 | 用户自带 API Key（BYOK），保存在本机浏览器 |
+| AI 解析 | 复习模式下逐题讲解 |
+| AI 学情分析 | 交卷后根据得分与错题生成建议 |
+| 错题集 AI | 错题卡片上「AI 错因分析」，结果缓存在本机 |
+| AI 设置 | 用户自带 API Key（BYOK），保存在浏览器 localStorage |
 
 ### 站点默认 AI（免费）
 
-未填写自带 Key 时，使用 **Cloudflare Worker → 智谱 GLM-4-Flash**（官网免费，国内直连）：
+未填写自带 Key 时，使用 **Cloudflare Worker → 智谱 GLM**（国内直连）：
 
-- API Key 存在 Worker Secrets（`ZHIPU_API_KEY`），**不会**出现在前端或 Git 仓库
-- 前端配置见 `js/ai-config.js`（仅 Worker 地址，无 Key）
-- 共享站点配额，请勿频繁点击；用户可在设置页填写自己的智谱 Key 启用完整模式
+- API Key 存在 Worker Secrets（`ZHIPU_API_KEY`），**不会**出现在前端或 Git
+- 前端配置见 `js/ai-config.js`（仅 Worker 地址）
+- 共享站点配额，请勿频繁点击；可填写自己的智谱 Key 启用完整模式
 
 ### 自带 Key（BYOK）· 完整模式
-
-在「AI 设置」填写 API Key 并保存后，自动进入**完整模式**（直连服务商，不经过 Worker）：
 
 | 能力 | 完整模式（自带 Key） | 站点默认 AI |
 |------|---------------------|-------------|
@@ -57,53 +81,54 @@ python scripts/import_welearn.py
 | 点击冷却 | 无 | 90 秒 |
 | 测试连接冷却 | 无 | 15 秒 |
 
-支持 Gemini、DeepSeek、Moonshot/Kimi、智谱、通义千问、硅基流动、火山引擎/豆包、GitHub Models、ChatAnywhere 等。清除 Key 后恢复站点默认 AI。
+支持 Gemini、DeepSeek、Moonshot/Kimi、智谱、通义千问、硅基流动、火山引擎/豆包、GitHub Models、ChatAnywhere 等。
 
-使用 AI 时，题目与作答会发送至对应 AI 服务商处理；API Key 与加密口令不会上传至本站。
+使用 AI 时，题目与作答会发送至对应服务商；Key 与加密口令不会上传至本站。
 
 ### 部署 Cloudflare Worker
 
-1. 在 [智谱开放平台](https://open.bigmodel.cn/usercenter/apikeys) 申请 API Key（`glm-4-flash` 免费）
-2. Cloudflare Dashboard → Workers → 更新 `workers/ai-proxy.js` → Deploy
-3. Settings → Secrets → 添加 `ZHIPU_API_KEY`（可删除旧的 `GEMINI_API_KEY`）
-4. 将 Worker 地址写入 `js/ai-config.js` 的 `proxyUrl`（自定义域名或 `https://xxx.workers.dev/v1`）
-5. 在 Worker 代码 `ALLOWED_ORIGINS` 中加入你的 GitHub Pages 域名（仅白名单 Origin 可调用，拒绝 curl/脚本直调）
+详见 [`workers/README.md`](workers/README.md)。简要步骤：
 
-6. **建议**绑定 KV namespace `AI_RATE` 启用 IP hourly 限流（见 `workers/wrangler.toml`）；未绑 KV 时会用 Cache API 兜底限流
+1. [智谱开放平台](https://open.bigmodel.cn/usercenter/apikeys) 申请 Key
+2. 部署 `workers/ai-proxy.js`，Secrets 添加 `ZHIPU_API_KEY`
+3. `js/ai-config.js` 写入 Worker 的 `proxyUrl`
+4. `ALLOWED_ORIGINS` 加入 GitHub Pages 域名
+5. 建议绑定 KV `AI_RATE` 做 IP 限流
 
 ### 本地可选：ChatAnywhere 代理
 
-若需在本机用 ChatAnywhere（**不能**经 Cloudflare 转发）：
-
 ```bat
 copy .env.example .env
-:: 编辑 .env 填入 CHATANYWHERE_API_KEY
 copy js\ai-config.local.example.js js\ai-config.local.js
-:: 编辑 ai-config.local.js 启用 localhost 代理
 start-ai.bat
 ```
 
-日常本地调试可直接 `start.bat`，与线上一致使用 Worker；或在 `ai-config.local.js` 中设 `proxyUrl: ''` 后只用自己的智谱 Key。
+日常调试可直接 `start.bat`（与线上一致走 Worker）。
 
 ### 勿提交到 Git
 
-以下已在 `.gitignore` 中：
-
-- `.env`（本地 ChatAnywhere Key）
-- `js/ai-config.local.js`（本地覆盖配置）
+`.gitignore` 已排除：`.env`、`js/ai-config.local.js`、`scripts/_*.png` 等本地调试产物。
 
 ## 测试
 
-需先启动本地服务器，再运行：
+先 `start.bat`，再运行（默认 `http://localhost:8080`，可传参覆盖）：
 
 ```bat
-python scripts/test_full.py
-python scripts/test_welearn_quiz.py
 python scripts/validate_data.py
+python scripts/audit_iwords_fill.py
+python scripts/deep_check_exams.py
+python scripts/test_multichoice_gaokao.py
+python scripts/test_full.py
+python scripts/test_wrong_book.py
+python scripts/test_iwords.py
+python scripts/test_welearn_quiz.py
+python scripts/test_vocab_flashcard.py
 ```
+
+`test_full.py` 覆盖 18 套题库加载、判分、移动端关键流程、期末选题页、错题集入口（约 132 项）。
 
 ## GitHub Pages
 
-推送到 `main` 分支后，Actions 会自动部署。
+推送到 `main` 后 Actions 自动部署（失败时会等待 45 秒重试一次）。
 
-在线访问：https://q2126221702-ux.github.io/geren/
+在线：https://q2126221702-ux.github.io/geren/

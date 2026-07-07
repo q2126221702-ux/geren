@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  /** 在线测验主应用：答题、判分、复习、错题集、闪卡、AI 联动。 */
+
   const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
   const state = {
@@ -21,7 +23,13 @@
     testCooldownUntil: 0,
     testCooldownTimer: null,
     wrongDrillMode: false,
+    wrongBookDrill: false,
+    wrongBookDrillSnapshot: null,
     parentQuiz: null,
+    currentQuizFile: null,
+    currentManifestEntry: null,
+    wrongBookFilters: { category: 'all', quizId: 'all', type: 'all', query: '' },
+    wrongBookAiLoadingId: null,
     reviewSheetOpen: false,
     reviewFilterWrong: false,
     homeCategory: localStorage.getItem('quiz-home-category') || 'industrial',
@@ -208,6 +216,7 @@
   const pages = {
     home: $('page-home'),
     examPick: $('page-exam-pick'),
+    wrongBook: $('page-wrong-book'),
     quiz: $('page-quiz'),
     result: $('page-result'),
     settings: $('page-settings'),
@@ -1128,11 +1137,13 @@
     return m ? `${baseTitle} · 试卷${m[1].toUpperCase()}` : baseTitle;
   }
 
-  const INDUSTRIAL_QUIZ_IDS = new Set(['profinet', 'opc', 'modbus', 'serial', 'comprehensive', 'exam100']);
+  const INDUSTRIAL_QUIZ_IDS =
+    window.QuizMeta?.INDUSTRIAL_QUIZ_IDS ||
+    new Set(['profinet', 'opc', 'modbus', 'serial', 'comprehensive', 'exam100']);
 
   function getQuizCategory(entry) {
-    if (INDUSTRIAL_QUIZ_IDS.has(entry.id)) return 'industrial';
-    return 'english';
+    if (window.QuizMeta) return QuizMeta.getQuizCategory(entry.id);
+    return INDUSTRIAL_QUIZ_IDS.has(entry.id) ? 'industrial' : 'english';
   }
 
   function setHomeCategory(category) {
@@ -1254,6 +1265,7 @@
         }
       });
     });
+    updateWrongBookBadge();
   }
 
   function startQuiz(file, entry) {
@@ -1263,24 +1275,329 @@
           startFlashcard(file, state.quiz);
           return;
         }
-        state.currentIndex = 0;
-        state.answers = {};
-        state.submitted = false;
-        state.aiCache = {};
-        state.aiScoreCache = {};
-        state.lastResult = null;
-        state.wrongDrillMode = false;
-        state.parentQuiz = null;
-        resetReviewUI();
-        $('quiz-title').textContent = quizTitleWithVariant(state.quiz.title, file);
-        $('total-count').textContent = state.quiz.questions.length;
-        showPage('quiz');
-        renderQuestion();
-        renderAnswerCard();
-        updateProgress();
-        scrollToQuestionArea();
+        state.wrongBookDrillSnapshot = null;
+        state.currentQuizFile = file;
+        state.currentManifestEntry = entry || manifestEntryByIdFromFile(file);
+        beginQuizSession(quizTitleWithVariant(state.quiz.title, file));
       })
       .catch((err) => alert(err.message));
+  }
+
+  function manifestEntryByIdFromFile(file) {
+    return state.manifest?.quizzes?.find((q) => q.file === file) || null;
+  }
+
+  function beginQuizSession(titleText, options = {}) {
+    state.currentIndex = 0;
+    state.answers = {};
+    state.submitted = false;
+    state.aiCache = {};
+    state.aiScoreCache = {};
+    state.lastResult = null;
+    state.wrongDrillMode = false;
+    if (!options.preserveWrongBookDrill) {
+      state.wrongBookDrill = false;
+      state.wrongBookDrillSnapshot = null;
+    }
+    state.parentQuiz = null;
+    resetReviewUI();
+    $('quiz-title').textContent = titleText;
+    $('total-count').textContent = state.quiz.questions.length;
+    showPage('quiz');
+    renderQuestion();
+    renderAnswerCard();
+    updateProgress();
+    scrollToQuestionArea();
+  }
+
+  function getWrongBookFilters() {
+    return { ...state.wrongBookFilters };
+  }
+
+  function getFilteredWrongBookItems() {
+    if (!window.QuizWrongBook) return [];
+    return QuizWrongBook.filterItems(QuizWrongBook.getAll(), getWrongBookFilters());
+  }
+
+  function updateWrongBookBadge() {
+    const badge = $('wrong-book-badge');
+    if (!badge || !window.QuizWrongBook) return;
+    const total = QuizWrongBook.getAll().length;
+    badge.textContent = total > 99 ? '99+' : String(total);
+    badge.classList.toggle('hidden', total === 0);
+  }
+
+  function truncateText(text, max) {
+    const s = String(text || '').replace(/\s+/g, ' ').trim();
+    if (s.length <= max) return s;
+    return `${s.slice(0, max)}…`;
+  }
+
+  function formatWrongBookWhen(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '';
+    return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  }
+
+  function renderWrongBookPage() {
+    if (!window.QuizWrongBook) return;
+    const all = QuizWrongBook.getAll();
+    const filtered = getFilteredWrongBookItems();
+    const st = QuizWrongBook.stats(all);
+    const statsEl = $('wrong-book-stats');
+    if (statsEl) {
+      statsEl.innerHTML = [
+        { label: '全部错题', value: st.total, tone: 'text-primary' },
+        { label: '工业以太网', value: st.industrial, tone: 'text-blue-700' },
+        { label: '英语', value: st.english, tone: 'text-violet-700' },
+        { label: '近7天新增', value: st.weekNew, tone: 'text-amber-700' },
+      ]
+        .map(
+          (item) => `
+        <div class="bg-white rounded-lg border border-gray-200 px-3 py-3 text-center">
+          <p class="text-xs text-gray-500">${item.label}</p>
+          <p class="text-xl font-semibold ${item.tone} mt-1">${item.value}</p>
+        </div>`
+        )
+        .join('');
+    }
+
+    $('wrong-book-subtitle').textContent =
+      st.total > 0
+        ? `本机已保存 ${st.total} 道 · 当前筛选 ${filtered.length} 道`
+        : '本机持久保存 · 可随时移除';
+
+    document.querySelectorAll('[data-wb-category]').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.wbCategory === state.wrongBookFilters.category);
+    });
+
+    const quizSelect = $('wrong-book-quiz-filter');
+    if (quizSelect) {
+      const current = state.wrongBookFilters.quizId;
+      const sources = QuizWrongBook.listQuizSources(all);
+      quizSelect.innerHTML =
+        `<option value="all">全部来源</option>` +
+        sources
+          .map(
+            (s) =>
+              `<option value="${escapeAttr(s.quizId)}">${escapeHtml(s.quizTitle)} (${s.count})</option>`
+          )
+          .join('');
+      quizSelect.value = sources.some((s) => s.quizId === current) ? current : 'all';
+      if (quizSelect.value !== current) state.wrongBookFilters.quizId = quizSelect.value;
+    }
+
+    const typeSelect = $('wrong-book-type-filter');
+    if (typeSelect) {
+      const current = state.wrongBookFilters.type;
+      const types = QuizWrongBook.listTypes(all);
+      typeSelect.innerHTML =
+        `<option value="all">全部题型</option>` +
+        types.map((t) => `<option value="${escapeAttr(t)}">${escapeHtml(t)}</option>`).join('');
+      typeSelect.value = types.includes(current) || current === 'all' ? current : 'all';
+      if (typeSelect.value !== current) state.wrongBookFilters.type = typeSelect.value;
+    }
+
+    const searchInput = $('wrong-book-search');
+    if (searchInput && searchInput.value !== state.wrongBookFilters.query) {
+      searchInput.value = state.wrongBookFilters.query;
+    }
+
+    $('btn-wrong-book-practice').disabled = filtered.length === 0;
+    $('btn-wrong-book-clear-filtered').disabled = filtered.length === 0;
+    $('btn-wrong-book-clear-all').disabled = all.length === 0;
+
+    const list = $('wrong-book-list');
+    const empty = $('wrong-book-empty');
+    if (!list || !empty) return;
+
+    if (!filtered.length) {
+      list.innerHTML = '';
+      empty.classList.remove('hidden');
+      empty.textContent = all.length
+        ? '当前筛选条件下没有错题，请调整筛选或清空条件。'
+        : '暂无错题。完成测验并交卷后，客观错题会自动收录到这里。';
+      return;
+    }
+
+    empty.classList.add('hidden');
+    list.innerHTML = filtered
+      .map((item) => {
+        const q = item.question || {};
+        const title = truncateText(String(q.title || '').replace(/\n/g, ' '), 100);
+        const partialBadge = item.partial
+          ? '<span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 shrink-0">部分正确</span>'
+          : '';
+        const aiBusy = state.wrongBookAiLoadingId === item.id;
+        const aiHtml = item.aiExplainCache
+          ? `<div class="mt-3 ai-output text-sm text-gray-700 bg-violet-50 rounded-lg p-3 border border-violet-100">${window.QuizAI ? QuizAI.formatAiHtml(item.aiExplainCache) : escapeHtml(item.aiExplainCache)}</div>`
+          : '';
+        return `
+          <article class="bg-white rounded-lg shadow-sm border border-gray-200 p-4" data-wb-id="${escapeAttr(item.id)}">
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0 flex-1">
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">${escapeHtml(item.type || '题目')}</span>
+                  <span class="text-xs text-gray-400">${escapeHtml(item.quizTitle || '')}</span>
+                  ${partialBadge}
+                </div>
+                <p class="text-sm text-gray-800 leading-relaxed">${escapeHtml(title)}</p>
+                <p class="text-xs text-gray-500 mt-2">你的答案：${escapeHtml(item.lastUserAnswer || '—')} · 错 ${item.wrongCount || 1} 次 · ${escapeHtml(formatWrongBookWhen(item.lastWrongAt))}</p>
+              </div>
+              <button type="button" class="wrong-book-remove shrink-0 text-xs px-2.5 py-1.5 rounded border border-red-200 text-red-600 hover:bg-red-50" data-id="${escapeAttr(item.id)}">移除</button>
+            </div>
+            <div class="flex flex-wrap gap-2 mt-3">
+              <button type="button" class="wrong-book-ai text-xs px-3 py-1.5 rounded bg-violet-600 text-white hover:bg-violet-700 disabled:opacity-50" data-id="${escapeAttr(item.id)}" ${aiBusy ? 'disabled' : ''}>
+                ${aiBusy ? 'AI 分析中…' : item.aiExplainCache ? '重新 AI 错因分析' : 'AI 错因分析'}
+              </button>
+            </div>
+            ${aiHtml}
+          </article>`;
+      })
+      .join('');
+  }
+
+  function handleWrongBookListClick(e) {
+    const removeBtn = e.target.closest('.wrong-book-remove');
+    if (removeBtn?.dataset.id) {
+      removeWrongBookItem(removeBtn.dataset.id);
+      return;
+    }
+    const aiBtn = e.target.closest('.wrong-book-ai');
+    if (aiBtn?.dataset.id) runWrongBookAiExplain(aiBtn.dataset.id);
+  }
+
+  function openWrongBookPage() {
+    if (!window.QuizWrongBook) {
+      alert('错题集模块未加载');
+      return;
+    }
+    renderWrongBookPage();
+    showPage('wrongBook');
+  }
+
+  function removeWrongBookItem(id) {
+    if (!window.QuizWrongBook || !id) return;
+    if (!confirm('确定从错题集移除此题？')) return;
+    QuizWrongBook.remove(id);
+    updateWrongBookBadge();
+    renderWrongBookPage();
+  }
+
+  function clearFilteredWrongBook() {
+    if (!window.QuizWrongBook) return;
+    const filtered = getFilteredWrongBookItems();
+    if (!filtered.length) return;
+    if (!confirm(`确定移除当前筛选下的 ${filtered.length} 道错题？此操作不可恢复。`)) return;
+    QuizWrongBook.removeMany(filtered.map((it) => it.id));
+    updateWrongBookBadge();
+    renderWrongBookPage();
+  }
+
+  function clearAllWrongBook() {
+    if (!window.QuizWrongBook) return;
+    const total = QuizWrongBook.getAll().length;
+    if (!total) return;
+    if (!confirm(`确定清空全部 ${total} 道错题？此操作不可恢复。`)) return;
+    QuizWrongBook.removeAll();
+    updateWrongBookBadge();
+    renderWrongBookPage();
+  }
+
+  function startWrongBookPractice() {
+    if (!window.QuizWrongBook) return;
+    const filtered = getFilteredWrongBookItems();
+    if (!filtered.length) {
+      alert('当前筛选下没有可练习的错题');
+      return;
+    }
+    const quiz = QuizWrongBook.buildDrillQuiz(filtered);
+    state.quiz = quiz;
+    state.currentQuizFile = '__wrong_book__';
+    state.currentManifestEntry = { id: 'wrong_book', title: '错题集' };
+    state.wrongBookDrillSnapshot = {
+      quiz: JSON.parse(JSON.stringify(quiz)),
+      file: state.currentQuizFile,
+      entry: state.currentManifestEntry,
+    };
+    state.wrongBookDrill = true;
+    beginQuizSession(quiz.title, { preserveWrongBookDrill: true });
+  }
+
+  async function runWrongBookAiExplain(id) {
+    if (!window.QuizWrongBook || !window.QuizAI || state.wrongBookAiLoadingId) return;
+    const item = QuizWrongBook.getById(id);
+    if (!item) return;
+    if (!requireAiConfigured({ noRedirect: true })) return;
+
+    state.wrongBookAiLoadingId = id;
+    renderWrongBookPage();
+
+    const q = item.question;
+    const gradeResult = { correct: false, partial: item.partial, score: 0, maxScore: q.full_score || 0 };
+    try {
+      const result = await QuizAI.explainQuestion(q, item.lastUserAnswer, gradeResult);
+      const text = typeof result === 'string' ? result : result.text;
+      QuizWrongBook.setAiExplainCache(id, text || '');
+    } catch (err) {
+      alert(err.message || 'AI 分析失败');
+    } finally {
+      state.wrongBookAiLoadingId = null;
+      renderWrongBookPage();
+    }
+  }
+
+  function collectWrongBookItemsFromCurrentQuiz() {
+    if (!state.quiz || state.wrongDrillMode || state.wrongBookDrill) return [];
+    const items = [];
+    state.quiz.questions.forEach((q, i) => {
+      if (isEssayQuestion(q)) return;
+      if (!isAnswered(i)) return;
+      const result = gradeQuestion(q, state.answers[i]);
+      if (result.correct) return;
+      items.push({
+        q,
+        index: i,
+        userAnswer: state.answers[i],
+        partial: Boolean(result.partial),
+      });
+    });
+    return items;
+  }
+
+  function syncWrongBookAfterSubmit() {
+    if (!window.QuizWrongBook) return null;
+    if (state.wrongBookDrill) {
+      let removed = 0;
+      state.quiz.questions.forEach((q, i) => {
+        const id = q._wrongBookId;
+        if (!id) return;
+        const result = gradeQuestion(q, state.answers[i]);
+        if (result.correct) {
+          if (QuizWrongBook.remove(id)) removed += 1;
+        } else {
+          QuizWrongBook.recordWrongAgain(id, state.answers[i]);
+        }
+      });
+      state.wrongBookDrill = false;
+      updateWrongBookBadge();
+      return { drill: true, removed };
+    }
+    if (!state.currentQuizFile || state.currentQuizFile === '__wrong_book__') return null;
+    const items = collectWrongBookItemsFromCurrentQuiz();
+    if (!items.length) {
+      updateWrongBookBadge();
+      return null;
+    }
+    const summary = QuizWrongBook.upsertFromSession({
+      quiz: state.quiz,
+      quizFile: state.currentQuizFile,
+      entry: state.currentManifestEntry,
+      items,
+    });
+    updateWrongBookBadge();
+    return summary;
   }
 
   function typeLabel(type) {
@@ -1730,6 +2047,23 @@
       objectiveCount,
       rateText,
     };
+
+    let wbSync = null;
+    if (!(state.wrongDrillMode && state.parentQuiz)) {
+      wbSync = syncWrongBookAfterSubmit();
+      if (wbSync?.drill) {
+        rateText += ` · 错题集已移除 ${wbSync.removed} 道答对题目`;
+        resultSnapshot.rateText = rateText;
+      } else if (wbSync) {
+        const parts = [];
+        if (wbSync.added) parts.push(`新增 ${wbSync.added}`);
+        if (wbSync.updated) parts.push(`更新 ${wbSync.updated}`);
+        if (parts.length) {
+          rateText += ` · 错题集${parts.join('，')}`;
+          resultSnapshot.rateText = rateText;
+        }
+      }
+    }
 
     if (state.wrongDrillMode && state.parentQuiz) {
       const parent = state.parentQuiz;
@@ -2673,7 +3007,40 @@
       showPage('home');
     });
 
+    $('btn-open-wrong-book')?.addEventListener('click', openWrongBookPage);
+    $('btn-wrong-book-back')?.addEventListener('click', () => showPage('home'));
+    $('btn-wrong-book-practice')?.addEventListener('click', startWrongBookPractice);
+    $('btn-wrong-book-export')?.addEventListener('click', () => window.QuizWrongBook?.downloadExport());
+    $('btn-wrong-book-clear-filtered')?.addEventListener('click', clearFilteredWrongBook);
+    $('btn-wrong-book-clear-all')?.addEventListener('click', clearAllWrongBook);
+    document.querySelectorAll('[data-wb-category]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.wrongBookFilters.category = btn.dataset.wbCategory || 'all';
+        renderWrongBookPage();
+      });
+    });
+    $('wrong-book-quiz-filter')?.addEventListener('change', (e) => {
+      state.wrongBookFilters.quizId = e.target.value;
+      renderWrongBookPage();
+    });
+    $('wrong-book-type-filter')?.addEventListener('change', (e) => {
+      state.wrongBookFilters.type = e.target.value;
+      renderWrongBookPage();
+    });
+    $('wrong-book-search')?.addEventListener('input', (e) => {
+      state.wrongBookFilters.query = e.target.value;
+      renderWrongBookPage();
+    });
+    $('wrong-book-list')?.addEventListener('click', handleWrongBookListClick);
+
     $('btn-back').addEventListener('click', () => {
+      if (state.wrongBookDrill && !state.submitted) {
+        if (confirm('退出错题练习，返回首页？')) {
+          state.wrongBookDrill = false;
+          showPage('home');
+        }
+        return;
+      }
       if (state.wrongDrillMode && state.parentQuiz) {
         if (confirm('退出错词突击，返回成绩单？')) exitWrongDrill();
         return;
@@ -2715,6 +3082,15 @@
     $('review-filter-wrong-desktop')?.addEventListener('click', () => setReviewFilter(true));
 
     $('btn-retry').addEventListener('click', () => {
+      if (state.wrongBookDrillSnapshot) {
+        const snap = state.wrongBookDrillSnapshot;
+        state.quiz = JSON.parse(JSON.stringify(snap.quiz));
+        state.currentQuizFile = snap.file;
+        state.currentManifestEntry = snap.entry;
+        state.wrongBookDrill = true;
+        beginQuizSession(state.quiz.title, { preserveWrongBookDrill: true });
+        return;
+      }
       state.currentIndex = 0;
       state.answers = {};
       state.submitted = false;
@@ -2722,6 +3098,7 @@
       state.aiScoreCache = {};
       state.lastResult = null;
       state.wrongDrillMode = false;
+      state.wrongBookDrill = false;
       state.parentQuiz = null;
       resetReviewUI();
       $('wrong-drill-banner')?.classList.add('hidden');
@@ -2734,6 +3111,8 @@
 
     $('btn-home').addEventListener('click', () => {
       state.wrongDrillMode = false;
+      state.wrongBookDrill = false;
+      state.wrongBookDrillSnapshot = null;
       state.parentQuiz = null;
       showPage('home');
     });
@@ -2771,6 +3150,7 @@
     try {
       await loadManifest();
       renderQuizList();
+      updateWrongBookBadge();
     } catch (err) {
       $('load-error').textContent = err.message;
       $('load-error').classList.remove('hidden');

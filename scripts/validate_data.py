@@ -1,4 +1,4 @@
-"""校验 manifest 与题库 JSON 一致性."""
+"""校验 manifest 与 data/ 下各题库 JSON 字段、题数、iWords / 闪卡 / exam_pack 规则."""
 import json
 import re
 import sys

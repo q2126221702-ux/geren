@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
-  <meta name="app-version" content="202607060100">
+  <meta name="app-version" content="202607071200">
   <title>在线测验</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -216,6 +216,16 @@
       align-items: center;
       gap: 0.375rem;
     }
+    .wrong-book-chip {
+      border-color: #e5e7eb;
+      color: #6b7280;
+      background: #fff;
+    }
+    .wrong-book-chip.active {
+      border-color: #0080ff;
+      color: #0080ff;
+      background: #e6f3ff;
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen text-gray-800">
@@ -228,9 +238,15 @@
           <h1 class="text-xl font-semibold">在线测验</h1>
           <p class="text-sm text-blue-100 mt-1">工业以太网 · 英语 两类题库</p>
         </div>
-        <button id="btn-open-settings" class="shrink-0 text-sm px-3 py-1.5 rounded border border-white/40 hover:bg-white/10">
-          AI 设置
-        </button>
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="btn-open-wrong-book" type="button" class="relative text-sm px-3 py-1.5 rounded border border-white/40 hover:bg-white/10">
+            错题集
+            <span id="wrong-book-badge" class="hidden absolute -top-1.5 -right-1.5 min-w-[1.125rem] h-[1.125rem] px-1 rounded-full bg-amber-400 text-[10px] font-semibold text-amber-950 leading-[1.125rem] text-center">0</span>
+          </button>
+          <button id="btn-open-settings" class="text-sm px-3 py-1.5 rounded border border-white/40 hover:bg-white/10">
+            AI 设置
+          </button>
+        </div>
       </div>
     </header>
     <main class="max-w-3xl mx-auto px-4 py-6">
@@ -440,6 +456,59 @@
     </main>
   </div>
 
+  <!-- 错题集 -->
+  <div id="page-wrong-book" class="hidden min-h-screen">
+    <header class="bg-primary text-white shadow">
+      <div class="max-w-3xl mx-auto px-4 py-5 flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h1 class="text-xl font-semibold">错题集</h1>
+          <p id="wrong-book-subtitle" class="text-sm text-blue-100 mt-1">本机持久保存 · 可随时移除</p>
+        </div>
+        <button id="btn-wrong-book-back" type="button" class="shrink-0 text-sm px-3 py-1.5 rounded border border-white/40 hover:bg-white/10">
+          返回
+        </button>
+      </div>
+    </header>
+    <main class="max-w-3xl mx-auto px-4 py-6 space-y-4">
+      <div id="wrong-book-stats" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 space-y-3">
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" data-wb-category="all" class="wrong-book-chip active text-sm px-3 py-2 rounded-lg border">全部</button>
+          <button type="button" data-wb-category="industrial" class="wrong-book-chip text-sm px-3 py-2 rounded-lg border">工业以太网</button>
+          <button type="button" data-wb-category="english" class="wrong-book-chip text-sm px-3 py-2 rounded-lg border col-span-2 sm:col-span-1">英语</button>
+        </div>
+        <div class="flex flex-wrap gap-2 items-center">
+          <select id="wrong-book-quiz-filter" class="text-sm border border-gray-300 rounded-lg px-3 py-2 bg-white min-w-[10rem] flex-1">
+            <option value="all">全部来源</option>
+          </select>
+          <select id="wrong-book-type-filter" class="text-sm border border-gray-300 rounded-lg px-3 py-2 bg-white min-w-[7rem]">
+            <option value="all">全部题型</option>
+          </select>
+        </div>
+        <input id="wrong-book-search" type="search" placeholder="搜索题干或题库名称"
+          class="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" />
+        <div class="flex flex-wrap gap-2">
+          <button id="btn-wrong-book-practice" type="button" class="px-4 py-2 rounded bg-primary text-white text-sm hover:bg-primary-dark disabled:opacity-50" disabled>
+            开始练习
+          </button>
+          <button id="btn-wrong-book-export" type="button" class="px-4 py-2 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50">
+            导出 JSON
+          </button>
+          <button id="btn-wrong-book-clear-filtered" type="button" class="px-4 py-2 rounded border border-amber-300 bg-amber-50 text-amber-800 text-sm hover:bg-amber-100 disabled:opacity-50" disabled>
+            清空当前筛选
+          </button>
+          <button id="btn-wrong-book-clear-all" type="button" class="px-4 py-2 rounded border border-red-200 bg-white text-sm text-red-600 hover:bg-red-50 disabled:opacity-50" disabled>
+            清空全部
+          </button>
+        </div>
+      </div>
+      <div id="wrong-book-list" class="space-y-3"></div>
+      <p id="wrong-book-empty" class="hidden text-center text-sm text-gray-500 py-10 bg-white rounded-lg border border-dashed border-gray-200">
+        暂无错题。完成测验并交卷后，客观错题会自动收录到这里。
+      </p>
+    </main>
+  </div>
+
   <!-- 单词速记闪卡 -->
   <div id="page-flashcard" class="hidden min-h-screen flex flex-col bg-gray-100">
     <header class="bg-primary text-white shadow sticky top-0 z-20">
@@ -563,9 +632,11 @@
     </main>
   </div>
 
+  <script src="js/quiz-meta.js?v=202607071200"></script>
   <script src="js/ai-config.js?v=202607042400"></script>
   <script src="js/ai-config.local.js?v=202607042400" onerror=""></script>
   <script src="js/ai.js?v=202607052200"></script>
-  <script src="js/app.js?v=202607062100"></script>
+  <script src="js/wrong-book.js?v=202607071200"></script>
+  <script src="js/app.js?v=202607071200"></script>
 </body>
 </html>
