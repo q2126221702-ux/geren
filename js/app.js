@@ -33,6 +33,8 @@
     reviewSheetOpen: false,
     reviewFilterWrong: false,
     homeCategory: localStorage.getItem('quiz-home-category') || 'industrial',
+    /** 本次会话内已交卷的工业以太网测验 id（刷新后清空） */
+    sessionDoneIndustrial: new Set(),
     flashcard: {
       deck: null,
       order: [],
@@ -229,6 +231,7 @@
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+    if (name === 'home') renderQuizList();
     if (name === 'quiz') updateQuizMobileChrome();
     else {
       $('quiz-answer-dock')?.classList.add('hidden');
@@ -1156,7 +1159,42 @@
     renderQuizList();
   }
 
-  function renderQuizItem(q) {
+  function recordIndustrialSessionDone() {
+    const entry = state.currentManifestEntry;
+    if (!entry || getQuizCategory(entry) !== 'industrial') return;
+    if (state.wrongBookDrill || state.wrongDrillMode) return;
+    state.sessionDoneIndustrial.add(entry.id);
+  }
+
+  function shouldSplitIndustrialDone(industrial) {
+    const n = state.sessionDoneIndustrial.size;
+    return n > 0 && n < industrial.length;
+  }
+
+  function renderIndustrialHomeList(industrial) {
+    if (!shouldSplitIndustrialDone(industrial)) {
+      return `<div class="space-y-3">${industrial.map((q) => renderQuizItem(q)).join('')}</div>`;
+    }
+    const doneSet = state.sessionDoneIndustrial;
+    const todo = industrial.filter((q) => !doneSet.has(q.id));
+    const done = industrial.filter((q) => doneSet.has(q.id));
+    const section = (title, tone, dot, items, sessionDone) => `
+          <section class="mb-6">
+            <h2 class="home-section-title ${tone}">
+              <span class="inline-block w-1.5 h-1.5 rounded-full ${dot}"></span>
+              ${title}
+              <span class="text-gray-400 font-normal">（${items.length}）</span>
+            </h2>
+            <div class="space-y-3">${items.map((q) => renderQuizItem(q, { sessionDone })).join('')}</div>
+          </section>`;
+    return (
+      section('未做过', 'text-blue-700', 'bg-primary', todo, false) +
+      section('已做过', 'text-emerald-700', 'bg-emerald-500', done, true)
+    );
+  }
+
+  function renderQuizItem(q, options = {}) {
+    const sessionDone = Boolean(options.sessionDone);
     const isFc = q.kind === 'flashcard';
     const isExamPack = q.kind === 'exam_pack';
     const unitLabel = isFc ? `${q.count} 张` : `${q.count} 题`;
@@ -1164,10 +1202,14 @@
       ? '<span class="text-xs px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 shrink-0">速记</span>'
       : isExamPack
         ? '<span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 shrink-0">5套卷</span>'
-        : '';
+        : sessionDone
+          ? '<span class="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 shrink-0">本次已做</span>'
+          : '';
     const cardClass = isFc
       ? 'quiz-item w-full text-left rounded-lg shadow-sm px-5 py-4 hover:shadow transition border-2 border-violet-300 bg-gradient-to-r from-violet-50 to-white hover:border-violet-400'
-      : 'quiz-item w-full text-left bg-white rounded-lg shadow-sm border border-gray-200 px-5 py-4 hover:border-primary hover:shadow transition';
+      : sessionDone
+        ? 'quiz-item w-full text-left bg-white rounded-lg shadow-sm border border-emerald-200 px-5 py-4 hover:border-emerald-400 hover:shadow transition opacity-95'
+        : 'quiz-item w-full text-left bg-white rounded-lg shadow-sm border border-gray-200 px-5 py-4 hover:border-primary hover:shadow transition';
     let subtitle = '';
     if (isFc) {
       subtitle = '<p class="text-xs text-violet-600 mt-1">词性转换 · 仅≥2词性词族 · 翻转背诵</p>';
@@ -1249,7 +1291,7 @@
 
     let html = '';
     if (state.homeCategory === 'industrial') {
-      html = `<div class="space-y-3">${industrial.map(renderQuizItem).join('')}</div>`;
+      html = renderIndustrialHomeList(industrial);
     } else {
       html = renderEnglishQuizSections(english);
     }
@@ -2096,6 +2138,7 @@
     updateAnalysisButtonLabel();
     updateAnalysisModeBadge();
     renderWrongMemoryPanel();
+    recordIndustrialSessionDone();
     showPage('result');
   }
 
