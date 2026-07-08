@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
-"""深度检查 7 套期末卷 JSON 与组卷方案。"""
+"""深度检查 5 套期末卷 JSON 与组卷方案。"""
 import json
 from collections import Counter
 from pathlib import Path
 
 from build_industrial_exam_100 import load_all_questions, validate_cross_paper, validate_plan
-from build_exam_supplement_fg import apply_slot_patch
 
 DATA = Path(__file__).resolve().parent.parent / "data"
 SCRIPTS = Path(__file__).resolve().parent
 
 
 def main():
-    base_pool = load_all_questions()
-    pool = apply_slot_patch(base_pool)
+    pool = load_all_questions()
     plans_raw = json.loads((SCRIPTS / "exam_plans_fixed.json").read_text(encoding="utf-8"))
     plans = {
         label: [(x["source"], x["sort"], x["score"], x["chapter"]) for x in items]
@@ -21,7 +19,7 @@ def main():
     }
     issues: list[str] = []
 
-    for label in "ABCDEFG":
+    for label in "ABCDE":
         fp = DATA / f"工业网络技术期末考核_100分_{label}.json"
         exam = json.loads(fp.read_text(encoding="utf-8"))
         if len(exam["questions"]) != 44:
@@ -63,19 +61,11 @@ def main():
                 run = 1
 
     all_keys = [(x[0], x[1]) for p in plans.values() for x in p]
-    heavy = [k for k, v in Counter(all_keys).items() if v > 5]
+    heavy = [k for k, v in Counter(all_keys).items() if v > 3]
     if heavy:
-        issues.append(f"有 {len(heavy)} 道题在 7 套卷中出现超过 5 次")
+        issues.append(f"有 {len(heavy)} 道题在 5 套卷中出现超过 3 次")
 
-    used_keys = set(all_keys)
-    pool_keys = set(pool.keys())
-    missing = pool_keys - used_keys
-    if missing:
-        issues.append(f"题库有 {len(missing)} 题未被任何试卷使用")
-    elif len(used_keys) == len(pool_keys):
-        print(f"✓ 全覆盖: {len(used_keys)}/{len(pool_keys)} 题")
-
-    cross = validate_cross_paper({k: plans[k] for k in "ABCDE"})
+    cross = validate_cross_paper(plans)
 
     print("=== 深度检查 ===")
     if issues:
@@ -88,32 +78,19 @@ def main():
     for label in "ABCDE":
         iss = validate_plan(label, plans[label], pool)
         print(f"试卷{label}:", "通过" if not iss else iss)
-    for label in "FG":
-        iss = validate_plan(label, plans[label], pool, supplement=True)
-        print(f"试卷{label}（补充）:", "通过" if not iss else iss)
 
-    print("\n=== 跨卷重复率（A~E 主卷）===")
+    print("\n=== 跨卷重复率 ===")
     for a, b in __import__("itertools").combinations("ABCDE", 2):
         sa = {(x[0], x[1]) for x in plans[a]}
         sb = {(x[0], x[1]) for x in plans[b]}
         ov = len(sa & sb)
         flag = "✓" if 0.20 <= ov / 44 <= 0.30 else "△"
         print(f"  {flag} {a}-{b}: {ov}题 ({ov/44:.1%})")
-
-    print("\n=== 补充卷 F/G ===")
-    for label in "FG":
-        iss = validate_plan(label, plans[label], pool, supplement=True)
-        print(f"试卷{label}:", "通过" if not iss else iss)
-    sae = {(x[0], x[1]) for p in "ABCDE" for x in plans[p]}
-    for label in "FG":
-        sf = {(x[0], x[1]) for x in plans[label]}
-        only_fg = sf - sae
-        print(f"  {label} 相对 A~E 新增题: {len(only_fg)}")
     if cross:
         print("跨卷提示:", "; ".join(cross))
 
     print("\n=== 问答题一览 ===")
-    for label in "ABCDEFG":
+    for label in "ABCDE":
         titles = [
             pool[(s, n)]["title"][:50]
             for s, n, _, _ in plans[label]

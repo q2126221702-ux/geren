@@ -41,7 +41,6 @@ python scripts/import_iwords.py
 
 ```bat
 python scripts/build_industrial_exam_100.py
-python scripts/build_exam_supplement_fg.py
 python scripts/deep_check_exams.py
 python scripts/audit_exam_papers.py
 ```
