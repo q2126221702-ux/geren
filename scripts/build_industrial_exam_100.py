@@ -193,7 +193,7 @@ def solve_paper(
     return None
 
 
-def validate_plan(label: str, plan: list, pool: dict) -> list[str]:
+def validate_plan(label: str, plan: list, pool: dict, *, supplement: bool = False) -> list[str]:
     issues: list[str] = []
     if len(plan) != 44:
         return [f"题量 {len(plan)} != 44"]
@@ -212,9 +212,10 @@ def validate_plan(label: str, plan: list, pool: dict) -> list[str]:
             issues.append(f"{qtype} 数量 {type_counts[qtype]} != {expected}")
 
     diff_counts = Counter(pool[(s, n)]["difficulty"] for s, n, _, _ in plan)
-    for d, q in DIFF_QUOTA.items():
-        if diff_counts[d] != q:
-            issues.append(f"难度「{d}」{diff_counts[d]} 题 != 目标 {q}")
+    if not supplement:
+        for d, q in DIFF_QUOTA.items():
+            if diff_counts[d] != q:
+                issues.append(f"难度「{d}」{diff_counts[d]} 题 != 目标 {q}")
 
     obj_ch = Counter(c for s, n, _, c in plan if pool[(s, n)]["type"] != "问答题")
     for ch in CHAPTERS:
@@ -238,7 +239,7 @@ def validate_plan(label: str, plan: list, pool: dict) -> list[str]:
 
     diff_val = {EASY: 1, MEDIUM: 2, HARD: 3}
     diffs = [diff_val[pool[(s, n)]["difficulty"]] for s, n, _, _ in plan]
-    if sum(1 for i in range(1, len(diffs)) if diffs[i] < diffs[i - 1]) > 6:
+    if not supplement and sum(1 for i in range(1, len(diffs)) if diffs[i] < diffs[i - 1]) > 6:
         issues.append("难度递进不足（递减过多）")
 
     for s, n, _, _ in plan:

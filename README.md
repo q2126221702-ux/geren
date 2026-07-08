@@ -16,7 +16,7 @@ start.bat
 |------|------|
 | 首页分类 | **工业以太网** / **英语** 两类入口，记住上次选择 |
 | 工业题库 | Profinet、OPC、MODBUS、串口、综合考核 |
-| 期末卷 | 工业网络技术期末考核（100 分）· 5 套 A~E + **随机抽卷**选题页 |
+| 期末卷 | 工业网络技术期末考核（100 分）· 7 套 A~G（含 F/G 补充全覆盖卷）+ **随机抽卷** |
 | 英语题库 | B1U4~U8 翻译、语法选择、iWords 填空、单词速记闪卡 |
 | 错题集 | 交卷自动收录客观错题，本机 `localStorage` 持久化；筛选、练习、AI 错因、导出、单题/批量移除 |
 | 错词突击 | iWords 交卷后「换形式再练错词」（仅当次会话） |
@@ -27,7 +27,7 @@ start.bat
 
 当前 manifest 共 **18** 项：
 
-- **工业（6）**：Profinet / OPC / MODBUS / 串口 / 综合考核 / 期末 100 分（exam_pack，variants A~E）
+- **工业（6）**：Profinet / OPC / MODBUS / 串口 / 综合考核 / 期末 100 分（exam_pack，variants A~G）
 - **英语（12）**：5 单元翻译、语法 50 题、5 单元 iWords、B1U4~U8 单词速记
 
 从 `welearn-output/` 重新生成 WE Learn 题库：
@@ -41,6 +41,7 @@ python scripts/import_iwords.py
 
 ```bat
 python scripts/build_industrial_exam_100.py
+python scripts/build_exam_supplement_fg.py
 python scripts/deep_check_exams.py
 python scripts/audit_exam_papers.py
 ```

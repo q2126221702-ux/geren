@@ -1125,7 +1125,7 @@
   }
 
   function examVariantFromFile(file) {
-    const m = String(file || '').match(/_([A-E])\.json$/i);
+    const m = String(file || '').match(/_([A-G])\.json$/i);
     return m ? m[1].toUpperCase() : null;
   }
 
@@ -1269,7 +1269,7 @@
     const badge = isFc
       ? '<span class="text-xs px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 shrink-0">速记</span>'
       : isExamPack
-        ? '<span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 shrink-0">5套卷</span>'
+        ? `<span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 shrink-0">${escapeHtml(String((q.variants?.length || 7)))}套卷</span>`
         : sessionDone
           ? '<span class="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 shrink-0">本次已做</span>'
           : '';
@@ -1282,7 +1282,7 @@
     if (isFc) {
       subtitle = '<p class="text-xs text-violet-600 mt-1">词性转换 · 仅≥2词性词族 · 翻转背诵</p>';
     } else if (isExamPack) {
-      subtitle = '<p class="text-xs text-amber-700 mt-1">共 5 套等价试卷 · 进入后选择试卷或随机抽卷</p>';
+      subtitle = '<p class="text-xs text-amber-700 mt-1">共 7 套等价试卷 · A~G · 进入后选择或随机抽卷</p>';
     }
     return `
       <button
