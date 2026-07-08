@@ -527,7 +527,7 @@
       "type": "问答题",
       "title": "现场同时混用Modbus、Profinet、OPC协议，层级如何划分？",
       "options": [],
-      "correct_answer": "底层现场总线层：Modbus、Profinet对接PLC、仪表执行设备；中层交互层：以太网协议互通；上层监控层：OPC协议对接组态、工控服务器、上位机。 第五部分 程序设计题 编程题干+考点要求+核心代码框架，可直接编译调试",
+      "correct_answer": "底层现场总线层：Modbus、Profinet对接PLC、仪表执行设备；中层交互层：以太网协议互通；上层监控层：OPC协议对接组态、工控服务器、上位机。",
       "full_score": 5.0
     },
     {
