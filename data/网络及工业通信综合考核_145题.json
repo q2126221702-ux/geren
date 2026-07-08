@@ -1035,11 +1035,11 @@
     {
       "sort": 95,
       "type": "填空题(客观)",
-      "title": "Profinet中文全称________工业以太网。",
+      "title": "Profinet中文全称________。",
       "options": [
         ""
       ],
-      "correct_answer": "工业以太网",
+      "correct_answer": "过程现场网络工业以太网",
       "full_score": 2.0
     },
     {
