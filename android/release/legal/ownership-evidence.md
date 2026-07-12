@@ -6,9 +6,9 @@
 
 - 名称：题域引擎（Tiyu Engine）
 - 包名：`com.xuzheng.tiyuengine`
-- 当前版本：`1.0.4`，versionCode 5
+- 当前版本：`1.0.6`，versionCode 7
 - 发布账户：GitHub `q2126221702-ux`
-- 正式 Release：`https://github.com/q2126221702-ux/geren/releases/tag/v1.0.2`
+- 正式 Release：`https://github.com/q2126221702-ux/geren/releases/tag/v1.0.6`
 
 ## 技术证据
 

@@ -1,8 +1,13 @@
 package com.xuzheng.tiyuengine.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import com.xuzheng.tiyuengine.data.AppUpdater
+import com.xuzheng.tiyuengine.data.NetworkMonitor
+import com.xuzheng.tiyuengine.data.UpdateInfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -12,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -105,17 +109,12 @@ import com.xuzheng.tiyuengine.data.LearningRecord
 import com.xuzheng.tiyuengine.data.QuestionAttempt
 import com.xuzheng.tiyuengine.data.LearningStats
 import com.xuzheng.tiyuengine.data.LearningStore
-import com.xuzheng.tiyuengine.data.AppUpdater
-import com.xuzheng.tiyuengine.data.UpdateInfo
-import com.xuzheng.tiyuengine.data.BackupPreview
-import com.xuzheng.tiyuengine.data.LearningBackup
 import com.xuzheng.tiyuengine.data.FavoriteStore
 import com.xuzheng.tiyuengine.data.AiSettingsStore
 import com.xuzheng.tiyuengine.data.AiClient
 import com.xuzheng.tiyuengine.data.AiMode
 import com.xuzheng.tiyuengine.data.AiQuestionResult
 import com.xuzheng.tiyuengine.R
-import com.xuzheng.tiyuengine.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -123,9 +122,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-private enum class Screen { HOME, QUIZZES, ANSWER, RESULT, WRONG_BOOK, FAVORITES, PROFILE, AI_SETTINGS }
-
-private const val PRIVACY_POLICY_URL = "https://q2126221702-ux.github.io/geren/privacy-policy.html"
+internal enum class Screen {
+    HOME, QUIZZES, ANSWER, RESULT, WRONG_BOOK, FAVORITES, PROFILE,
+    SETTINGS, BACKUP, UPDATE, ABOUT, AI_SETTINGS, LEARNING_REPORT,
+}
 
 internal fun shouldAutoAdvance(
     questionType: QuestionType,
@@ -140,12 +140,37 @@ internal fun shouldAutoAdvance(
 @Composable
 fun QuizApp() {
     val context = LocalContext.current
+    ProvideAppColors {
+        val colors = appColors()
+        val snackbarHostState = remember { SnackbarHostState() }
+        val messenger = rememberAppMessenger(snackbarHostState)
+        CompositionLocalProvider(LocalAppMessenger provides messenger) {
+            QuizAppContent(snackbarHostState, colors)
+        }
+    }
+}
+
+@Composable
+private fun QuizAppContent(snackbarHostState: SnackbarHostState, colors: AppColors) {
+    val context = LocalContext.current
+    val messenger = LocalAppMessenger.current
+    var isOnline by remember { mutableStateOf(NetworkMonitor.isOnline(context)) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            isOnline = NetworkMonitor.isOnline(context)
+            kotlinx.coroutines.delay(3_000)
+        }
+    }
     val store = remember(context) { WrongBookStore(context) }
     val learningStore = remember(context) { LearningStore(context) }
     val favoriteStore = remember(context) { FavoriteStore(context) }
     val quizRepository = remember(context) { QuizRepository(context) }
     var quizzes by remember { mutableStateOf(quizRepository.loadQuizzes()) }
     var screen by remember { mutableStateOf(Screen.HOME) }
+    var quizOrigin by remember { mutableStateOf(Screen.HOME) }
+    var showAnswerExitConfirm by remember { mutableStateOf(false) }
+    var pendingExamVariants by remember { mutableStateOf<List<Quiz>?>(null) }
+    var openUpdateOnLaunch by remember { mutableStateOf(false) }
     var activeQuiz by remember { mutableStateOf<Quiz?>(null) }
     var result by remember { mutableIntStateOf(0) }
     var lastAnswers by remember { mutableStateOf(AnswerBundle()) }
@@ -158,25 +183,87 @@ fun QuizApp() {
     val recommendedQuiz = if (dueQuestions.isNotEmpty()) Quiz("wrong_review", "今日错题复练", "到期错题优先巩固", dueQuestions)
         else quizzes.find { it.id == LearningStats.recommendedQuizId(learningRecords, quizzes) } ?: quizzes.firstOrNull()
 
-    val goHome = { screen = Screen.HOME }
-    BackHandler(enabled = screen != Screen.HOME) { screen = if (screen == Screen.AI_SETTINGS) Screen.PROFILE else Screen.HOME }
+    fun openQuiz(quiz: Quiz, from: Screen) {
+        activeQuiz = quiz
+        quizOrigin = from
+        screen = Screen.ANSWER
+    }
 
-    when (screen) {
+    fun leaveQuizFlow() {
+        screen = quizOrigin
+        activeQuiz = null
+    }
+
+    val goHome = { screen = Screen.HOME }
+    BackHandler(enabled = screen != Screen.HOME || showAnswerExitConfirm) {
+        when {
+            showAnswerExitConfirm -> showAnswerExitConfirm = false
+            screen == Screen.ANSWER -> showAnswerExitConfirm = true
+            screen == Screen.RESULT -> leaveQuizFlow()
+            screen == Screen.AI_SETTINGS || screen == Screen.BACKUP || screen == Screen.UPDATE || screen == Screen.ABOUT -> screen = Screen.SETTINGS
+            screen == Screen.SETTINGS || screen == Screen.LEARNING_REPORT -> screen = Screen.PROFILE
+            screen == Screen.FAVORITES -> screen = Screen.HOME
+            else -> screen = Screen.HOME
+        }
+    }
+
+    if (showAnswerExitConfirm) {
+        AlertDialog(
+            onDismissRequest = { showAnswerExitConfirm = false },
+            title = { Text("确定退出练习？") },
+            text = { Text("退出后本次作答进度不会保存。") },
+            confirmButton = { Button(onClick = { showAnswerExitConfirm = false; leaveQuizFlow() }) { Text("退出") } },
+            dismissButton = { TextButton(onClick = { showAnswerExitConfirm = false }) { Text("继续答题") } },
+        )
+    }
+
+    pendingExamVariants?.let { variants ->
+        ExamPickerSheet(
+            variants = variants,
+            onDismiss = { pendingExamVariants = null },
+            onSelect = { quiz ->
+                pendingExamVariants = null
+                openQuiz(quiz, Screen.QUIZZES)
+            },
+        )
+    }
+
+    LaunchedEffect(openUpdateOnLaunch) {
+        if (openUpdateOnLaunch) {
+            openUpdateOnLaunch = false
+            screen = Screen.UPDATE
+        }
+    }
+
+    QuizAppShell(screen = screen, isOnline = isOnline, snackbarHostState = snackbarHostState, onOpenUpdate = { openUpdateOnLaunch = true }) { targetScreen ->
+    when (targetScreen) {
         Screen.HOME -> HomeScreen(
             wrongCount = wrongItems.count { it.status != ReviewStatus.MASTERED && it.nextReviewAt <= System.currentTimeMillis() },
             learningRecords = learningRecords,
             quizzes = quizzes,
             recommendedQuiz = recommendedQuiz,
-            onStart = { recommendedQuiz?.let { activeQuiz = it; screen = Screen.ANSWER } },
+            onStart = { recommendedQuiz?.let { openQuiz(it, Screen.HOME) } },
             onLibrary = { screen = Screen.QUIZZES },
             onWrongBook = { screen = Screen.WRONG_BOOK },
             onFavorites = { screen = Screen.FAVORITES },
             onProfile = { screen = Screen.PROFILE },
-            onQuizSelect = { activeQuiz = it; screen = Screen.ANSWER },
+            onQuizSelect = { openQuiz(it, Screen.HOME) },
         )
-        Screen.QUIZZES -> QuizListScreen(quizzes, onHome = goHome, onWrongBook = { screen = Screen.WRONG_BOOK }, onProfile = { screen = Screen.PROFILE }, onSelect = { activeQuiz = it; screen = Screen.ANSWER })
+        Screen.QUIZZES -> QuizListScreen(
+            quizzes = quizzes,
+            onHome = goHome,
+            onWrongBook = { screen = Screen.WRONG_BOOK },
+            onProfile = { screen = Screen.PROFILE },
+            onSelect = { openQuiz(it, Screen.QUIZZES) },
+            onOpenExamPack = { pendingExamVariants = it },
+        )
         Screen.ANSWER -> activeQuiz?.let { quiz ->
-            AnswerScreen(quiz = quiz, favoriteIds = favoriteIds, onToggleFavorite = { questionId -> favoriteIds = favoriteStore.toggle(questionId) }, onBack = goHome) { answers, durationSeconds ->
+            AnswerScreen(
+                quiz = quiz,
+                favoriteIds = favoriteIds,
+                onToggleFavorite = { questionId -> favoriteIds = favoriteStore.toggle(questionId) },
+                onBack = { showAnswerExitConfirm = true },
+            ) { answers, durationSeconds ->
                 result = QuizEngine.score(quiz.questions, answers)
                 lastAnswers = answers
                 lastDurationSeconds = durationSeconds
@@ -197,7 +284,18 @@ fun QuizApp() {
             }
         }
         Screen.RESULT -> activeQuiz?.let { quiz ->
-            ResultScreen(quiz, result, lastAnswers, lastDurationSeconds, onHome = goHome, onRetry = { screen = Screen.ANSWER }, onWrongBook = { screen = Screen.WRONG_BOOK })
+            ResultScreen(
+                quiz = quiz,
+                score = result,
+                answers = lastAnswers,
+                durationSeconds = lastDurationSeconds,
+                favoriteIds = favoriteIds,
+                onToggleFavorite = { questionId -> favoriteIds = favoriteStore.toggle(questionId) },
+                isOnline = isOnline,
+                onHome = { leaveQuizFlow() },
+                onRetry = { screen = Screen.ANSWER },
+                onWrongBook = { leaveQuizFlow(); screen = Screen.WRONG_BOOK },
+            )
         }
         Screen.WRONG_BOOK -> WrongBookScreen(
             quizzes = quizzes,
@@ -206,8 +304,7 @@ fun QuizApp() {
             onLibrary = { screen = Screen.QUIZZES },
             onProfile = { screen = Screen.PROFILE },
             onPractice = { questions ->
-                activeQuiz = Quiz("wrong_review", "错题复练", "连续答对 3 次后归档", questions)
-                screen = Screen.ANSWER
+                openQuiz(Quiz("wrong_review", "错题复练", "连续答对 3 次后归档", questions), Screen.WRONG_BOOK)
             },
         )
         Screen.FAVORITES -> FavoritesScreen(
@@ -219,42 +316,65 @@ fun QuizApp() {
             onWrongBook = { screen = Screen.WRONG_BOOK },
             onProfile = { screen = Screen.PROFILE },
             onPractice = { questions ->
-                activeQuiz = Quiz("favorites_review", "收藏练习", "集中巩固收藏题目", questions)
-                screen = Screen.ANSWER
+                openQuiz(Quiz("favorites_review", "收藏练习", "集中巩固收藏题目", questions), Screen.FAVORITES)
             },
         )
         Screen.PROFILE -> ProfileScreen(
             records = learningRecords,
-            quizzes = quizzes,
             wrongItems = wrongItems,
             quizCount = quizzes.size,
             questionCount = quizzes.sumOf { it.questions.size },
             lastSyncedAt = quizRepository.lastSyncedAt(),
+            isOnline = isOnline,
             onSync = {
+                if (!NetworkMonitor.isOnline(context)) error("当前无网络，请检查连接后重试")
                 val result = withContext(Dispatchers.IO) { quizRepository.syncFromGithub() }
                 quizzes = quizRepository.loadQuizzes()
                 result
             },
+            onSyncComplete = { messenger.show("同步完成：${it.quizCount} 套 · ${it.questionCount} 题") },
+            onSyncFailed = { messenger.show(it) },
+            onHome = goHome,
+            onLibrary = { screen = Screen.QUIZZES },
+            onWrongBook = { screen = Screen.WRONG_BOOK },
+            onSettings = { screen = Screen.SETTINGS },
+            onLearningReport = { screen = Screen.LEARNING_REPORT },
+        )
+        Screen.SETTINGS -> SettingsScreen(
+            onBack = { screen = Screen.PROFILE },
+            onBackup = { screen = Screen.BACKUP },
+            onAiSettings = { screen = Screen.AI_SETTINGS },
+            onUpdate = { screen = Screen.UPDATE },
+            onAbout = { screen = Screen.ABOUT },
+        )
+        Screen.BACKUP -> BackupSettingsScreen(
+            onBack = { screen = Screen.SETTINGS },
             onDataImported = {
                 learningRecords = learningStore.load()
                 wrongItems = store.loadItems()
                 favoriteIds = favoriteStore.loadIds()
             },
-            onHome = goHome,
-            onLibrary = { screen = Screen.QUIZZES },
-            onWrongBook = { screen = Screen.WRONG_BOOK },
-            onAiSettings = { screen = Screen.AI_SETTINGS },
         )
-        Screen.AI_SETTINGS -> AiSettingsScreen(onBack = { screen = Screen.PROFILE })
+        Screen.UPDATE -> UpdateSettingsScreen(onBack = { screen = Screen.SETTINGS })
+        Screen.ABOUT -> AboutScreen(onBack = { screen = Screen.SETTINGS })
+        Screen.AI_SETTINGS -> AiSettingsScreen(onBack = { screen = Screen.SETTINGS })
+        Screen.LEARNING_REPORT -> LearningReportScreen(
+            records = learningRecords,
+            quizzes = quizzes,
+            wrongItems = wrongItems,
+            onBack = { screen = Screen.PROFILE },
+        )
+    }
     }
 }
 
 @Composable
 private fun HomeScreen(wrongCount: Int, learningRecords: List<LearningRecord>, quizzes: List<Quiz>, recommendedQuiz: Quiz?, onStart: () -> Unit, onLibrary: () -> Unit, onWrongBook: () -> Unit, onFavorites: () -> Unit, onProfile: () -> Unit, onQuizSelect: (Quiz) -> Unit) {
     var selectedTab by remember { mutableStateOf("最近") }
+    val regularQuizzes = remember(quizzes) { quizzes.filter { !it.id.startsWith("exam100_") } }
     val visibleQuizzes = when (selectedTab) {
-        "专项" -> quizzes.drop(1).take(4)
-        else -> quizzes.take(5)
+        "专项" -> regularQuizzes.drop(1).take(4)
+        else -> regularQuizzes.take(5)
     }
     Scaffold(
         containerColor = Color(0xFFF6F8FB),
@@ -342,33 +462,58 @@ private fun Metric(label: String, value: String, modifier: Modifier = Modifier) 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun QuizListScreen(quizzes: List<Quiz>, onHome: () -> Unit, onWrongBook: () -> Unit, onProfile: () -> Unit, onSelect: (Quiz) -> Unit) {
+private fun QuizListScreen(
+    quizzes: List<Quiz>,
+    onHome: () -> Unit,
+    onWrongBook: () -> Unit,
+    onProfile: () -> Unit,
+    onSelect: (Quiz) -> Unit,
+    onOpenExamPack: (List<Quiz>) -> Unit,
+) {
+    val colors = appColors()
     var query by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("全部") }
-    val filtered = quizzes.filter { quiz ->
-        (category == "全部" || quiz.subtitle.startsWith(category)) &&
-            (query.isBlank() || quiz.title.contains(query, true) || quiz.subtitle.contains(query, true))
+    val entries = remember(quizzes) { buildLibraryEntries(quizzes) }
+    val filtered = entries.filter { entry ->
+        (category == "全部" || entry.subtitle.startsWith(category)) &&
+            (query.isBlank() || entry.title.contains(query, true) || entry.subtitle.contains(query, true))
     }
-    Scaffold(containerColor = Color(0xFFF6F8FB), topBar = { TopAppBar(title = { Column { Text("题库", fontWeight = FontWeight.Bold, fontSize = 25.sp); Text("按目标选择练习", fontSize = 13.sp, color = Color(0xFF64748B)) } }) }, bottomBar = { AppBottomBar(Screen.QUIZZES, onHome, {}, onWrongBook, onProfile) }) { padding ->
+    Scaffold(containerColor = colors.surfaceMuted, topBar = { TopAppBar(title = { Column { Text("题库", fontWeight = FontWeight.Bold, fontSize = 25.sp); Text("按目标选择练习", fontSize = 13.sp, color = colors.textSecondary) } }) }, bottomBar = { AppBottomBar(Screen.QUIZZES, onHome, {}, onWrongBook, onProfile) }) { padding ->
         LazyColumn(Modifier.padding(padding), verticalArrangement = Arrangement.spacedBy(0.dp)) {
-            item { Column(Modifier.background(Color.White).padding(horizontal = 18.dp, vertical = 14.dp)) { OutlinedTextField(value = query, onValueChange = { query = it }, modifier = Modifier.fillMaxWidth(), leadingIcon = { Icon(Icons.Default.Search, null) }, placeholder = { Text("搜索题库、协议或知识点") }, singleLine = true, shape = RoundedCornerShape(14.dp)); Row(Modifier.padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) { listOf("全部", "工业网络", "英语").forEach { item -> Surface(onClick = { category = item }, color = if (category == item) Color(0xFF0A5FC2) else Color(0xFFEEF2F7), shape = RoundedCornerShape(10.dp)) { Text(item, color = if (category == item) Color.White else Color(0xFF526174), modifier = Modifier.padding(horizontal = 15.dp, vertical = 8.dp), fontWeight = if (category == item) FontWeight.Bold else FontWeight.Normal) } } } } }
-            item { Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 17.dp), horizontalArrangement = Arrangement.SpaceBetween) { Text("${filtered.size} 套练习", fontWeight = FontWeight.Bold, fontSize = 18.sp); Text("离线可用", color = Color(0xFF138A5B), fontSize = 13.sp) } }
-            if (filtered.isEmpty()) item { Column(Modifier.fillMaxWidth().padding(40.dp), horizontalAlignment = Alignment.CenterHorizontally) { Icon(Icons.Default.Search, null, tint = Color(0xFF94A3B8), modifier = Modifier.size(42.dp)); Text("没有找到相关题库", fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp)); TextButton(onClick = { query = ""; category = "全部" }) { Text("清除筛选") } } }
-            items(filtered) { quiz -> LibraryRow(quiz, onClick = { onSelect(quiz) }) }
+            item { Column(Modifier.background(colors.surface).padding(horizontal = 18.dp, vertical = 14.dp)) { OutlinedTextField(value = query, onValueChange = { query = it }, modifier = Modifier.fillMaxWidth(), leadingIcon = { Icon(Icons.Default.Search, null) }, placeholder = { Text("搜索题库、协议或知识点") }, singleLine = true, shape = RoundedCornerShape(14.dp)); Row(Modifier.padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) { listOf("全部", "工业网络", "英语").forEach { item -> Surface(onClick = { category = item }, color = if (category == item) colors.primary else colors.primarySoft, shape = RoundedCornerShape(10.dp)) { Text(item, color = if (category == item) colors.onPrimary else colors.textSecondary, modifier = Modifier.padding(horizontal = 15.dp, vertical = 8.dp), fontWeight = if (category == item) FontWeight.Bold else FontWeight.Normal) } } } } }
+            item { Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 17.dp), horizontalArrangement = Arrangement.SpaceBetween) { Text("${filtered.size} 套练习", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = colors.textPrimary); Text("离线可用", color = colors.success, fontSize = 13.sp) } }
+            if (filtered.isEmpty()) item { Column(Modifier.fillMaxWidth().padding(40.dp), horizontalAlignment = Alignment.CenterHorizontally) { Icon(Icons.Default.Search, null, tint = colors.textSecondary, modifier = Modifier.size(42.dp)); Text("没有找到相关题库", fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 12.dp), color = colors.textPrimary); TextButton(onClick = { query = ""; category = "全部" }) { Text("清除筛选") } } }
+            items(filtered, key = { it.id }) { entry ->
+                LibraryEntryRow(entry) {
+                    if (entry.examVariants != null) onOpenExamPack(entry.examVariants) else entry.quiz?.let(onSelect)
+                }
+            }
             item { Spacer(Modifier.height(18.dp)) }
         }
     }
 }
 
 @Composable
-private fun LibraryRow(quiz: Quiz, onClick: () -> Unit) {
-    val industrial = quiz.id != "english_basic"
-    Row(Modifier.fillMaxWidth().background(Color.White).clickable(onClick = onClick).padding(horizontal = 18.dp, vertical = 17.dp), verticalAlignment = Alignment.CenterVertically) {
-        Box(Modifier.size(50.dp).background(if (industrial) Color(0xFFE4F5F2) else Color(0xFFEEF0FF), RoundedCornerShape(14.dp)), contentAlignment = Alignment.Center) { Icon(if (industrial) Icons.Default.Hub else Icons.Default.ChatBubbleOutline, null, tint = if (industrial) Color(0xFF138A5B) else Color(0xFF6550C9)) }
-        Column(Modifier.padding(start = 14.dp).weight(1f)) { Row(verticalAlignment = Alignment.CenterVertically) { Text(quiz.title, fontWeight = FontWeight.Bold, fontSize = 17.sp); if (quiz.id == "mixed_demo") Surface(color = Color(0xFFE8F2FF), shape = RoundedCornerShape(5.dp), modifier = Modifier.padding(start = 7.dp)) { Text("综合", color = Color(0xFF0759BD), fontSize = 11.sp, modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)) } }; Text(quiz.subtitle, color = Color(0xFF64748B), fontSize = 13.sp, modifier = Modifier.padding(top = 3.dp)); Text("${quiz.questions.size} 题 · 约 5 分钟", color = Color(0xFF0A5FC2), fontSize = 12.sp, modifier = Modifier.padding(top = 7.dp)) }
-        Icon(Icons.Default.ChevronRight, null, tint = Color(0xFF64748B))
+private fun LibraryEntryRow(entry: LibraryEntry, onClick: () -> Unit) {
+    val colors = appColors()
+    val industrial = entry.subtitle.startsWith("工业网络")
+    Row(Modifier.fillMaxWidth().background(colors.surface).clickable(onClick = onClick).padding(horizontal = 18.dp, vertical = 17.dp), verticalAlignment = Alignment.CenterVertically) {
+        Box(Modifier.size(50.dp).background(if (industrial) Color(0xFFE4F5F2) else Color(0xFFEEF0FF), RoundedCornerShape(14.dp)), contentAlignment = Alignment.Center) {
+            Icon(if (entry.examVariants != null) Icons.Default.Description else if (industrial) Icons.Default.Hub else Icons.Default.ChatBubbleOutline, null, tint = if (entry.examVariants != null) colors.primary else if (industrial) colors.success else Color(0xFF6550C9))
+        }
+        Column(Modifier.padding(start = 14.dp).weight(1f)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(entry.title, fontWeight = FontWeight.Bold, fontSize = 17.sp, color = colors.textPrimary)
+                if (entry.examVariants != null) Surface(color = colors.primarySoft, shape = RoundedCornerShape(5.dp), modifier = Modifier.padding(start = 7.dp)) {
+                    Text("${entry.examVariants.size} 套", color = colors.primary, fontSize = 11.sp, modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp))
+                }
+            }
+            Text(entry.subtitle, color = colors.textSecondary, fontSize = 13.sp, modifier = Modifier.padding(top = 3.dp))
+            Text("${entry.questionCount} 题 · 约 5 分钟", color = colors.primary, fontSize = 12.sp, modifier = Modifier.padding(top = 7.dp))
+        }
+        Icon(Icons.Default.ChevronRight, null, tint = colors.textSecondary)
     }
-    Box(Modifier.padding(start = 82.dp, end = 18.dp).fillMaxWidth().height(1.dp).background(Color(0xFFE4E9F0)))
+    Box(Modifier.padding(start = 82.dp, end = 18.dp).fillMaxWidth().height(1.dp).background(colors.border))
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -446,25 +591,13 @@ private fun AnswerScreen(quiz: Quiz, favoriteIds: Set<String>, onToggleFavorite:
         }
     }
     if (showAnswerSheet) {
-        AlertDialog(
-            onDismissRequest = { showAnswerSheet = false },
-            title = { Text("答题卡", fontWeight = FontWeight.Bold) },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    Text("已答 ${answeredCount()} 题，未答 ${quiz.questions.size - answeredCount()} 题", color = Color(0xFF697586))
-                    quiz.questions.chunked(5).forEach { rowQuestions ->
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            rowQuestions.forEach { item ->
-                                val itemIndex = quiz.questions.indexOf(item)
-                                val itemAnswered = bundle().isAnswered(item)
-                                Box(Modifier.size(46.dp).background(if (itemAnswered) Color(0xFF123A70) else Color(0xFFE9EDF3), RoundedCornerShape(12.dp)).clickable { index = itemIndex; showAnswerSheet = false }, contentAlignment = Alignment.Center) { Text("${itemIndex + 1}", color = if (itemAnswered) Color.White else Color(0xFF4A5567), fontWeight = FontWeight.Bold) }
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = { Button(onClick = { showAnswerSheet = false }) { Text("继续答题") } },
-            dismissButton = { TextButton(onClick = { showAnswerSheet = false; submit() }) { Text("交卷") } },
+        AnswerSheetBottomSheet(
+            quiz = quiz,
+            currentIndex = index,
+            answers = bundle(),
+            onDismiss = { showAnswerSheet = false },
+            onJump = { index = it },
+            onSubmit = submit,
         )
     }
     if (showSubmitConfirm) {
@@ -479,19 +612,32 @@ private fun AnswerScreen(quiz: Quiz, favoriteIds: Set<String>, onToggleFavorite:
 }
 
 @Composable
-private fun ResultScreen(quiz: Quiz, score: Int, answers: AnswerBundle, durationSeconds: Long, onHome: () -> Unit, onRetry: () -> Unit, onWrongBook: () -> Unit) {
+private fun ResultScreen(
+    quiz: Quiz,
+    score: Int,
+    answers: AnswerBundle,
+    durationSeconds: Long,
+    favoriteIds: Set<String>,
+    onToggleFavorite: (String) -> Unit,
+    isOnline: Boolean,
+    onHome: () -> Unit,
+    onRetry: () -> Unit,
+    onWrongBook: () -> Unit,
+) {
+    val colors = appColors()
     val objectiveCount = quiz.questions.count { it.type != QuestionType.ESSAY }.coerceAtLeast(1)
+    val wrongCount = objectiveCount - score
     val rate = score * 100 / objectiveCount
     var reviewFilter by remember { mutableStateOf("需要巩固") }
     val reviewQuestions = if (reviewFilter == "全部") quiz.questions else quiz.questions.filter { it.type != QuestionType.ESSAY && !QuizEngine.isCorrect(it, answers) }
-    LazyColumn(Modifier.fillMaxSize().background(Color(0xFFF6F8FB)), verticalArrangement = Arrangement.spacedBy(0.dp)) {
+    LazyColumn(Modifier.fillMaxSize().background(colors.surfaceMuted), verticalArrangement = Arrangement.spacedBy(0.dp)) {
         item { Row(Modifier.fillMaxWidth().background(Color.White).padding(horizontal = 10.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) { IconButton(onClick = onHome) { Icon(Icons.Default.ArrowBack, "返回") }; Column { Text("练习结果", fontWeight = FontWeight.Bold, fontSize = 21.sp); Text(quiz.title, color = Color(0xFF64748B), fontSize = 12.sp) } } }
         item { Card(Modifier.padding(16.dp).fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color(0xFF082E59)), shape = RoundedCornerShape(20.dp)) { Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) { Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { Column { Text(if (rate >= 80) "掌握良好" else "还需巩固", color = Color(0xFF15C5ED), fontWeight = FontWeight.Bold); Row(verticalAlignment = Alignment.Bottom) { Text("$rate", color = Color.White, fontSize = 54.sp, fontWeight = FontWeight.Bold); Text(" 分", color = Color(0xFFC9D8E8), modifier = Modifier.padding(bottom = 10.dp)) } }; Icon(if (rate >= 80) Icons.Default.CheckCircle else Icons.Default.ErrorOutline, null, tint = if (rate >= 80) Color(0xFF36C98F) else Color(0xFFFFB357), modifier = Modifier.size(58.dp)) }; Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) { ResultStat("答对", "$score 题", Modifier.weight(1f)); ResultStat("待巩固", "${objectiveCount - score} 题", Modifier.weight(1f)); ResultStat("用时", formatDuration(durationSeconds), Modifier.weight(1f)) }; Text(if (rate >= 80) "整体掌握良好，可以进入下一套练习。" else "建议先查看解析，再完成一次错题复练。", color = Color(0xFFD4E0EC), fontSize = 14.sp) } } }
         item { Row(Modifier.padding(horizontal = 16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) { Button(onClick = if (objectiveCount - score > 0) onWrongBook else onHome, modifier = Modifier.weight(1f)) { Text(if (objectiveCount - score > 0) "复习错题" else "返回首页") }; OutlinedButton(onClick = onRetry, modifier = Modifier.weight(1f)) { Icon(Icons.Default.Refresh, null, modifier = Modifier.size(18.dp)); Text(" 再练一次") } } }
-        item { AiAnalysisPanel(quiz, score, answers) }
-        item { Column(Modifier.padding(top = 18.dp).background(Color.White)) { Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(26.dp)) { listOf("需要巩固", "全部").forEach { tab -> TextButton(onClick = { reviewFilter = tab }) { Text(tab, color = if (reviewFilter == tab) Color(0xFF0759BD) else Color(0xFF64748B), fontWeight = if (reviewFilter == tab) FontWeight.Bold else FontWeight.Normal) } } }; Box(Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFE4E9F0))) } }
-        if (reviewQuestions.isEmpty()) item { Column(Modifier.fillMaxWidth().background(Color.White).padding(38.dp), horizontalAlignment = Alignment.CenterHorizontally) { Icon(Icons.Default.CheckCircle, null, tint = Color(0xFF20A66A), modifier = Modifier.size(42.dp)); Text("本次没有错题", fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp)) } }
-        items(reviewQuestions) { question -> Box(Modifier.background(Color.White).padding(horizontal = 16.dp, vertical = 7.dp)) { ReviewCard(question, answers) } }
+        item { AiAnalysisPanel(quiz, score, answers, isOnline, defaultCollapsed = wrongCount > 0) }
+        item { Column(Modifier.padding(top = 18.dp).background(colors.surface)) { Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { Row(horizontalArrangement = Arrangement.spacedBy(26.dp)) { listOf("需要巩固", "全部").forEach { tab -> TextButton(onClick = { reviewFilter = tab }) { Text(tab, color = if (reviewFilter == tab) colors.primary else colors.textSecondary, fontWeight = if (reviewFilter == tab) FontWeight.Bold else FontWeight.Normal) } } }; if (wrongCount > 0 && reviewFilter == "需要巩固") Text("$wrongCount 题", color = colors.warning, fontSize = 12.sp) }; Box(Modifier.fillMaxWidth().height(1.dp).background(colors.border)) } }
+        if (reviewQuestions.isEmpty()) item { Column(Modifier.fillMaxWidth().background(colors.surface).padding(38.dp), horizontalAlignment = Alignment.CenterHorizontally) { Icon(Icons.Default.CheckCircle, null, tint = colors.success, modifier = Modifier.size(42.dp)); Text("本次没有错题", fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp), color = colors.textPrimary) } }
+        items(reviewQuestions) { question -> Box(Modifier.background(colors.surface).padding(horizontal = 16.dp, vertical = 7.dp)) { ReviewCard(question, answers, favoriteIds, onToggleFavorite, isOnline) } }
         item { Spacer(Modifier.height(24.dp)) }
     }
 }
@@ -503,7 +649,15 @@ private fun QuestionType.label() = when (this) { QuestionType.SINGLE -> "单选�
 private fun QuestionType.instruction() = when (this) { QuestionType.SINGLE, QuestionType.TRUE_FALSE -> "请选择一个最合适的答案"; QuestionType.MULTIPLE -> "本题有多个正确答案，请选择全部正确项"; QuestionType.FILL -> "请在下方填写答案"; QuestionType.ESSAY -> "请根据要点组织你的回答" }
 
 @Composable
-private fun ReviewCard(question: Question, answers: AnswerBundle) {
+private fun ReviewCard(
+    question: Question,
+    answers: AnswerBundle,
+    favoriteIds: Set<String>,
+    onToggleFavorite: (String) -> Unit,
+    isOnline: Boolean,
+) {
+    val colors = appColors()
+    val messenger = LocalAppMessenger.current
     val context = LocalContext.current
     val client = remember(context) { AiClient(context) }
     val scope = rememberCoroutineScope()
@@ -517,26 +671,38 @@ private fun ReviewCard(question: Question, answers: AnswerBundle) {
         QuestionType.FILL -> question.acceptedAnswers.joinToString(" / ")
         QuestionType.ESSAY -> question.referenceAnswer
     }
-    Card(colors = CardDefaults.cardColors(containerColor = Color.White), shape = RoundedCornerShape(16.dp)) {
+    Card(colors = CardDefaults.cardColors(containerColor = colors.surface), shape = RoundedCornerShape(16.dp)) {
         Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text(question.type.label(), color = Color(0xFF697586), fontSize = 13.sp); Text(if (question.type == QuestionType.ESSAY) "自评" else if (correct) "回答正确" else "需要巩固", color = if (correct) Color(0xFF18794E) else Color(0xFFB54708), fontWeight = FontWeight.SemiBold) }
-            Text(question.prompt, fontWeight = FontWeight.SemiBold)
-            Text(if (question.type == QuestionType.ESSAY) "参考答案：$answerText" else "正确答案：$answerText", color = Color(0xFF123A70))
-            Text(question.explanation, color = Color(0xFF5F6B7C), lineHeight = 22.sp)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text(question.type.label(), color = colors.textSecondary, fontSize = 13.sp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = { onToggleFavorite(question.id); messenger.show(if (question.id in favoriteIds) "已取消收藏" else "已加入收藏") }) {
+                        Icon(if (question.id in favoriteIds) Icons.Default.Bookmark else Icons.Default.BookmarkBorder, if (question.id in favoriteIds) "取消收藏" else "收藏题目", tint = colors.primary)
+                    }
+                    Text(if (question.type == QuestionType.ESSAY) "自评" else if (correct) "回答正确" else "需要巩固", color = if (correct) colors.success else colors.warning, fontWeight = FontWeight.SemiBold)
+                }
+            }
+            Text(question.prompt, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
+            Text(if (question.type == QuestionType.ESSAY) "参考答案：$answerText" else "正确答案：$answerText", color = colors.textPrimary)
+            Text(question.explanation, color = colors.textSecondary, lineHeight = 22.sp)
             if (aiText.isNotBlank() || aiError.isNotBlank() || aiLoading) {
-                Surface(color = Color(0xFFF2F6FC), shape = RoundedCornerShape(14.dp)) {
+                Surface(color = colors.primarySoft, shape = RoundedCornerShape(14.dp)) {
                     Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically) { Icon(Icons.Default.AutoAwesome, null, tint = Color(0xFF0759BD), modifier = Modifier.size(18.dp)); Text(" AI 深度解析", color = Color(0xFF123A70), fontWeight = FontWeight.Bold) }
-                        aiResult?.score?.let { Text("AI 评分：${formatAiScore(it)} / ${aiResult?.maxScore ?: 10}", color = Color(0xFF138A5B), fontWeight = FontWeight.Bold) }
+                        Row(verticalAlignment = Alignment.CenterVertically) { Icon(Icons.Default.AutoAwesome, null, tint = colors.primary, modifier = Modifier.size(18.dp)); Text(" AI 深度解析", color = colors.textPrimary, fontWeight = FontWeight.Bold) }
+                        aiResult?.score?.let { Text("AI 评分：${formatAiScore(it)} / ${aiResult?.maxScore ?: 10}", color = colors.success, fontWeight = FontWeight.Bold) }
                         if (aiText.isNotBlank()) AiFormattedText(aiText)
-                        if (aiError.isNotBlank()) Text(aiError, color = Color(0xFFC2412D), fontSize = 13.sp)
-                        if (aiLoading && aiText.isBlank()) Row(verticalAlignment = Alignment.CenterVertically) { CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp); Text(" 正在生成解析…", color = Color(0xFF64748B), fontSize = 13.sp) }
+                        if (aiError.isNotBlank()) Text(aiError, color = if (aiError.contains("冷却")) colors.warning else colors.danger, fontSize = 13.sp)
+                        if (aiLoading && aiText.isBlank()) Row(verticalAlignment = Alignment.CenterVertically) { CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp); Text(" 正在生成解析…", color = colors.textSecondary, fontSize = 13.sp) }
                     }
                 }
             }
             OutlinedButton(
                 enabled = !aiLoading,
                 onClick = {
+                    if (!isOnline) {
+                        aiError = "当前无网络，无法使用 AI 解析"
+                        return@OutlinedButton
+                    }
                     aiLoading = true
                     aiError = ""
                     aiText = ""
@@ -556,60 +722,86 @@ private fun ReviewCard(question: Question, answers: AnswerBundle) {
 }
 
 @Composable
-private fun AiAnalysisPanel(quiz: Quiz, score: Int, answers: AnswerBundle) {
+private fun AiAnalysisPanel(quiz: Quiz, score: Int, answers: AnswerBundle, isOnline: Boolean, defaultCollapsed: Boolean = false) {
+    val colors = appColors()
     val context = LocalContext.current
     val client = remember(context) { AiClient(context) }
     val settingsStore = remember(context) { AiSettingsStore(context) }
     val scope = rememberCoroutineScope()
     var text by remember(quiz.id, answers) { mutableStateOf("") }
-    var error by remember(quiz.id, answers) { mutableStateOf("") }
+    var info by remember(quiz.id, answers) { mutableStateOf("") }
     var loading by remember(quiz.id, answers) { mutableStateOf(false) }
-    var collapsed by remember(quiz.id, answers) { mutableStateOf(false) }
+    var collapsed by remember(quiz.id, answers) { mutableStateOf(defaultCollapsed) }
     var lastGeneratedAt by remember(quiz.id, answers) { mutableStateOf(0L) }
-    Card(Modifier.padding(horizontal = 16.dp, vertical = 16.dp).fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = Color.White), shape = RoundedCornerShape(18.dp)) {
+    var cooldownLeftMs by remember { mutableStateOf(0L) }
+    LaunchedEffect(lastGeneratedAt) {
+        while (true) {
+            val settings = settingsStore.load()
+            cooldownLeftMs = if (settings.mode == AiMode.SHARED && lastGeneratedAt > 0) {
+                (120_000 - (System.currentTimeMillis() - lastGeneratedAt)).coerceAtLeast(0)
+            } else 0L
+            kotlinx.coroutines.delay(1_000)
+        }
+    }
+    Card(Modifier.padding(horizontal = 16.dp, vertical = 16.dp).fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = colors.surface), shape = RoundedCornerShape(18.dp)) {
         Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Row(verticalAlignment = Alignment.CenterVertically) { Box(Modifier.size(38.dp).background(Color(0xFFE8EFF9), CircleShape), contentAlignment = Alignment.Center) { Icon(Icons.Default.AutoAwesome, null, tint = Color(0xFF0759BD)) }; Column(Modifier.padding(start = 11.dp)) { Text("AI 学情分析", fontWeight = FontWeight.Bold, fontSize = 17.sp); Text(if (settingsStore.load().mode == AiMode.OWN_KEY) "自带 Key · 完整模式" else "站点默认 AI · 精炼模式", color = Color(0xFF64748B), fontSize = 12.sp) } }
+                Row(verticalAlignment = Alignment.CenterVertically) { Box(Modifier.size(38.dp).background(colors.primarySoft, CircleShape), contentAlignment = Alignment.Center) { Icon(Icons.Default.AutoAwesome, null, tint = colors.primary) }; Column(Modifier.padding(start = 11.dp)) { Text("AI 学情分析", fontWeight = FontWeight.Bold, fontSize = 17.sp, color = colors.textPrimary); Text(if (settingsStore.load().mode == AiMode.OWN_KEY) "自带 Key · 完整模式" else "站点默认 AI · 精炼模式", color = colors.textSecondary, fontSize = 12.sp) } }
                 if (text.isNotBlank()) IconButton(onClick = { collapsed = !collapsed }) { Icon(if (collapsed) Icons.Default.ExpandMore else Icons.Default.ExpandLess, if (collapsed) "展开" else "收起") }
             }
             if (!collapsed) {
-                if (text.isBlank() && !loading && error.isBlank()) Text("根据本次作答总结薄弱知识点、典型错因和记忆方法。", color = Color(0xFF526174), lineHeight = 21.sp)
+                if (text.isBlank() && !loading && info.isBlank()) Text("根据本次作答总结薄弱知识点、典型错因和记忆方法。", color = colors.textSecondary, lineHeight = 21.sp)
                 if (text.isNotBlank()) AiFormattedText(text)
-                if (loading && text.isBlank()) Row(verticalAlignment = Alignment.CenterVertically) { CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp); Text(" 正在分析学情，通常需要 10–30 秒…", color = Color(0xFF64748B), fontSize = 13.sp) }
-                if (error.isNotBlank()) Text(error, color = Color(0xFFC2412D), fontSize = 13.sp)
+                if (loading && text.isBlank()) Row(verticalAlignment = Alignment.CenterVertically) { CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp); Text(" 正在分析学情，通常需要 10–30 秒…", color = colors.textSecondary, fontSize = 13.sp) }
+                if (info.isNotBlank()) Text(info, color = colors.warning, fontSize = 13.sp)
             }
             Button(
-                enabled = !loading,
+                enabled = !loading && cooldownLeftMs == 0L,
                 onClick = {
+                    if (!isOnline) {
+                        info = "当前无网络，无法生成学情分析"
+                        return@Button
+                    }
                     val settings = settingsStore.load()
-                    if (settings.mode == AiMode.SHARED && lastGeneratedAt > 0 && System.currentTimeMillis() - lastGeneratedAt < 120_000) {
-                        error = "站点默认 AI 需要等待 2 分钟后重新分析；填写自带 Key 可立即生成。"
+                    if (settings.mode == AiMode.SHARED && lastGeneratedAt > 0 && cooldownLeftMs > 0) {
+                        info = "共享 AI 冷却中，约 ${cooldownLeftMs / 60_000 + 1} 分钟后可重新分析"
                     } else {
                         loading = true
                         collapsed = false
-                        error = ""
+                        info = ""
                         text = ""
                         scope.launch {
                             runCatching { client.analyze(quiz, score, answers) { partial -> text = partial } }
                                 .onSuccess { result -> text = result; lastGeneratedAt = System.currentTimeMillis() }
-                                .onFailure { error = it.message ?: "学情分析失败，请检查网络后重试" }
+                                .onFailure { info = it.message ?: "学情分析失败，请检查网络后重试" }
                             loading = false
                         }
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-            ) { Icon(Icons.Default.AutoAwesome, null, modifier = Modifier.size(17.dp)); Text(if (text.isBlank()) " 生成学情分析" else " 重新分析") }
+            ) {
+                Icon(Icons.Default.AutoAwesome, null, modifier = Modifier.size(17.dp))
+                Text(
+                    when {
+                        loading -> " 正在分析…"
+                        cooldownLeftMs > 0 && text.isNotBlank() -> " 冷却中 ${cooldownLeftMs / 60_000}:${"%02d".format((cooldownLeftMs / 1000) % 60)}"
+                        text.isBlank() -> " 生成学情分析"
+                        else -> " 重新分析"
+                    },
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun AiFormattedText(text: String) {
+    val colors = appColors()
     Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
         text.lines().filter { it.isNotBlank() }.forEach { line ->
             val heading = line.startsWith("**") && line.indexOf("**", startIndex = 2) >= 2
-            Text(line.replace("**", "").trim(), color = if (heading) Color(0xFF123A70) else Color(0xFF374151), fontWeight = if (heading) FontWeight.Bold else FontWeight.Normal, fontSize = if (heading) 15.sp else 14.sp, lineHeight = 22.sp)
+            Text(line.replace("**", "").trim(), color = if (heading) colors.textPrimary else colors.textSecondary, fontWeight = if (heading) FontWeight.Bold else FontWeight.Normal, fontSize = if (heading) 15.sp else 14.sp, lineHeight = 22.sp)
         }
     }
 }
@@ -680,7 +872,7 @@ private fun FavoritesScreen(
     Scaffold(
         containerColor = Color(0xFFF6F8FB),
         topBar = { TopAppBar(title = { Column { Text("我的收藏", fontWeight = FontWeight.Bold, fontSize = 25.sp); Text("按题库和题型集中巩固", fontSize = 13.sp, color = Color(0xFF64748B)) } }) },
-        bottomBar = { AppBottomBar(Screen.HOME, onHome, onLibrary, onWrongBook, onProfile) },
+        bottomBar = { AppBottomBar(null, onHome, onLibrary, onWrongBook, onProfile) },
     ) { padding ->
         LazyColumn(Modifier.padding(padding), verticalArrangement = Arrangement.spacedBy(0.dp)) {
             if (entries.isEmpty()) {
@@ -734,80 +926,121 @@ private fun FavoriteFilter(label: String, selected: Boolean, onClick: () -> Unit
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProfileScreen(records: List<LearningRecord>, quizzes: List<Quiz>, wrongItems: List<WrongItem>, quizCount: Int, questionCount: Int, lastSyncedAt: Long, onSync: suspend () -> SyncResult, onDataImported: () -> Unit, onHome: () -> Unit, onLibrary: () -> Unit, onWrongBook: () -> Unit, onAiSettings: () -> Unit) {
-    val context = LocalContext.current
-    val appUpdater = remember(context) { AppUpdater(context) }
-    val learningBackup = remember(context) { LearningBackup(context) }
-    val aiSettings = remember(context) { AiSettingsStore(context).load() }
+private fun ProfileScreen(
+    records: List<LearningRecord>,
+    wrongItems: List<WrongItem>,
+    quizCount: Int,
+    questionCount: Int,
+    lastSyncedAt: Long,
+    isOnline: Boolean,
+    onSync: suspend () -> SyncResult,
+    onSyncComplete: (SyncResult) -> Unit,
+    onSyncFailed: (String) -> Unit,
+    onHome: () -> Unit,
+    onLibrary: () -> Unit,
+    onWrongBook: () -> Unit,
+    onSettings: () -> Unit,
+    onLearningReport: () -> Unit,
+) {
+    val colors = appColors()
     val summary = LearningStats.summary(records)
-    val days = LearningStats.lastSevenDays(records)
-    val quizAccuracy = LearningStats.quizAccuracy(records)
-    val typeAccuracy = LearningStats.typeAccuracy(records)
     val unmastered = wrongItems.count { it.status == ReviewStatus.UNMASTERED }
     val reviewing = wrongItems.count { it.status == ReviewStatus.REVIEWING }
     val mastered = wrongItems.count { it.status == ReviewStatus.MASTERED }
     val scope = rememberCoroutineScope()
     var syncing by remember { mutableStateOf(false) }
-    var checkingUpdate by remember { mutableStateOf(false) }
-    var updateStatus by remember { mutableStateOf("当前版本 ${BuildConfig.VERSION_NAME}") }
-    var availableUpdate by remember { mutableStateOf<UpdateInfo?>(null) }
-    var updateCacheBytes by remember { mutableStateOf(appUpdater.cachedUpdateBytes()) }
-    var backupStatus by remember { mutableStateOf("导出或恢复学习记录") }
-    var pendingImportJson by remember { mutableStateOf<String?>(null) }
-    var pendingImportPreview by remember { mutableStateOf<BackupPreview?>(null) }
-    var syncMessage by remember(lastSyncedAt) { mutableStateOf(if (lastSyncedAt == 0L) "尚未在线同步" else "上次同步 ${formatDateTime(lastSyncedAt)}") }
-    val exportBackup = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
-        if (uri != null) scope.launch {
-            runCatching {
-                withContext(Dispatchers.IO) {
-                    context.contentResolver.openOutputStream(uri, "wt")?.bufferedWriter()?.use { it.write(learningBackup.exportJson()) }
-                        ?: error("无法写入所选文件")
-                }
-            }.onSuccess { backupStatus = "学习数据已导出" }
-                .onFailure { backupStatus = it.message ?: "导出失败" }
-        }
+    var isRefreshing by remember { mutableStateOf(false) }
+    var syncMessage by remember(lastSyncedAt) {
+        mutableStateOf(if (lastSyncedAt == 0L) "尚未在线同步" else "上次同步 ${formatDateTime(lastSyncedAt)}")
     }
-    val importBackup = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        if (uri != null) scope.launch {
-            runCatching {
-                withContext(Dispatchers.IO) {
-                    val json = context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
-                        ?: error("无法读取所选文件")
-                    json to learningBackup.preview(json)
-                }
-            }.onSuccess { (json, preview) -> pendingImportJson = json; pendingImportPreview = preview }
-                .onFailure { backupStatus = it.message ?: "备份文件无效" }
-        }
+    val pullState = rememberPullToRefreshState()
+    suspend fun runSync() {
+        syncing = true
+        syncMessage = "正在从 GitHub 获取最新题库…"
+        runCatching { onSync() }
+            .onSuccess { result ->
+                syncMessage = "上次同步 ${formatDateTime(result.syncedAt)}"
+                onSyncComplete(result)
+            }
+            .onFailure { error -> syncMessage = "同步失败"; onSyncFailed(error.message ?: "请检查网络后重试") }
+        syncing = false
+        isRefreshing = false
     }
-    Scaffold(containerColor = Color(0xFFF4F6FA), bottomBar = { AppBottomBar(Screen.PROFILE, onHome, onLibrary, onWrongBook, {}) }) { padding ->
-        LazyColumn(Modifier.padding(padding).padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            item { Spacer(Modifier.height(18.dp)); Text("我的", fontSize = 28.sp, fontWeight = FontWeight.Bold); Text("学习数据与应用设置", color = Color(0xFF697586)) }
-            item { Card(colors = CardDefaults.cardColors(containerColor = Color.White), shape = RoundedCornerShape(18.dp)) { Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) { Box(Modifier.size(52.dp).background(Color(0xFFE3E9F3), CircleShape), contentAlignment = Alignment.Center) { Text("学", color = Color(0xFF123A70), fontWeight = FontWeight.Bold) }; Column(Modifier.padding(start = 16.dp)) { Text("本地学习档案", fontWeight = FontWeight.Bold, fontSize = 18.sp); Text("数据仅保存在这台设备", color = Color(0xFF697586)) } } } }
-            item { Text("学习概览", fontSize = 18.sp, fontWeight = FontWeight.SemiBold); Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) { Metric("累计答题", "${summary.questionCount} 道", Modifier.weight(1f)); Metric("累计测验", "${summary.quizCount} 次", Modifier.weight(1f)) } }
-            item { Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) { Metric("今日已完成", "${summary.todayQuestionCount} 道", Modifier.weight(1f)); Metric("连续学习", "${LearningStats.streakDays(records)} 天", Modifier.weight(1f)) } }
-            item { ReportCard("近 7 天趋势") { days.forEach { day -> TrendRow(SimpleDateFormat("E", Locale.CHINA).format(Date(day.dayStart)), day.questionCount, day.correctCount) } } }
-            item { ReportCard("错题掌握进度") { StatProgress("未掌握", unmastered, wrongItems.size, Color(0xFFE15B64)); StatProgress("复习中", reviewing, wrongItems.size, Color(0xFFE4A33A)); StatProgress("已掌握", mastered, wrongItems.size, Color(0xFF20A66A)) } }
-            if (quizAccuracy.isNotEmpty()) item { ReportCard("薄弱题库") { quizAccuracy.take(3).forEach { StatProgress(it.label, it.correct, it.total, Color(0xFF0759BD)) } } }
-            if (typeAccuracy.isNotEmpty()) item { ReportCard("题型正确率") { typeAccuracy.forEach { StatProgress(it.label, it.correct, it.total, Color(0xFF6B4CC5)) } } }
-            if (records.isNotEmpty()) item { ReportCard("最近测验") { records.takeLast(3).reversed().forEach { record -> Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Column(Modifier.weight(1f)) { Text(record.quizTitle, fontWeight = FontWeight.SemiBold); Text(formatDateTime(record.submittedAt), color = Color(0xFF64748B), fontSize = 12.sp) }; Text("${if (record.total == 0) 0 else record.score * 100 / record.total}%", color = Color(0xFF0759BD), fontWeight = FontWeight.Bold) } } } }
+    Scaffold(containerColor = colors.pageBackground, bottomBar = { AppBottomBar(Screen.PROFILE, onHome, onLibrary, onWrongBook, {}) }) { padding ->
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = {
+                if (!isOnline) {
+                    onSyncFailed("当前无网络，无法同步题库")
+                } else {
+                    isRefreshing = true
+                    scope.launch { runSync() }
+                }
+            },
+            state = pullState,
+            modifier = Modifier.padding(padding),
+        ) {
+        LazyColumn(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            item {
+                Spacer(Modifier.height(18.dp))
+                Text("我的", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                Text("学习数据与应用入口", color = Color(0xFF697586))
+            }
+            item {
+                Card(colors = CardDefaults.cardColors(containerColor = Color.White), shape = RoundedCornerShape(18.dp)) {
+                    Row(Modifier.fillMaxWidth().padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Box(Modifier.size(52.dp).background(Color(0xFFE3E9F3), CircleShape), contentAlignment = Alignment.Center) {
+                            Text("学", color = Color(0xFF123A70), fontWeight = FontWeight.Bold)
+                        }
+                        Column(Modifier.padding(start = 16.dp)) {
+                            Text("本地学习档案", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                            Text("数据仅保存在这台设备", color = Color(0xFF697586))
+                        }
+                    }
+                }
+            }
+            item {
+                Text("学习概览", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Metric("累计答题", "${summary.questionCount} 道", Modifier.weight(1f))
+                    Metric("累计测验", "${summary.quizCount} 次", Modifier.weight(1f))
+                }
+            }
+            item {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Metric("今日已完成", "${summary.todayQuestionCount} 道", Modifier.weight(1f))
+                    Metric("连续学习", "${LearningStats.streakDays(records)} 天", Modifier.weight(1f))
+                }
+            }
+            item {
+                ReportCard("错题掌握进度") {
+                    StatProgress("未掌握", unmastered, wrongItems.size, Color(0xFFE15B64))
+                    StatProgress("复习中", reviewing, wrongItems.size, Color(0xFFE4A33A))
+                    StatProgress("已掌握", mastered, wrongItems.size, Color(0xFF20A66A))
+                }
+            }
+            item {
+                Card(colors = CardDefaults.cardColors(containerColor = Color.White), shape = RoundedCornerShape(16.dp)) {
+                    SettingsNavRow("学习报告", "趋势、薄弱点与最近测验", onLearningReport)
+                }
+            }
             item {
                 Card(colors = CardDefaults.cardColors(containerColor = Color.White), shape = RoundedCornerShape(18.dp)) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically) { Icon(Icons.Default.CloudSync, null, tint = Color(0xFF0759BD)); Column(Modifier.padding(start = 12.dp)) { Text("GitHub 题库同步", fontWeight = FontWeight.Bold, fontSize = 17.sp); Text("当前 $quizCount 套 · $questionCount 题", color = Color(0xFF64748B), fontSize = 13.sp) } }
-                        Text(syncMessage, color = if (syncMessage.startsWith("同步失败")) Color(0xFFB54708) else Color(0xFF64748B), fontSize = 13.sp)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.CloudSync, null, tint = Color(0xFF0759BD))
+                            Column(Modifier.padding(start = 12.dp)) {
+                                Text("GitHub 题库同步", fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                                Text("当前 $quizCount 套 · $questionCount 题", color = Color(0xFF64748B), fontSize = 13.sp)
+                            }
+                        }
+                        Text(syncMessage, color = if (syncMessage.startsWith("同步失败")) colors.warning else colors.textSecondary, fontSize = 13.sp)
+                        if (!isOnline) Text("当前无网络，请连接后下拉刷新或手动同步", color = colors.warning, fontSize = 12.sp)
                         Button(
-                            enabled = !syncing,
-                            onClick = {
-                                syncing = true
-                                syncMessage = "正在从 GitHub 获取最新题库…"
-                                scope.launch {
-                                    runCatching { onSync() }
-                                        .onSuccess { result -> syncMessage = "同步完成：${result.quizCount} 套 · ${result.questionCount} 题" }
-                                        .onFailure { error -> syncMessage = "同步失败：${error.message ?: "请检查网络后重试"}" }
-                                    syncing = false
-                                }
-                            },
+                            enabled = !syncing && isOnline,
+                            onClick = { scope.launch { runSync() } },
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                         ) { Text(if (syncing) "正在同步…" else "立即同步题库") }
@@ -815,151 +1048,24 @@ private fun ProfileScreen(records: List<LearningRecord>, quizzes: List<Quiz>, wr
                 }
             }
             item {
-                Text("设置", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                SettingRow("检查更新", if (checkingUpdate) "正在检查 GitHub Releases…" else updateStatus) {
-                    if (!checkingUpdate) {
-                        checkingUpdate = true
-                        updateStatus = "正在检查…"
-                        scope.launch {
-                            runCatching { withContext(Dispatchers.IO) { appUpdater.checkForUpdate() } }
-                                .onSuccess { update ->
-                                    availableUpdate = update
-                                    updateStatus = if (update == null) "已是最新版本 ${BuildConfig.VERSION_NAME}" else "发现新版本 ${update.versionName}"
-                                }
-                                .onFailure { updateStatus = it.message ?: "检查更新失败，请稍后重试" }
-                            checkingUpdate = false
-                        }
-                    }
+                Card(colors = CardDefaults.cardColors(containerColor = Color.White), shape = RoundedCornerShape(16.dp)) {
+                    SettingsNavRow("应用设置", "备份、AI、更新与关于", onSettings)
                 }
-                SettingRow("清理安装包缓存", if (updateCacheBytes == 0L) "当前没有已下载的安装包" else "已占用 ${formatStorageSize(updateCacheBytes)} · 点击清理") {
-                    if (appUpdater.clearCachedUpdates()) {
-                        updateCacheBytes = 0L
-                        updateStatus = "安装包缓存已清理"
-                    } else {
-                        updateStatus = "缓存清理失败，请稍后重试"
-                    }
-                }
-                SettingRow("导出学习数据", backupStatus) {
-                    val fileName = "题域引擎-学习备份-${SimpleDateFormat("yyyyMMdd-HHmm", Locale.CHINA).format(Date())}.json"
-                    exportBackup.launch(fileName)
-                }
-                SettingRow("导入学习数据", "从备份文件恢复，将覆盖当前记录") {
-                    importBackup.launch(arrayOf("application/json", "text/plain"))
-                }
-                SettingRow("学习提醒", "暂未开启")
-                SettingRow("AI 设置", if (aiSettings.mode == com.xuzheng.tiyuengine.data.AiMode.SHARED) "站点默认 AI · 已就绪" else if (aiSettings.hasApiKey) "${aiSettings.provider.name} · 已配置" else "需要填写 API Key", onAiSettings)
-                SettingRow("关于应用", "版本 ${BuildConfig.VERSION_NAME} · 正式版")
-                SettingRow("隐私说明", "查看公开网页版隐私政策") {
-                    context.startActivity(
-                        android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(PRIVACY_POLICY_URL))
-                            .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
-                    )
-                }
-                SettingRow("版权声明", "© 2026 Xu Zheng · 保留所有权利")
             }
         }
-    }
-    availableUpdate?.let { update ->
-        AlertDialog(
-            onDismissRequest = { availableUpdate = null },
-            title = { Text("发现新版本 ${update.versionName}", fontWeight = FontWeight.Bold) },
-            text = { Text(update.notes, lineHeight = 22.sp) },
-            confirmButton = {
-                Button(onClick = {
-                    availableUpdate = null
-                    checkingUpdate = true
-                    updateStatus = "正在下载安装包…"
-                    scope.launch {
-                        runCatching { withContext(Dispatchers.IO) { appUpdater.download(update) } }
-                            .onSuccess { apk ->
-                                updateCacheBytes = apk.length()
-                                val installerOpened = appUpdater.install(apk)
-                                updateStatus = if (installerOpened) "安装包已下载，请按系统提示完成更新" else "请允许安装未知应用，然后再次检查更新"
-                            }
-                            .onFailure { updateStatus = it.message ?: "更新下载失败，请稍后重试" }
-                        checkingUpdate = false
-                    }
-                }) { Text("下载并安装") }
-            },
-            dismissButton = { TextButton(onClick = { availableUpdate = null }) { Text("稍后") } },
-        )
-    }
-    if (pendingImportJson != null && pendingImportPreview != null) {
-        val preview = pendingImportPreview!!
-        AlertDialog(
-            onDismissRequest = { pendingImportJson = null; pendingImportPreview = null },
-            title = { Text("确认恢复学习数据？", fontWeight = FontWeight.Bold) },
-            text = {
-                Text("备份时间：${formatDateTime(preview.exportedAt)}\n学习记录：${preview.learningRecordCount} 条\n错题记录：${preview.wrongItemCount} 条\n收藏题目：${preview.favoriteCount} 道\n\n恢复后将覆盖当前设备上的学习、错题与收藏记录。")
-            },
-            confirmButton = {
-                Button(onClick = {
-                    val json = pendingImportJson ?: return@Button
-                    pendingImportJson = null
-                    pendingImportPreview = null
-                    scope.launch {
-                        runCatching { withContext(Dispatchers.IO) { learningBackup.restore(json) } }
-                            .onSuccess { backupStatus = "恢复完成：${it.learningRecordCount} 条学习记录、${it.wrongItemCount} 条错题、${it.favoriteCount} 道收藏"; onDataImported() }
-                            .onFailure { backupStatus = it.message ?: "恢复失败" }
-                    }
-                }) { Text("覆盖并恢复") }
-            },
-            dismissButton = { TextButton(onClick = { pendingImportJson = null; pendingImportPreview = null }) { Text("取消") } },
-        )
-    }
-}
-
-@Composable
-private fun ReportCard(title: String, content: @Composable ColumnScope.() -> Unit) {
-    Card(colors = CardDefaults.cardColors(containerColor = Color.White), shape = RoundedCornerShape(18.dp)) {
-        Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(title, fontSize = 17.sp, fontWeight = FontWeight.Bold)
-            content()
         }
     }
 }
-
-@Composable
-private fun TrendRow(label: String, questions: Int, correct: Int) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Text(label, modifier = Modifier.size(width = 32.dp, height = 22.dp), color = Color(0xFF64748B), fontSize = 12.sp)
-        LinearProgressIndicator(progress = { (questions.coerceAtMost(20) / 20f) }, modifier = Modifier.weight(1f).height(8.dp), color = Color(0xFF00A7D6), trackColor = Color(0xFFE8EEF5))
-        Text("$questions 题 · $correct 对", modifier = Modifier.padding(start = 10.dp), fontSize = 12.sp, color = Color(0xFF526174))
-    }
-}
-
-@Composable
-private fun StatProgress(label: String, value: Int, total: Int, color: Color) {
-    val percent = if (total == 0) 0 else value * 100 / total
-    Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text(label, fontSize = 13.sp); Text("$value / $total · $percent%", fontSize = 12.sp, color = Color(0xFF64748B)) }
-        LinearProgressIndicator(progress = { if (total == 0) 0f else value.toFloat() / total }, modifier = Modifier.fillMaxWidth().height(7.dp), color = color, trackColor = Color(0xFFE8EEF5))
-    }
-}
-
-private fun formatDateTime(timestamp: Long): String = SimpleDateFormat("MM-dd HH:mm", Locale.CHINA).format(Date(timestamp))
 
 private fun formatDuration(seconds: Long): String = when {
     seconds < 60 -> "${seconds.coerceAtLeast(1)} 秒"
     else -> "${seconds / 60}分${seconds % 60}秒"
 }
 
-private fun formatStorageSize(bytes: Long): String = when {
-    bytes < 1024 -> "$bytes B"
-    bytes < 1024 * 1024 -> "%.1f KB".format(Locale.CHINA, bytes / 1024.0)
-    else -> "%.1f MB".format(Locale.CHINA, bytes / (1024.0 * 1024.0))
-}
-
 @Composable
-private fun SettingRow(title: String, subtitle: String, onClick: (() -> Unit)? = null) {
-    var modifier = Modifier.fillMaxWidth().background(Color.White, RoundedCornerShape(14.dp))
-    if (onClick != null) modifier = modifier.clickable(onClick = onClick)
-    Row(modifier.padding(18.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) { Column(Modifier.weight(1f)) { Text(title, fontWeight = FontWeight.SemiBold); Text(subtitle, color = Color(0xFF697586), fontSize = 13.sp) }; Text("›", fontSize = 24.sp, color = Color(0xFF697586)) }
-}
-
-@Composable
-private fun AppBottomBar(selected: Screen, onHome: () -> Unit, onLibrary: () -> Unit, onWrongBook: () -> Unit, onProfile: () -> Unit) {
-    NavigationBar(containerColor = Color.White) {
+private fun AppBottomBar(selected: Screen?, onHome: () -> Unit, onLibrary: () -> Unit, onWrongBook: () -> Unit, onProfile: () -> Unit) {
+    val colors = appColors()
+    NavigationBar(containerColor = colors.surface) {
         listOf(
             Triple(Screen.HOME, "首页", onHome),
             Triple(Screen.QUIZZES, "题库", onLibrary),
