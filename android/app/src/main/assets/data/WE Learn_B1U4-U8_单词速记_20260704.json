@@ -1,0 +1,419 @@
+{
+  "title": "WE Learn B1U4~U8 词性转换冲刺（17组）",
+  "exported_at": "2026-07-05T19:36:00.863434",
+  "source": "实用综合教程(第三版)1 ISBN 9787544677301 · WE Learn iWords",
+  "quiz_type": "vocab_flashcard",
+  "description": "共 17 张 · 仅含≥2词性词族 · 词性转换考点",
+  "filter_criteria": "考前冲刺：只保留教材中两种及以上词性的同词族（如 complete/completion）",
+  "filter_profile": "sprint",
+  "cards": [
+    {
+      "sort": 1,
+      "headword": "complete",
+      "word": "complete",
+      "forms": [
+        {
+          "word": "complete",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "完成",
+          "phonetic": "[kəm'pliːt]"
+        },
+        {
+          "word": "completion",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "完成，结束",
+          "phonetic": "[kəm'pliːʃən]"
+        }
+      ],
+      "zh_summary": "完成",
+      "multi": true,
+      "unit": "B1U4"
+    },
+    {
+      "sort": 2,
+      "headword": "employ",
+      "word": "employ",
+      "forms": [
+        {
+          "word": "employ",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "雇用",
+          "phonetic": "[ɪm'plɔɪ]"
+        },
+        {
+          "word": "employer",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "雇主，老板",
+          "phonetic": "[ɪm'plɔɪə]"
+        }
+      ],
+      "zh_summary": "雇用；雇主",
+      "multi": true,
+      "unit": "B1U6"
+    },
+    {
+      "sort": 3,
+      "headword": "refer",
+      "word": "refer",
+      "forms": [
+        {
+          "word": "refer",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "提及，谈到",
+          "phonetic": "[rɪ'fɜː]"
+        },
+        {
+          "word": "reference",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "介绍信；参考",
+          "phonetic": "['refərəns]"
+        }
+      ],
+      "zh_summary": "提及；介绍信",
+      "multi": true,
+      "unit": "B1U4"
+    },
+    {
+      "sort": 4,
+      "headword": "activity",
+      "word": "activity",
+      "forms": [
+        {
+          "word": "activity",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "活动",
+          "phonetic": "[æk'tɪvɪti]"
+        },
+        {
+          "word": "active",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "积极的",
+          "phonetic": "['æktɪv]"
+        }
+      ],
+      "zh_summary": "活动；积极的",
+      "multi": true,
+      "unit": "B1U7"
+    },
+    {
+      "sort": 5,
+      "headword": "perfect",
+      "word": "perfect",
+      "forms": [
+        {
+          "word": "perfect",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "完美的，完满的",
+          "phonetic": "['pɜːfɪkt]"
+        },
+        {
+          "word": "perfectly",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "完美地，完全地",
+          "phonetic": "['pɜːfɪktli]"
+        }
+      ],
+      "zh_summary": "完美的；完美地",
+      "multi": true,
+      "unit": "B1U8"
+    },
+    {
+      "sort": 6,
+      "headword": "fitness",
+      "word": "fitness",
+      "forms": [
+        {
+          "word": "fitness",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "健身，健康",
+          "phonetic": "['fɪtnɪs]"
+        },
+        {
+          "word": "fit",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "（尤指经过锻炼后）健康的",
+          "phonetic": "[fɪt]"
+        }
+      ],
+      "zh_summary": "健身；（尤指经过锻炼后）健康的",
+      "multi": true,
+      "unit": "B1U7"
+    },
+    {
+      "sort": 7,
+      "headword": "remove",
+      "word": "remove",
+      "forms": [
+        {
+          "word": "remove",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "移动；去掉",
+          "phonetic": "[rɪ'muːv]"
+        },
+        {
+          "word": "movement",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "运动，动作",
+          "phonetic": "['muːvmənt]"
+        }
+      ],
+      "zh_summary": "移动；运动",
+      "multi": true,
+      "unit": "B1U8"
+    },
+    {
+      "sort": 8,
+      "headword": "tradition",
+      "word": "tradition",
+      "forms": [
+        {
+          "word": "tradition",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "传统，惯例",
+          "phonetic": "[trə'dɪʃn]"
+        },
+        {
+          "word": "traditional",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "传统的，惯例的",
+          "phonetic": "[trə'dɪʃənəl]"
+        }
+      ],
+      "zh_summary": "传统；传统的",
+      "multi": true,
+      "unit": "B1U6"
+    },
+    {
+      "sort": 9,
+      "headword": "threat",
+      "word": "threat",
+      "forms": [
+        {
+          "word": "threat",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "威胁",
+          "phonetic": "[θret]"
+        },
+        {
+          "word": "threatening",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "具有威胁性的，令人生畏的",
+          "phonetic": "['θretnɪŋ]"
+        }
+      ],
+      "zh_summary": "威胁；具有威胁性的",
+      "multi": true,
+      "unit": "B1U8"
+    },
+    {
+      "sort": 10,
+      "headword": "tension",
+      "word": "tension",
+      "forms": [
+        {
+          "word": "tension",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "紧张，压力",
+          "phonetic": "['tenʃn]"
+        },
+        {
+          "word": "tense",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "紧张的，拉紧的",
+          "phonetic": "[tens]"
+        }
+      ],
+      "zh_summary": "紧张；紧张的",
+      "multi": true,
+      "unit": "B1U7"
+    },
+    {
+      "sort": 11,
+      "headword": "festival",
+      "word": "festival",
+      "forms": [
+        {
+          "word": "festival",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "节日",
+          "phonetic": "['festɪvl]"
+        },
+        {
+          "word": "festive",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "喜庆的，节日的",
+          "phonetic": "['festɪv]"
+        }
+      ],
+      "zh_summary": "节日；喜庆的",
+      "multi": true,
+      "unit": "B1U5"
+    },
+    {
+      "sort": 12,
+      "headword": "respond",
+      "word": "respond",
+      "forms": [
+        {
+          "word": "respond",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "回应，作出反应",
+          "phonetic": "[rɪ'spɒnd]"
+        },
+        {
+          "word": "responsibility",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "责任，职责",
+          "phonetic": "[rɪˌspɒnsə'bɪləti]"
+        }
+      ],
+      "zh_summary": "回应；责任",
+      "multi": true,
+      "unit": "B1U5"
+    },
+    {
+      "sort": 13,
+      "headword": "intend",
+      "word": "intend",
+      "forms": [
+        {
+          "word": "intend",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "想要，打算",
+          "phonetic": "[ɪn'tend]"
+        },
+        {
+          "word": "intention",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "打算，意图",
+          "phonetic": "[ɪn'tenʃn]"
+        }
+      ],
+      "zh_summary": "想要；打算",
+      "multi": true,
+      "unit": "B1U8"
+    },
+    {
+      "sort": 14,
+      "headword": "weigh",
+      "word": "weigh",
+      "forms": [
+        {
+          "word": "weigh",
+          "pos": "v.",
+          "pos_zh": "动词",
+          "zh": "重量为，重",
+          "phonetic": "[weɪ]"
+        },
+        {
+          "word": "weight",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "重量，体重",
+          "phonetic": "[weɪt]"
+        }
+      ],
+      "zh_summary": "重量为；重量",
+      "multi": true,
+      "unit": "B1U7"
+    },
+    {
+      "sort": 15,
+      "headword": "relative",
+      "word": "relative",
+      "forms": [
+        {
+          "word": "relative",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "亲戚",
+          "phonetic": "['relətɪv]"
+        },
+        {
+          "word": "related",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "有关系的，相关的",
+          "phonetic": "[rɪ'leɪtɪd]"
+        }
+      ],
+      "zh_summary": "亲戚；有关系的",
+      "multi": true,
+      "unit": "B1U8"
+    },
+    {
+      "sort": 16,
+      "headword": "typist",
+      "word": "typist",
+      "forms": [
+        {
+          "word": "typist",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "打字员",
+          "phonetic": "['taɪpɪst]"
+        },
+        {
+          "word": "typical",
+          "pos": "adj.",
+          "pos_zh": "形容词",
+          "zh": "典型的",
+          "phonetic": "['tɪpɪkl]"
+        }
+      ],
+      "zh_summary": "打字员；典型的",
+      "multi": true,
+      "unit": "B1U6"
+    },
+    {
+      "sort": 17,
+      "headword": "simplicity",
+      "word": "simplicity",
+      "forms": [
+        {
+          "word": "simplicity",
+          "pos": "n.",
+          "pos_zh": "名词",
+          "zh": "简单，简洁",
+          "phonetic": "[sɪm'plɪsɪti]"
+        },
+        {
+          "word": "simply",
+          "pos": "adv.",
+          "pos_zh": "副词",
+          "zh": "仅仅，只",
+          "phonetic": "['sɪmpli]"
+        }
+      ],
+      "zh_summary": "简单；仅仅",
+      "multi": true,
+      "unit": "B1U4"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Learning history, review progress and sync metadata live in SharedPreferences. -->
+    <include domain="sharedpref" path="." />
+    <exclude domain="sharedpref" path="ai_settings.xml" />
+    <exclude domain="sharedpref" path="ai_secrets.xml" />
+</full-backup-content>

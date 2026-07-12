@@ -1,0 +1,211 @@
+{
+  "title": "MODBUS协议及应用",
+  "exported_at": "2026-06-26T18:52:38.949875",
+  "questions": [
+    {
+      "sort": 1,
+      "type": "单选题",
+      "title": "以下不属于Modbus协议特点的是",
+      "options": [
+        "公开发布，无版权要求",
+        "支持多种电气接口，如RS-232、RS-485等",
+        "支持多种传输介质，如双绞线、光纤、无线等",
+        "高速低成本，用于设备级控制系统与分散式I/O"
+      ],
+      "correct_answer": "D. 高速低成本，用于设备级控制系统与分散式I/O",
+      "your_answer": "D. 高速低成本，用于设备级控制系统与分散式I/O",
+      "score": "10.0",
+      "full_score": 10.0
+    },
+    {
+      "sort": 2,
+      "type": "单选题",
+      "title": "以下哪种场景更适合使用 Modbus TCP",
+      "options": [
+        "短距离单片机点对点",
+        "工业以太网组网",
+        "电池供电低功耗仪表",
+        "无线射频模块"
+      ],
+      "correct_answer": "B. 工业以太网组网",
+      "your_answer": "B. 工业以太网组网",
+      "score": "10.0",
+      "full_score": 10.0
+    },
+    {
+      "sort": 3,
+      "type": "单选题",
+      "title": "Modbus RTU 采用的通信模式是（）",
+      "options": [
+        "异步串行",
+        "并行",
+        "以太网",
+        "光纤"
+      ],
+      "correct_answer": "A. 异步串行",
+      "your_answer": "A. 异步串行",
+      "score": "10.0",
+      "full_score": 10.0
+    },
+    {
+      "sort": 4,
+      "type": "单选题",
+      "title": "Modbus RTU 常用物理接口不包括",
+      "options": [
+        "RS485",
+        "RS232",
+        "RJ45",
+        "USB转串口"
+      ],
+      "correct_answer": "C. RJ45",
+      "your_answer": "C. RJ45",
+      "score": "10.0",
+      "full_score": 10.0
+    },
+    {
+      "sort": 5,
+      "type": "单选题",
+      "title": "Modbus TCP 报文头部占（）字节",
+      "options": [
+        "5",
+        "7",
+        "10",
+        "16"
+      ],
+      "correct_answer": "B. 7",
+      "your_answer": "B. 7",
+      "score": "10.0",
+      "full_score": 10.0
+    },
+    {
+      "sort": 6,
+      "type": "判断题",
+      "title": "功能码 05 是写单个保持寄存器",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "your_answer": "1",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 7,
+      "type": "判断题",
+      "title": "Modbus RTU 和 Modbus TCP 应用层数据格式基本一致",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "your_answer": "0",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 8,
+      "type": "判断题",
+      "title": "Modbus TCP 可以通过交换机、路由器组网",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "your_answer": "0",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 9,
+      "type": "判断题",
+      "title": "Modbus 从站地址可以随意设置为 0-255 任意值",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "your_answer": "1",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 10,
+      "type": "判断题",
+      "title": "Modbus RTU 通信速率越高，允许的通信距离通常越短",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "your_answer": "0",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 11,
+      "type": "判断题",
+      "title": "Modbus TCP 报文比 Modbus RTU 报文更短",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "your_answer": "1",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 12,
+      "type": "判断题",
+      "title": "Modbus通讯中Modbus RTU的通信模式只能够在以太网上进行",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "your_answer": "1",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 13,
+      "type": "判断题",
+      "title": "Modbus RTU 只能使用 RS485 接口",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "your_answer": "0",
+      "score": "0.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 14,
+      "type": "判断题",
+      "title": "Modbus TCP 不需要 CRC 校验，依靠 TCP 保证可靠传输",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "your_answer": "0",
+      "score": "5.0",
+      "full_score": 5.0
+    },
+    {
+      "sort": 15,
+      "type": "判断题",
+      "title": "Modbus 可以一对多通信，支持多主站同时工作",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "your_answer": "1",
+      "score": "5.0",
+      "full_score": 5.0
+    }
+  ]
+}

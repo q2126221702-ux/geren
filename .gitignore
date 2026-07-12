@@ -10,3 +10,12 @@ Thumbs.db
 *.log
 scripts/_*.png
 scripts/curriculum_vocab_raw.txt
+
+# Android app (android/)
+android/.gradle/
+android/**/build/
+android/local.properties
+android/keystore.properties
+android/*.jks
+android/*.keystore
+android/.idea/

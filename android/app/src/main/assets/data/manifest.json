@@ -1,0 +1,123 @@
+{
+  "quizzes": [
+    {
+      "id": "profinet",
+      "title": "Profinet工业以太网测验",
+      "file": "Profinet工业以太网测验_20260626_185300.json",
+      "count": 25
+    },
+    {
+      "id": "opc",
+      "title": "OPC规范",
+      "file": "OPC规范_20260626_185227.json",
+      "count": 24
+    },
+    {
+      "id": "modbus",
+      "title": "MODBUS协议及应用",
+      "file": "MODBUS协议及应用_20260626_185238.json",
+      "count": 15
+    },
+    {
+      "id": "serial",
+      "title": "串口及应用",
+      "file": "串口及应用_20260626_185247.json",
+      "count": 15
+    },
+    {
+      "id": "comprehensive",
+      "title": "网络及工业通信综合考核",
+      "file": "网络及工业通信综合考核_145题.json",
+      "count": 135
+    },
+    {
+      "id": "exam100",
+      "title": "工业网络技术期末考核（满分100分）",
+      "file": "工业网络技术期末考核_100分_A.json",
+      "count": 44,
+      "kind": "exam_pack",
+      "variants": [
+        "工业网络技术期末考核_100分_A.json",
+        "工业网络技术期末考核_100分_B.json",
+        "工业网络技术期末考核_100分_C.json",
+        "工业网络技术期末考核_100分_D.json",
+        "工业网络技术期末考核_100分_E.json",
+        "工业网络技术期末考核_100分_F.json",
+        "工业网络技术期末考核_100分_G.json"
+      ]
+    },
+    {
+      "id": "welearn_b1u4",
+      "title": "WE Learn B1U4 Movies 翻译练习",
+      "file": "WE Learn_B1U4_Movies_翻译题_20260703.json",
+      "count": 6
+    },
+    {
+      "id": "welearn_b1u5",
+      "title": "WE Learn B1U5 Our Earth 翻译练习",
+      "file": "WE Learn_B1U5_Our_Earth_翻译题_20260703.json",
+      "count": 6
+    },
+    {
+      "id": "welearn_b1u6",
+      "title": "WE Learn B1U6 Part-time jobs 翻译练习",
+      "file": "WE Learn_B1U6_Part-time_jobs_翻译题_20260703.json",
+      "count": 6
+    },
+    {
+      "id": "welearn_b1u7",
+      "title": "WE Learn B1U7 Health 翻译练习",
+      "file": "WE Learn_B1U7_Health_翻译题_20260703.json",
+      "count": 6
+    },
+    {
+      "id": "welearn_b1u8",
+      "title": "WE Learn B1U8 Festivals 翻译练习",
+      "file": "WE Learn_B1U8_Festivals_翻译题_20260703.json",
+      "count": 6
+    },
+    {
+      "id": "welearn_b1u4u8_grammar",
+      "title": "WE Learn B1U4~U8 语法选择",
+      "file": "WE Learn_B1U4-U8_语法选择_20260705.json",
+      "count": 50
+    },
+    {
+      "id": "welearn_b1u4_iwords",
+      "title": "WE Learn B1U4 Movies iWords 词汇填空",
+      "file": "WE Learn_B1U4_Movies_iWords_20260704.json",
+      "count": 64
+    },
+    {
+      "id": "welearn_b1u5_iwords",
+      "title": "WE Learn B1U5 Our Earth iWords 词汇填空",
+      "file": "WE Learn_B1U5_Our_Earth_iWords_20260704.json",
+      "count": 75
+    },
+    {
+      "id": "welearn_b1u6_iwords",
+      "title": "WE Learn B1U6 Part-time jobs iWords 词汇填空",
+      "file": "WE Learn_B1U6_Part-time_jobs_iWords_20260704.json",
+      "count": 75
+    },
+    {
+      "id": "welearn_b1u7_iwords",
+      "title": "WE Learn B1U7 Health iWords 词汇填空",
+      "file": "WE Learn_B1U7_Health_iWords_20260704.json",
+      "count": 80
+    },
+    {
+      "id": "welearn_b1u8_iwords",
+      "title": "WE Learn B1U8 Festivals iWords 词汇填空",
+      "file": "WE Learn_B1U8_Festivals_iWords_20260704.json",
+      "count": 91
+    },
+    {
+      "id": "welearn_b1u4u8_vocab",
+      "title": "WE Learn B1U4~U8 词性转换冲刺（17组）",
+      "file": "WE Learn_B1U4-U8_单词速记_20260704.json",
+      "count": 17,
+      "kind": "flashcard"
+    }
+  ]
+}

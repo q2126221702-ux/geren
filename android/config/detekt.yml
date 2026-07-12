@@ -1,0 +1,50 @@
+build:
+  maxIssues: 0
+
+config:
+  validation: true
+
+complexity:
+  active: true
+  LongMethod:
+    active: true
+    threshold: 100
+  LongParameterList:
+    active: true
+    functionThreshold: 8
+    constructorThreshold: 9
+  TooManyFunctions:
+    active: true
+    thresholdInFiles: 40
+    thresholdInClasses: 35
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 20
+
+style:
+  active: true
+  MaxLineLength:
+    active: true
+    maxLineLength: 200
+    excludePackageStatements: true
+    excludeImportStatements: true
+  MagicNumber:
+    active: false
+
+naming:
+  active: true
+
+performance:
+  active: true
+
+potential-bugs:
+  active: true
+
+coroutines:
+  active: true
+
+empty-blocks:
+  active: true
+
+exceptions:
+  active: true

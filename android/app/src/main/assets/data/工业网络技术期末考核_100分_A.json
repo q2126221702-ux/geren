@@ -1,0 +1,556 @@
+{
+  "title": "工业网络技术期末考核（满分100分）",
+  "exported_at": "2026-07-08T16:34:03.311747",
+  "meta": {
+    "exam_variant": "A",
+    "school": "漳州职业技术学院",
+    "textbook_isbn": "9787115663788",
+    "textbook": "工业网络技术（微课版）",
+    "scope": "项目1~3、5~6（不含 CANopen、ThingsBoard）",
+    "total_score": 100,
+    "difficulty_ratio": {
+      "易": "60%",
+      "中": "30%",
+      "难": "10%"
+    },
+    "structure": {
+      "单选题": "20题×2.0分",
+      "填空题(客观)": "10题×2.0分",
+      "判断题": "10题×2.0分",
+      "问答题": "4题×5.0分"
+    },
+    "module_coverage": {
+      "基础": {
+        "count": 8,
+        "score": 16.0
+      },
+      "串口": {
+        "count": 9,
+        "score": 21.0
+      },
+      "Modbus": {
+        "count": 9,
+        "score": 21.0
+      },
+      "Profinet": {
+        "count": 9,
+        "score": 21.0
+      },
+      "OPC": {
+        "count": 9,
+        "score": 21.0
+      }
+    },
+    "sources": [
+      "Profinet工业以太网测验_20260626_185300.json",
+      "OPC规范_20260626_185227.json",
+      "MODBUS协议及应用_20260626_185238.json",
+      "串口及应用_20260626_185247.json",
+      "网络及工业通信综合考核_145题.json"
+    ]
+  },
+  "questions": [
+    {
+      "sort": 1,
+      "type": "单选题",
+      "title": "IEEE802.3协议定义的是（）通信标准",
+      "options": [
+        "串口通信",
+        "以太网有线通信",
+        "无线蓝牙",
+        "Modbus总线"
+      ],
+      "correct_answer": "B. 以太网有线通信",
+      "full_score": 2.0
+    },
+    {
+      "sort": 2,
+      "type": "单选题",
+      "title": "RS485通信采用的信号传输方式为（）",
+      "options": [
+        "单端信号传输",
+        "差分平衡信号传输",
+        "电流信号传输",
+        "无线传输"
+      ],
+      "correct_answer": "B. 差分平衡信号传输",
+      "full_score": 2.0
+    },
+    {
+      "sort": 3,
+      "type": "单选题",
+      "title": "Modbus RTU校验方式为（）",
+      "options": [
+        "奇偶校验",
+        "CRC16校验",
+        "LRC校验",
+        "无校验"
+      ],
+      "correct_answer": "B. CRC16校验",
+      "full_score": 2.0
+    },
+    {
+      "sort": 4,
+      "type": "单选题",
+      "title": "Profinet 设备快速分配 IP 与设备名使用（）",
+      "options": [
+        "DCP",
+        "DHCP",
+        "DNS",
+        "ARP"
+      ],
+      "correct_answer": "A. DCP",
+      "full_score": 2.0
+    },
+    {
+      "sort": 5,
+      "type": "单选题",
+      "title": "OPC架构中负责对接PLC、仪表硬件的是（）",
+      "options": [
+        "OPC客户端",
+        "OPC服务器",
+        "交换机",
+        "串口转换器"
+      ],
+      "correct_answer": "B. OPC服务器",
+      "full_score": 2.0
+    },
+    {
+      "sort": 6,
+      "type": "单选题",
+      "title": "IPv4地址标准长度为（）",
+      "options": [
+        "16位",
+        "32位",
+        "64位",
+        "128位"
+      ],
+      "correct_answer": "B. 32位",
+      "full_score": 2.0
+    },
+    {
+      "sort": 7,
+      "type": "单选题",
+      "title": "串口通信参数不包含以下哪一项（）",
+      "options": [
+        "波特率",
+        "数据位",
+        "IP地址",
+        "校验位"
+      ],
+      "correct_answer": "C. IP地址",
+      "full_score": 2.0
+    },
+    {
+      "sort": 8,
+      "type": "单选题",
+      "title": "Modbus功能码03作用为（）",
+      "options": [
+        "读取线圈寄存器",
+        "读取保持寄存器",
+        "写入单线圈",
+        "写入单寄存器"
+      ],
+      "correct_answer": "B. 读取保持寄存器",
+      "full_score": 2.0
+    },
+    {
+      "sort": 9,
+      "type": "单选题",
+      "title": "下列哪种实时等级适合一般工业 IO 控制、响应要求中等？",
+      "options": [
+        "TCP/IP",
+        "RT",
+        "IRT",
+        "HTTP"
+      ],
+      "correct_answer": "B. RT",
+      "full_score": 2.0
+    },
+    {
+      "sort": 10,
+      "type": "单选题",
+      "title": "关于OPC协议描述错误的是（）",
+      "options": [
+        "OPC协议具有高效性、可靠性、开放性、可互操作性",
+        "OPC规范规定了同步通讯和异步通讯两种通讯方式",
+        "同步通讯适用于OPC客户程序较多，数据量较大时的场合",
+        "同步通讯和异步通讯相比，异步通讯的效率更高"
+      ],
+      "correct_answer": "C. 同步通讯适用于OPC客户程序较多，数据量较大时的场合",
+      "full_score": 2.0
+    },
+    {
+      "sort": 11,
+      "type": "单选题",
+      "title": "工业以太网相比商用以太网最核心优化点为（）",
+      "options": [
+        "传输距离更远",
+        "实时性、抗干扰性更强",
+        "带宽更低",
+        "造价更低"
+      ],
+      "correct_answer": "B. 实时性、抗干扰性更强",
+      "full_score": 2.0
+    },
+    {
+      "sort": 12,
+      "type": "单选题",
+      "title": "电磁干扰极强车间，优先选用串口类型（）",
+      "options": [
+        "RS232",
+        "RS485",
+        "USB串口",
+        "蓝牙串口"
+      ],
+      "correct_answer": "B. RS485",
+      "full_score": 2.0
+    },
+    {
+      "sort": 13,
+      "type": "单选题",
+      "title": "Modbus功能码01读取的设备点位是（）",
+      "options": [
+        "离散输入线圈",
+        "保持寄存器",
+        "模拟输入寄存器",
+        "输出寄存器"
+      ],
+      "correct_answer": "A. 离散输入线圈",
+      "full_score": 2.0
+    },
+    {
+      "sort": 14,
+      "type": "单选题",
+      "title": "Profinet通信最小实时响应周期可达（）",
+      "options": [
+        "ms级",
+        "s级",
+        "min级",
+        "h级"
+      ],
+      "correct_answer": "A. ms级",
+      "full_score": 2.0
+    },
+    {
+      "sort": 15,
+      "type": "单选题",
+      "title": "下列哪项是OPC Classic与OPC UA的本质区别（ ）",
+      "options": [
+        "能否处理实时数据",
+        "是否支持历史数据访问",
+        "是否依赖特定操作系统",
+        "能否实现客户端-服务器通信"
+      ],
+      "correct_answer": "C. 是否依赖特定操作系统",
+      "full_score": 2.0
+    },
+    {
+      "sort": 16,
+      "type": "单选题",
+      "title": "下列不属于工业以太网故障的是（）",
+      "options": [
+        "电磁干扰丢包",
+        "IP地址冲突",
+        "总线差分电压异常",
+        "网线水晶头氧化"
+      ],
+      "correct_answer": "C. 总线差分电压异常",
+      "full_score": 2.0
+    },
+    {
+      "sort": 17,
+      "type": "单选题",
+      "title": "RS-232 逻辑&lsquo;1&rsquo;对应的电平范围通常是",
+      "options": [
+        "+3V～+15V",
+        "-3V～-15V",
+        "0V～5V",
+        "5V～12V"
+      ],
+      "correct_answer": "B. -3V～-15V",
+      "full_score": 2.0
+    },
+    {
+      "sort": 18,
+      "type": "单选题",
+      "title": "Modbus通信默认主从工作模式，说法正确的是（）",
+      "options": [
+        "从站主动发报文",
+        "主站下发指令，从站应答",
+        "所有设备主动通信",
+        "无主从区分"
+      ],
+      "correct_answer": "B. 主站下发指令，从站应答",
+      "full_score": 2.0
+    },
+    {
+      "sort": 19,
+      "type": "单选题",
+      "title": "Profinet总线故障代码8090代表（）",
+      "options": [
+        "地址冲突",
+        "设备断线失联",
+        "校验错误",
+        "波特率不匹配"
+      ],
+      "correct_answer": "B. 设备断线失联",
+      "full_score": 2.0
+    },
+    {
+      "sort": 20,
+      "type": "单选题",
+      "title": "不属于OPC数据访问类型的是（）",
+      "options": [
+        "DA实时数据",
+        "HA历史数据",
+        "AE告警数据",
+        "RTU串口数据"
+      ],
+      "correct_answer": "D. RTU串口数据",
+      "full_score": 2.0
+    },
+    {
+      "sort": 21,
+      "type": "填空题(客观)",
+      "title": "商用以太网优先级低于工业以太网________报文。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "实时",
+      "full_score": 2.0
+    },
+    {
+      "sort": 22,
+      "type": "填空题(客观)",
+      "title": "串口通信四大基础参数：波特率、数据位、校验位、________。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "停止位",
+      "full_score": 2.0
+    },
+    {
+      "sort": 23,
+      "type": "填空题(客观)",
+      "title": "功能码05功能为________单个线圈。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "强制置位",
+      "full_score": 2.0
+    },
+    {
+      "sort": 24,
+      "type": "填空题(客观)",
+      "title": "Profinet 周期传输的实时数据称为______",
+      "options": [
+        ""
+      ],
+      "correct_answer": "过程数据",
+      "full_score": 2.0
+    },
+    {
+      "sort": 25,
+      "type": "填空题(客观)",
+      "title": "新版跨平台工业通用协议简写为________。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "UA",
+      "full_score": 2.0
+    },
+    {
+      "sort": 26,
+      "type": "填空题(客观)",
+      "title": "阻断跨网段通信需要配置________网关。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "路由",
+      "full_score": 2.0
+    },
+    {
+      "sort": 27,
+      "type": "填空题(客观)",
+      "title": "RS232通信接线最少只需GND、TX、________三根线。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "RX",
+      "full_score": 2.0
+    },
+    {
+      "sort": 28,
+      "type": "填空题(客观)",
+      "title": "Modbus TCP单元标识符默认取值________。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "00",
+      "full_score": 2.0
+    },
+    {
+      "sort": 29,
+      "type": "填空题(客观)",
+      "title": "Profinet IO 系统由______、IO 设备、IO 监视器三部分组成",
+      "options": [
+        ""
+      ],
+      "correct_answer": "IO 控制器",
+      "full_score": 2.0
+    },
+    {
+      "sort": 30,
+      "type": "填空题(客观)",
+      "title": "老版OPC仅适配________操作系统。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "Windows",
+      "full_score": 2.0
+    },
+    {
+      "sort": 31,
+      "type": "判断题",
+      "title": "集线器可以实现跨网段IP数据转发。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "full_score": 2.0
+    },
+    {
+      "sort": 32,
+      "type": "判断题",
+      "title": "串口通信中，波特率越高，传输距离通常越近",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 33,
+      "type": "判断题",
+      "title": "Modbus TCP使用502固定端口通信。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 34,
+      "type": "判断题",
+      "title": "Profinet IRT模式可满足伺服运动控制高精度实时通信。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 35,
+      "type": "判断题",
+      "title": "OPC UA具有平台独立性，可在非Microsoft系统（包括嵌入式设备）上实现。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 36,
+      "type": "判断题",
+      "title": "工业交换机支持断电告警功能，民用交换机基本无此功能。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 37,
+      "type": "判断题",
+      "title": "终端匹配电阻可以减小 RS-485 信号反射，提高稳定性",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 38,
+      "type": "判断题",
+      "title": "功能码 05 是写单个保持寄存器",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "1",
+      "full_score": 2.0
+    },
+    {
+      "sort": 39,
+      "type": "判断题",
+      "title": "Profinet属于西门子专属实时工业以太网协议。（）",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 40,
+      "type": "判断题",
+      "title": "COM技术是实现控制设备和控制管理系统之间的数据交换的基础，OPC是作为工业标准定义的特殊COM接口。",
+      "options": [
+        "正确",
+        "错误"
+      ],
+      "correct_answer": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 41,
+      "type": "问答题",
+      "title": "串口通信波特率高低对通信效果分别有什么影响？",
+      "options": [],
+      "correct_answer": "波特率越高：传输速度越快，抗干扰变差，远距离易丢包；波特率越低：传输稳定抗干扰强，传输速率慢，适配远距离工控传输。",
+      "full_score": 5.0
+    },
+    {
+      "sort": 42,
+      "type": "问答题",
+      "title": "简述Modbus主从通信工作完整流程。",
+      "options": [],
+      "correct_answer": "①主站组装读写报文，下发指定地址从站；②总线传输报文；③从站校验地址、CRC、报文合法性；④合法报文执行读写指令；⑤从站组装应答报文回传主站；⑥主站校验报文，完成一次通信交互。",
+      "full_score": 5.0
+    },
+    {
+      "sort": 43,
+      "type": "问答题",
+      "title": "简述Profinet协议三大实时等级及适配工控场景。",
+      "options": [],
+      "correct_answer": "①NRT非实时：普通监控、参数读写；②RT实时：普通PLC逻辑联动；③IRT等时实时：伺服运动控制、高精度同步设备联动。",
+      "full_score": 5.0
+    },
+    {
+      "sort": 44,
+      "type": "问答题",
+      "title": "简述OPC Classic与OPC UA核心差异及升级优势。",
+      "options": [],
+      "correct_answer": "老式OPC依托Windows DCOM，仅限Windows、组网复杂、安全性低；OPC UA跨安卓/Linux/Windows、加密通信、支持外网、标准化数据模型、适配云端工控，兼容性安全性全面升级。",
+      "full_score": 5.0
+    }
+  ]
+}

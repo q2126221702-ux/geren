@@ -1,0 +1,327 @@
+{
+  "title": "Profinet工业以太网测验",
+  "exported_at": "2026-06-26T18:53:00.139638",
+  "questions": [
+    {
+      "sort": 1,
+      "type": "单选题",
+      "title": "工业 Profinet 推荐网线为（）",
+      "options": [
+        "超五类 / 六类屏蔽",
+        "三类线",
+        "电话线",
+        "同轴"
+      ],
+      "correct_answer": "A. 超五类 / 六类屏蔽",
+      "your_answer": "A. 超五类 / 六类屏蔽",
+      "score": "4.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 2,
+      "type": "单选题",
+      "title": "IRT 等时同步主要面向（）",
+      "options": [
+        "运动控制 / 伺服",
+        "办公上网",
+        "视频监控",
+        "网页"
+      ],
+      "correct_answer": "A. 运动控制 / 伺服",
+      "your_answer": "A. 运动控制 / 伺服",
+      "score": "4.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 3,
+      "type": "单选题",
+      "title": "MRP 环网冗余切换时间通常小于（）",
+      "options": [
+        "200ms",
+        "10ms",
+        "1s",
+        "500ms"
+      ],
+      "correct_answer": "A. 200ms",
+      "your_answer": "A. 200ms",
+      "score": "4.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 4,
+      "type": "单选题",
+      "title": "下列哪种实时等级适合一般工业 IO 控制、响应要求中等？",
+      "options": [
+        "TCP/IP",
+        "RT",
+        "IRT",
+        "HTTP"
+      ],
+      "correct_answer": "B. RT",
+      "your_answer": "B. RT",
+      "score": "4.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 5,
+      "type": "单选题",
+      "title": "Profinet 标准由哪个组织制定？",
+      "options": [
+        "OPC Foundation",
+        "PI（Profibus & Profinet International）",
+        "IEEE",
+        "IEC"
+      ],
+      "correct_answer": "B. PI（Profibus & Profinet International）",
+      "your_answer": "B. PI（Profibus & Profinet International）",
+      "score": "4.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 6,
+      "type": "单选题",
+      "title": "下列不属于 Profinet 常用拓扑的是（）",
+      "options": [
+        "星型",
+        "环型",
+        "总线型",
+        "蜂窝型"
+      ],
+      "correct_answer": "D. 蜂窝型",
+      "your_answer": "D. 蜂窝型",
+      "score": "4.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 7,
+      "type": "单选题",
+      "title": "Profinet 设备快速分配 IP 与设备名使用（）",
+      "options": [
+        "DCP",
+        "DHCP",
+        "DNS",
+        "ARP"
+      ],
+      "correct_answer": "A. DCP",
+      "your_answer": "A. DCP",
+      "score": "4.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 8,
+      "type": "单选题",
+      "title": "Profinet IO 控制器的角色是（）",
+      "options": [
+        "执行器",
+        "PLC / 主站",
+        "从站",
+        "仅监控"
+      ],
+      "correct_answer": "B. PLC / 主站",
+      "your_answer": "B. PLC / 主站",
+      "score": "4.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 9,
+      "type": "单选题",
+      "title": "保证 IRT 同步的核心是（）",
+      "options": [
+        "高带宽",
+        "时钟同步与时隙划分",
+        "长距离",
+        "无线"
+      ],
+      "correct_answer": "B. 时钟同步与时隙划分",
+      "your_answer": "B. 时钟同步与时隙划分",
+      "score": "4.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 10,
+      "type": "单选题",
+      "title": "过程数据的特点是（）",
+      "options": [
+        "周期、实时、小数据",
+        "非周期、大数据",
+        "仅用于配置",
+        "加密传输"
+      ],
+      "correct_answer": "A. 周期、实时、小数据",
+      "your_answer": "A. 周期、实时、小数据",
+      "score": "4.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 11,
+      "type": "填空题(客观)",
+      "title": "Profinet 是基于______的工业实时通信总线标准。",
+      "options": [
+        ""
+      ],
+      "correct_answer": "以太网",
+      "your_answer": "工业以太网",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 12,
+      "type": "填空题(客观)",
+      "title": "Profinet IO 系统由______、IO 设备、IO 监视器三部分组成",
+      "options": [
+        ""
+      ],
+      "correct_answer": "IO 控制器",
+      "your_answer": "IO控制器",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 13,
+      "type": "填空题(客观)",
+      "title": "Profinet 实时等级分为：TCP/IP、______、______",
+      "options": [
+        "",
+        ""
+      ],
+      "correct_answer": "RT（实时）；IRT（等时同步实时）",
+      "your_answer": "RT；IRT",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 14,
+      "type": "填空题(客观)",
+      "title": "实现环网冗余的 Profinet 协议是______",
+      "options": [
+        ""
+      ],
+      "correct_answer": "MRP（媒体冗余协议）",
+      "your_answer": "MRP",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 15,
+      "type": "填空题(客观)",
+      "title": "Profinet 用于设备命名与 IP 分配的协议是______",
+      "options": [
+        ""
+      ],
+      "correct_answer": "DCP（动态配置协议）",
+      "your_answer": "DCP",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 16,
+      "type": "填空题(客观)",
+      "title": "工业现场推荐使用______网线保证稳定性",
+      "options": [
+        ""
+      ],
+      "correct_answer": "超五类 / 六类 屏蔽",
+      "your_answer": "屏蔽",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 17,
+      "type": "填空题(客观)",
+      "title": "Profinet 物理层遵循______标准",
+      "options": [
+        ""
+      ],
+      "correct_answer": "IEEE 802.3 以太网",
+      "your_answer": "IEEE 802.3",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 18,
+      "type": "填空题(客观)",
+      "title": "IRT 通信最小周期可达到______甚至更小",
+      "options": [
+        ""
+      ],
+      "correct_answer": "1ms",
+      "your_answer": "31.25微秒",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 19,
+      "type": "填空题(客观)",
+      "title": "Profinet 网络故障与状态上报依靠______机制",
+      "options": [
+        ""
+      ],
+      "correct_answer": "诊断 / 报警",
+      "your_answer": "诊断",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 20,
+      "type": "填空题(客观)",
+      "title": "Profinet 周期传输的实时数据称为______",
+      "options": [
+        ""
+      ],
+      "correct_answer": "过程数据",
+      "your_answer": "过程数据",
+      "score": "4.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 21,
+      "type": "问答题",
+      "title": "什么是 MRP 环网冗余？它在 Profinet 中的作用是什么？",
+      "options": [],
+      "correct_answer": "MRP 是环网冗余协议。一环两链路，断点时自动切换，保证通信不中断；用于高可靠产线、设备层网络。",
+      "your_answer": "定义： 一种符合 IEC 标准的工业以太网环网拓扑冗余协议。通过冗余管理器逻辑断开环路的一端防止风暴。 ​作用： 当环网某处断线时，在 200ms 内自动切换到备用路径恢复通信，防止单点故障导致整线停机。",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 22,
+      "type": "问答题",
+      "title": "说明 Profinet IO 系统中：IO 控制器、IO 设备、IO 监视器各自作用",
+      "options": [],
+      "correct_answer": "IO 控制器：PLC / 主站，负责控制逻辑、过程数据交互。 IO 设备：从站，如远程 IO、仪表、阀岛、驱动器。 IO 监视器：用于诊断、监控、上下载、网络状态查看。",
+      "your_answer": "IO 控制器（主站/PLC）： 运行控制程序，建立通信连接，周期性读写数据并处理报警。 ​IO 设备（从站/分布式硬件）： 采集现场传感器输入信号，执行控制器发出的输出指令（如模块、变频器）。 ​IO 监视器（调试工具/PC）： 用于设备配置、命名、分配 IP 以及在线诊断，不参与周期性逻辑控制。",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 23,
+      "type": "问答题",
+      "title": "简述 DCP 协议在 Profinet 中的用途与常用操作",
+      "options": [],
+      "correct_answer": "DCP 用于：设备命名、分配 IP / 子网 / 网关、设备识别、快速寻址。是 Profinet 调试必备工具。",
+      "your_answer": "用途： 基于底层 MAC 广播的发现和基本配置协议，用于在设备没有 IP 地址时进行识别和配置。 ​常用操作： 1. 闪烁 LED（现场定位设备） 2. 扫描发现（获取在线设备的 MAC/IP） 3. 分配设备名称（Set Name） 4. 分配 IP 地址（Set IP） 5. 恢复出厂设置（Reset）",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 24,
+      "type": "问答题",
+      "title": "简述 Profinet RT 和 IRT 的区别与典型应用。",
+      "options": [],
+      "correct_answer": "RT：软实时，基于标准以太网，周期 1-10ms，适合常规 IO、变频器、仪表。 IRT：硬等时同步，时隙调度 + 时钟同步，周期 ≤1ms，用于伺服、运动控制、多轴同步。",
+      "your_answer": "RT（实时）： 基于软件优先级，响应时间 1~10ms。使用标准交换机。适用于普通分布式 I/O 采集、变频器控制。 ​IRT（等时实时）： 基于硬件时钟同步，响应时间 <1ms，抖动 <1μs。须专用硬件芯片。适用于高精度多轴运动控制（伺服/机器人同步）。",
+      "score": "0.0",
+      "full_score": 4.0
+    },
+    {
+      "sort": 25,
+      "type": "问答题",
+      "title": "列出影响 Profinet 实时性与稳定性的 5 个关键因素",
+      "options": [],
+      "correct_answer": "网线质量、交换机性能、实时等级、拓扑结构、干扰屏蔽、时钟同步、环网冗余、地址规划、设备负载",
+      "your_answer": "​拓扑与级联： 交换机线型级联过多导致数据转发延迟叠加。 ​刷新周期： 组态的扫描时间设置过短（超出硬件极限）导致丢包。 ​常规流量干扰： 网络中混入常规视频、大文件等 TCP/IP 流量阻塞通道。 ​电磁干扰与施工： 现场强电干扰、网线未屏蔽或未接地导致 CRC 报文错误。 ​交换机性能： 选用了不支持 QoS/VLAN 优先级的普通商用交换机。",
+      "score": "0.0",
+      "full_score": 4.0
+    }
+  ]
+}

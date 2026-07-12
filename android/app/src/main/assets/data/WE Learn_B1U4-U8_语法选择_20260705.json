@@ -1,0 +1,758 @@
+{
+  "title": "WE Learn B1U4~U8 语法选择（合并）",
+  "exported_at": "2026-07-05T20:16:07.744689",
+  "source": "WE Learn 截图整理（7月5号，25张）",
+  "instruction": "Choose the best answer to complete each of the following sentences.",
+  "questions": [
+    {
+      "sort": 1,
+      "type": "单选题",
+      "title": "【B1U4 Movies】People are fascinated with the memorable cartoon characters ______ by Hayao Miyazaki (宫崎骏).",
+      "options": [
+        "created",
+        "played",
+        "founded",
+        "written"
+      ],
+      "correct_answer": "A. created",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 2,
+      "type": "单选题",
+      "title": "【B1U4 Movies】The People's Republic of China was ______ in 1949.",
+      "options": [
+        "find",
+        "founding",
+        "found",
+        "founded"
+      ],
+      "correct_answer": "D. founded",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 3,
+      "type": "单选题",
+      "title": "【B1U4 Movies】The business has ______ from having one office to having twelve.",
+      "options": [
+        "moved",
+        "expanded",
+        "moving",
+        "expanding"
+      ],
+      "correct_answer": "B. expanded",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 4,
+      "type": "单选题",
+      "title": "【B1U4 Movies】Did you have ______ in Disneyland last summer?",
+      "options": [
+        "joy",
+        "happiness",
+        "fun",
+        "wonder"
+      ],
+      "correct_answer": "C. fun",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 5,
+      "type": "单选题",
+      "title": "【B1U4 Movies】We are told that the key to success ______ hardwork.",
+      "options": [
+        "lies in",
+        "lies by",
+        "lies for",
+        "lies at"
+      ],
+      "correct_answer": "A. lies in",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 6,
+      "type": "单选题",
+      "title": "【B1U4 Movies】Would you mind ______ me here at nine o'clock?",
+      "options": [
+        "meet",
+        "to meet",
+        "meeting",
+        "met"
+      ],
+      "correct_answer": "C. meeting",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 7,
+      "type": "单选题",
+      "title": "【B1U4 Movies】I was so sleepy that I could hardly keep my eyes ______ yesterday evening.",
+      "options": [
+        "opening",
+        "open",
+        "to be opened",
+        "to open"
+      ],
+      "correct_answer": "B. open",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 8,
+      "type": "单选题",
+      "title": "【B1U4 Movies】Jack is our math teacher's ______ student who always scores highest in math exams.",
+      "options": [
+        "worst",
+        "favorite",
+        "loved",
+        "liked"
+      ],
+      "correct_answer": "B. favorite",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 9,
+      "type": "单选题",
+      "title": "【B1U4 Movies】Miranda's suggestion will ______ to argument.",
+      "options": [
+        "turn",
+        "seem",
+        "grow",
+        "lead"
+      ],
+      "correct_answer": "D. lead",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 10,
+      "type": "单选题",
+      "title": "【B1U4 Movies】Bruce Lee is best ______ his martial arts on the film screen.",
+      "options": [
+        "remembered as",
+        "thought for",
+        "remembered for",
+        "recalled for"
+      ],
+      "correct_answer": "C. remembered for",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 11,
+      "type": "单选题",
+      "title": "【B1U5 Our Earth】The writer felt the need to make a ______ against racism in South Africa.",
+      "options": [
+        "stand",
+        "voice",
+        "thought",
+        "choice"
+      ],
+      "correct_answer": "A. stand",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 12,
+      "type": "单选题",
+      "title": "【B1U5 Our Earth】______ bad weather we had to have our physical education class in the classroom.",
+      "options": [
+        "Because of",
+        "Because",
+        "Because of the",
+        "Cause"
+      ],
+      "correct_answer": "C. Because of the",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 13,
+      "type": "单选题",
+      "title": "【B1U5 Our Earth】He was in a very low mood recently: he lost his job and ______ his wife left him.",
+      "options": [
+        "yet",
+        "on top of that",
+        "also",
+        "particularly"
+      ],
+      "correct_answer": "B. on top of that",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 14,
+      "type": "单选题",
+      "title": "【B1U5 Our Earth】Please ______ the TV set before you leave the sitting room.",
+      "options": [
+        "turn on",
+        "close",
+        "turn off",
+        "open"
+      ],
+      "correct_answer": "C. turn off",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 15,
+      "type": "单选题",
+      "title": "【B1U5 Our Earth】We encourage students to ______ fully in the running of the college.",
+      "options": [
+        "work",
+        "participate",
+        "come",
+        "join"
+      ],
+      "correct_answer": "B. participate",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 16,
+      "type": "单选题",
+      "title": "【B1U5 Our Earth】A sitting room can be made into a guest bedroom by ______ adding a sofabed.",
+      "options": [
+        "particularly",
+        "also",
+        "rather",
+        "simply"
+      ],
+      "correct_answer": "D. simply",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 17,
+      "type": "单选题",
+      "title": "【B1U5 Our Earth】If you want to succeed, you must ______ average.",
+      "options": [
+        "go beyond",
+        "go after",
+        "go against",
+        "go before"
+      ],
+      "correct_answer": "A. go beyond",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 18,
+      "type": "单选题",
+      "title": "【B1U5 Our Earth】A new building ______ the view of my office window.",
+      "options": [
+        "takes",
+        "blocks",
+        "conceals",
+        "hides"
+      ],
+      "correct_answer": "B. blocks",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 19,
+      "type": "单选题",
+      "title": "【B1U5 Our Earth】The role will be the biggest ______ of his acting career.",
+      "options": [
+        "challenge",
+        "examination",
+        "task",
+        "difficulty"
+      ],
+      "correct_answer": "A. challenge",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 20,
+      "type": "单选题",
+      "title": "【B1U5 Our Earth】The dove is a ______ of peace.",
+      "options": [
+        "sign",
+        "animal",
+        "symbol",
+        "signal"
+      ],
+      "correct_answer": "C. symbol",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 21,
+      "type": "单选题",
+      "title": "【B1U6 Part-time jobs】The new student ______ well with other classmates.",
+      "options": [
+        "got away",
+        "got up",
+        "got along",
+        "got down"
+      ],
+      "correct_answer": "C. got along",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 22,
+      "type": "单选题",
+      "title": "【B1U6 Part-time jobs】With a failing memory, the old granny ______ remembering things.",
+      "options": [
+        "finds it easy",
+        "is able to",
+        "can not",
+        "has difficulty in"
+      ],
+      "correct_answer": "D. has difficulty in",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 23,
+      "type": "单选题",
+      "title": "【B1U6 Part-time jobs】Buy a computer and you will get a package of software ______.",
+      "options": [
+        "for free",
+        "for money",
+        "for use",
+        "without money"
+      ],
+      "correct_answer": "A. for free",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 24,
+      "type": "单选题",
+      "title": "【B1U6 Part-time jobs】We've been ______ the lost boy all over the town.",
+      "options": [
+        "hunted for",
+        "hunting for",
+        "looking after",
+        "looked after"
+      ],
+      "correct_answer": "B. hunting for",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 25,
+      "type": "单选题",
+      "title": "【B1U6 Part-time jobs】The composition needs ______ before it is handed in.",
+      "options": [
+        "to check",
+        "checking",
+        "checked",
+        "check"
+      ],
+      "correct_answer": "B. checking",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 26,
+      "type": "单选题",
+      "title": "【B1U6 Part-time jobs】The pen I am using now ______ my brother.",
+      "options": [
+        "belongs to",
+        "is belonged to",
+        "belongs",
+        "is belonging to"
+      ],
+      "correct_answer": "A. belongs to",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 27,
+      "type": "单选题",
+      "title": "【B1U6 Part-time jobs】Do you usually go to see the doctor ______ or with your mother?",
+      "options": [
+        "by himself",
+        "alone",
+        "lonely",
+        "yourself"
+      ],
+      "correct_answer": "B. alone",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 28,
+      "type": "单选题",
+      "title": "【B1U6 Part-time jobs】Jack will ______ of the department when the director is away on holiday.",
+      "options": [
+        "charge",
+        "in charge",
+        "be in charge",
+        "be charging"
+      ],
+      "correct_answer": "C. be in charge",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 29,
+      "type": "单选题",
+      "title": "【B1U6 Part-time jobs】The teacher gave the students her new telephone number so that they could call her ______.",
+      "options": [
+        "if possible",
+        "when necessary",
+        "when possible",
+        "for free"
+      ],
+      "correct_answer": "B. when necessary",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 30,
+      "type": "单选题",
+      "title": "【B1U6 Part-time jobs】Do you know why the author ______ the film 'The Wandering Earth' in his recent book?",
+      "options": [
+        "said",
+        "spoke",
+        "mentioned",
+        "told"
+      ],
+      "correct_answer": "C. mentioned",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 31,
+      "type": "单选题",
+      "title": "【B1U7 Health】If you want to gain people's respect, be sure to ______ your promises.",
+      "options": [
+        "live through",
+        "live up to",
+        "live with",
+        "live on"
+      ],
+      "correct_answer": "B. live up to",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 32,
+      "type": "单选题",
+      "title": "【B1U7 Health】As the saying goes, all work and no play makes Jack a dull boy, so we should ______ work and play.",
+      "options": [
+        "keep a good balance between",
+        "both",
+        "better",
+        "just"
+      ],
+      "correct_answer": "A. keep a good balance between",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 33,
+      "type": "单选题",
+      "title": "【B1U7 Health】The wind is ______. Let's ______ the fence before a storm comes.",
+      "options": [
+        "strong; strengthen",
+        "strengthen; strength",
+        "strength; strengthen",
+        "strengthening; strong"
+      ],
+      "correct_answer": "A. strong; strengthen",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 34,
+      "type": "单选题",
+      "title": "【B1U7 Health】While people may watch television for up-to-the-minute news, it is unlikely that television ______ the newspaper completely.",
+      "options": [
+        "replace",
+        "have replaced",
+        "replaced",
+        "will replace"
+      ],
+      "correct_answer": "D. will replace",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 35,
+      "type": "单选题",
+      "title": "【B1U7 Health】My boss asked me to write a marketing report, but I have little experience ______ to marketing.",
+      "options": [
+        "about",
+        "related",
+        "on",
+        "concerning"
+      ],
+      "correct_answer": "B. related",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 36,
+      "type": "单选题",
+      "title": "【B1U7 Health】My cousin is very ______ in all kinds of after-school activities.",
+      "options": [
+        "keen",
+        "eager",
+        "focused",
+        "active"
+      ],
+      "correct_answer": "D. active",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 37,
+      "type": "单选题",
+      "title": "【B1U7 Health】Why ______ on clothes you don't need?",
+      "options": [
+        "stick",
+        "live",
+        "waste",
+        "fit"
+      ],
+      "correct_answer": "C. waste",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 38,
+      "type": "单选题",
+      "title": "【B1U7 Health】The doctor ordered him to go on a ______ to lose weight.",
+      "options": [
+        "vacation",
+        "diet",
+        "fasting",
+        "job"
+      ],
+      "correct_answer": "B. diet",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 39,
+      "type": "单选题",
+      "title": "【B1U7 Health】The car ______ speed as it went down the hill.",
+      "options": [
+        "grew",
+        "turned",
+        "gained",
+        "quickened"
+      ],
+      "correct_answer": "C. gained",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 40,
+      "type": "单选题",
+      "title": "【B1U7 Health】Some animals get ______ when they see their reflections in the mirror.",
+      "options": [
+        "confused",
+        "angry",
+        "sleepy",
+        "sad"
+      ],
+      "correct_answer": "A. confused",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 41,
+      "type": "单选题",
+      "title": "【B1U8 Festivals】I ______ to the summer vacation when I can visit my old friends in hometown.",
+      "options": [
+        "look",
+        "look forward",
+        "look up",
+        "look on"
+      ],
+      "correct_answer": "B. look forward",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 42,
+      "type": "单选题",
+      "title": "【B1U8 Festivals】It is impossible to change the committee's decision. It is ______.",
+      "options": [
+        "final",
+        "last",
+        "unchanged",
+        "fixed"
+      ],
+      "correct_answer": "A. final",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 43,
+      "type": "单选题",
+      "title": "【B1U8 Festivals】The company needs your immediate reply. It is ______ time for you to make up your mind.",
+      "options": [
+        "good",
+        "right",
+        "high",
+        "correct"
+      ],
+      "correct_answer": "C. high",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 44,
+      "type": "单选题",
+      "title": "【B1U8 Festivals】The Dragon Boat Festival ______ the fifth day of the fifth lunar month in China.",
+      "options": [
+        "is",
+        "falls on",
+        "be",
+        "fell on"
+      ],
+      "correct_answer": "B. falls on",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 45,
+      "type": "单选题",
+      "title": "【B1U8 Festivals】If you turn the envelope ______, the key will fall out.",
+      "options": [
+        "upside down",
+        "down",
+        "in",
+        "up"
+      ],
+      "correct_answer": "A. upside down",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 46,
+      "type": "单选题",
+      "title": "【B1U8 Festivals】You were ______ to be here one hour ago. What has happened to you?",
+      "options": [
+        "waited",
+        "supposed",
+        "planned",
+        "intended"
+      ],
+      "correct_answer": "B. supposed",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 47,
+      "type": "单选题",
+      "title": "【B1U8 Festivals】He ______ his things and went on a journey to Egypt.",
+      "options": [
+        "gathered",
+        "stuffed",
+        "packed up",
+        "made up"
+      ],
+      "correct_answer": "C. packed up",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 48,
+      "type": "单选题",
+      "title": "【B1U8 Festivals】______ the articles there are some photographs in the newspaper.",
+      "options": [
+        "Along with",
+        "With",
+        "Along",
+        "By"
+      ],
+      "correct_answer": "A. Along with",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 49,
+      "type": "单选题",
+      "title": "【B1U8 Festivals】The English teacher asked us to ______ the textbooks and notebooks from the desks and get ready to take an exam.",
+      "options": [
+        "get",
+        "put",
+        "remove",
+        "take"
+      ],
+      "correct_answer": "C. remove",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    },
+    {
+      "sort": 50,
+      "type": "单选题",
+      "title": "【B1U8 Festivals】There is a total ______ on smoking in the public space in many parts of China.",
+      "options": [
+        "hate",
+        "refusal",
+        "no",
+        "ban"
+      ],
+      "correct_answer": "D. ban",
+      "your_answer": "",
+      "score": "0",
+      "full_score": 2.0
+    }
+  ]
+}
