@@ -38,7 +38,7 @@
 ## 发布信息
 
 - 包名：`com.xuzheng.tiyuengine`
-- 版本：`1.0.6` (`versionCode 7`)
+- 版本：`1.0.7` (`versionCode 8`)
 - 最低系统：Android 7.0（API 24）
 - 目标系统：Android API 36
 - 隐私政策：https://q2126221702-ux.github.io/geren/privacy-policy.html
