@@ -1,11 +1,5 @@
 package com.xuzheng.tiyuengine.ui
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -70,17 +64,8 @@ internal fun QuizAppShell(
                     )
                 }
             }
-            AnimatedContent(
-                targetState = screen,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = if (isOnline) 0.dp else 40.dp),
-                transitionSpec = {
-                    (slideInHorizontally { it / 6 } + fadeIn()) togetherWith (slideOutHorizontally { -it / 6 } + fadeOut())
-                },
-                label = "screen",
-            ) { targetScreen ->
-                content(targetScreen)
+            Box(Modifier.fillMaxSize().padding(top = if (isOnline) 0.dp else 40.dp)) {
+                content(screen)
             }
         }
     }
@@ -91,7 +76,10 @@ internal fun QuizAppShell(
             title = { Text("发现新版本 ${update.versionName}", fontWeight = FontWeight.Bold) },
             text = { Text(update.notes, lineHeight = 22.sp) },
             confirmButton = {
-                Button(onClick = { startupUpdate = null; onOpenUpdate() }) { Text("前往更新") }
+                Button(onClick = {
+                    startupUpdate = null;
+                    onOpenUpdate()
+                }) { Text("前往更新") }
             },
             dismissButton = {
                 TextButton(onClick = { startupUpdate = null }) { Text("稍后") }
