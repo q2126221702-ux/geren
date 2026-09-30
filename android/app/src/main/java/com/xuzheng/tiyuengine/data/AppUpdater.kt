@@ -19,17 +19,40 @@ data class UpdateInfo(
     val versionName: String,
     val notes: String,
     val downloadUrl: String,
+    val versionCode: Int? = null,
+)
+
+data class UpdateReleaseMetadata(
+    val versionName: String,
+    val versionCode: Int?,
+    val notes: String,
 )
 
 object UpdateVersions {
-    fun isNewer(remote: String, current: String): Boolean {
+    private val versionNameMarker = Regex("""<!--\s*android-version-name:\s*([^\s<>]+)\s*-->""")
+    private val versionCodeMarker = Regex("""<!--\s*android-version-code:\s*([^\s<>]+)\s*-->""")
+
+    fun parseReleaseMetadata(tagName: String, body: String): UpdateReleaseMetadata {
+        val versionName = versionNameMarker.find(body)?.groupValues?.get(1)
+            ?: tagName.trim()
+        val versionCode = versionCodeMarker.find(body)?.groupValues?.get(1)?.toIntOrNull()
+            ?.takeIf { it > 0 }
+        val notes = body.replace(versionNameMarker, "").replace(versionCodeMarker, "").trim()
+        return UpdateReleaseMetadata(
+            versionName.removePrefix("v"),
+            versionCode,
+            notes.ifBlank { "修复问题并优化使用体验。" },
+        )
+    }
+
+    fun isNewer(remote: String, current: String, remoteVersionCode: Int? = null, currentVersionCode: Int? = null): Boolean {
         val remoteParts = remote.trim().removePrefix("v").split('.').map { it.takeWhile(Char::isDigit).toIntOrNull() ?: 0 }
         val currentParts = current.trim().removePrefix("v").split('.').map { it.takeWhile(Char::isDigit).toIntOrNull() ?: 0 }
         for (index in 0 until maxOf(remoteParts.size, currentParts.size)) {
-            val difference = remoteParts.getOrElse(index) { 0 } - currentParts.getOrElse(index) { 0 }
+            val difference = remoteParts.getOrElse(index) { 0 }.compareTo(currentParts.getOrElse(index) { 0 })
             if (difference != 0) return difference > 0
         }
-        return false
+        return remoteVersionCode != null && currentVersionCode != null && remoteVersionCode > currentVersionCode
     }
 }
 
@@ -40,15 +63,23 @@ class AppUpdater(private val context: Context) {
             if (connection.responseCode == HttpURLConnection.HTTP_NOT_FOUND) error("开发者尚未发布可供更新的安装包")
             check(connection.responseCode in 200..299) { "检查更新失败 (${connection.responseCode})" }
             val release = JSONObject(connection.inputStream.bufferedReader().use { it.readText() })
-            val version = release.getString("tag_name").removePrefix("v")
-            if (!UpdateVersions.isNewer(version, BuildConfig.VERSION_NAME)) return null
+            val metadata = UpdateVersions.parseReleaseMetadata(release.getString("tag_name"), release.optString("body"))
+            if (!UpdateVersions.isNewer(
+                    metadata.versionName,
+                    BuildConfig.VERSION_NAME,
+                    metadata.versionCode,
+                    BuildConfig.VERSION_CODE,
+                )
+            ) {
+                return null
+            }
             val assets = release.getJSONArray("assets")
             val apkUrl = (0 until assets.length()).asSequence()
                 .map { assets.getJSONObject(it) }
                 .firstOrNull { it.getString("name").endsWith(".apk", ignoreCase = true) }
                 ?.getString("browser_download_url")
                 ?: error("新版本没有附带 APK 安装包")
-            return UpdateInfo(version, release.optString("body").ifBlank { "修复问题并优化使用体验。" }, apkUrl)
+            return UpdateInfo(metadata.versionName, metadata.notes, apkUrl, metadata.versionCode)
         } finally {
             connection.disconnect()
         }

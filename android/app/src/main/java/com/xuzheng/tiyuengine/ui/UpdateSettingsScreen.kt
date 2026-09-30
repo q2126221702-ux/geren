@@ -111,7 +111,7 @@ internal fun UpdateSettingsScreen(onBack: () -> Unit) {
                             updateStatus = if (update == null) {
                                 "已是最新版本"
                             } else {
-                                "发现新版本 ${update.versionName}"
+                                updateTitle(update)
                             }
                         }
                         .onFailure {
@@ -177,7 +177,7 @@ internal fun UpdateSettingsScreen(onBack: () -> Unit) {
     availableUpdate?.let { update ->
         AlertDialog(
             onDismissRequest = { availableUpdate = null },
-            title = { Text("发现新版本 ${update.versionName}", fontWeight = FontWeight.Bold) },
+            title = { Text(updateTitle(update), fontWeight = FontWeight.Bold) },
             text = { Text(update.notes, lineHeight = 22.sp) },
             confirmButton = {
                 Button(onClick = {
@@ -210,3 +210,10 @@ internal fun UpdateSettingsScreen(onBack: () -> Unit) {
         )
     }
 }
+
+private fun updateTitle(update: UpdateInfo): String =
+    if (update.versionName == BuildConfig.VERSION_NAME) {
+        "发现补丁更新 ${update.versionName}"
+    } else {
+        "发现新版本 ${update.versionName}"
+    }

@@ -24,7 +24,7 @@ class AiClient(context: Context) {
 
     suspend fun test(settings: AiSettings, draftApiKey: String): String = complete(
         settings = settings,
-        apiKey = draftApiKey.ifBlank { if (settings.mode == AiMode.OWN_KEY) settingsStore.apiKey() else "" },
+        apiKey = if (settings.mode == AiMode.OWN_KEY) draftApiKey.ifBlank { settingsStore.apiKey() } else "",
         prompt = "请只回复：连接成功",
         maxTokens = 64,
         temperature = 0.0,
@@ -35,7 +35,15 @@ class AiClient(context: Context) {
         val settings = settingsStore.load()
         val full = settings.mode == AiMode.OWN_KEY
         val prompt = AiPromptBuilder.question(question, answers, full)
-        val raw = complete(settings, settingsStore.apiKey(), prompt, if (full) 4096 else 768, if (full) 0.6 else 0.5, full, onPartial)
+        val raw = complete(
+            settings,
+            if (full) settingsStore.apiKey() else "",
+            prompt,
+            if (full) 4096 else 768,
+            if (full) 0.6 else 0.5,
+            full,
+            onPartial,
+        )
         if (question.type != QuestionType.ESSAY) return AiQuestionResult(raw)
         val score = SCORE_REGEX.find(raw)
         return AiQuestionResult(
@@ -50,7 +58,7 @@ class AiClient(context: Context) {
         val full = settings.mode == AiMode.OWN_KEY
         return complete(
             settings,
-            settingsStore.apiKey(),
+            if (full) settingsStore.apiKey() else "",
             AiPromptBuilder.analysis(quiz, score, answers, full),
             if (full) 4096 else 512,
             if (full) 0.6 else 0.4,
@@ -81,7 +89,9 @@ class AiClient(context: Context) {
             .url("${baseUrl.trimEnd('/')}/chat/completions")
             .post(payload.toString().toRequestBody(JSON_MEDIA_TYPE))
             .header("Accept", if (stream) "text/event-stream" else "application/json")
-        if (apiKey.isNotBlank()) requestBuilder.header("Authorization", "Bearer $apiKey")
+        if (settings.mode == AiMode.OWN_KEY && apiKey.isNotBlank()) {
+            requestBuilder.header("Authorization", "Bearer $apiKey")
+        }
 
         client.newCall(requestBuilder.build()).execute().use { response ->
             if (!response.isSuccessful) throw aiError(response.code, response.body?.string().orEmpty())

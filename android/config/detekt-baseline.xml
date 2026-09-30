@@ -2,7 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>ArgumentListWrapping:AiClient.kt$AiClient$(settings, settingsStore.apiKey(), prompt, if (full) 4096 else 768, if (full) 0.6 else 0.5, full, onPartial)</ID>
     <ID>ArgumentListWrapping:AiClient.kt$AiPromptBuilder$("${('A'.code + index).toChar()}. $option")</ID>
     <ID>ArgumentListWrapping:AiClient.kt$AiPromptBuilder$("、")</ID>
     <ID>ArgumentListWrapping:AiClient.kt$AiPromptBuilder$(' ')</ID>
@@ -103,11 +102,11 @@
     <ID>ArgumentListWrapping:WrongBookStore.kt$WrongBookStore$(mutableSetOf())</ID>
     <ID>CyclomaticComplexMethod:AiClient.kt$AiClient$private suspend fun complete( settings: AiSettings, apiKey: String, prompt: String, maxTokens: Int, temperature: Double, stream: Boolean, onPartial: suspend (String) -&gt; Unit = {}, ): String</ID>
     <ID>CyclomaticComplexMethod:AiSettingsScreen.kt$@Composable internal fun AiSettingsScreen(onBack: () -&gt; Unit)</ID>
-    <ID>CyclomaticComplexMethod:QuizApp.kt$@Composable private fun AiAnalysisPanel( quiz: Quiz, score: Int, answers: AnswerBundle, isOnline: Boolean, defaultCollapsed: Boolean = false )</ID>
+    <ID>CyclomaticComplexMethod:QuizApp.kt$@Composable private fun AiAnalysisPanel( quiz: Quiz, score: Int, answers: AnswerBundle, client: AiClient, scope: CoroutineScope, state: AiAnalysisState, )</ID>
     <ID>CyclomaticComplexMethod:QuizApp.kt$@Composable private fun HomeScreen( wrongCount: Int, learningRecords: List&lt;LearningRecord&gt;, quizzes: List&lt;Quiz&gt;, recommendedQuiz: Quiz?, onStart: () -&gt; Unit, onLibrary: () -&gt; Unit, onWrongBook: () -&gt; Unit, onFavorites: () -&gt; Unit, onProfile: () -&gt; Unit, onQuizSelect: (Quiz) -&gt; Unit )</ID>
     <ID>CyclomaticComplexMethod:QuizApp.kt$@Composable private fun QuizAppContent(snackbarHostState: SnackbarHostState, colors: AppColors)</ID>
-    <ID>CyclomaticComplexMethod:QuizApp.kt$@Composable private fun ResultScreen( quiz: Quiz, score: Int, answers: AnswerBundle, durationSeconds: Long, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, isOnline: Boolean, onHome: () -&gt; Unit, onRetry: () -&gt; Unit, onWrongBook: () -&gt; Unit, )</ID>
-    <ID>CyclomaticComplexMethod:QuizApp.kt$@Composable private fun ReviewCard( number: Int, question: Question, answers: AnswerBundle, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, isOnline: Boolean, )</ID>
+    <ID>CyclomaticComplexMethod:QuizApp.kt$@Composable private fun ResultScreen( quiz: Quiz, score: Int, answers: AnswerBundle, durationSeconds: Long, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, onHome: () -&gt; Unit, onRetry: () -&gt; Unit, onWrongBook: () -&gt; Unit, )</ID>
+    <ID>CyclomaticComplexMethod:QuizApp.kt$@Composable private fun ReviewCard( number: Int, question: Question, answers: AnswerBundle, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, aiState: AiReviewState, onGenerateAi: () -&gt; Unit, )</ID>
     <ID>CyclomaticComplexMethod:QuizApp.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun AnswerScreen( quiz: Quiz, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, onBack: () -&gt; Unit, onSubmit: (AnswerBundle, Long) -&gt; Unit )</ID>
     <ID>CyclomaticComplexMethod:QuizApp.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun WrongBookScreen( quizzes: List&lt;Quiz&gt;, wrongItems: List&lt;WrongItem&gt;, onHome: () -&gt; Unit, onLibrary: () -&gt; Unit, onProfile: () -&gt; Unit, onPractice: (List&lt;Question&gt;) -&gt; Unit )</ID>
     <ID>FinalNewline:ExampleInstrumentedTest.kt$com.xuzheng.tiyuengine.ExampleInstrumentedTest.kt</ID>
@@ -131,7 +130,7 @@
     <ID>FunctionNaming:LearningReportScreen.kt$@Composable private fun ReportOverview(questionCount: Int, quizCount: Int, todayCount: Int, streakDays: Int)</ID>
     <ID>FunctionNaming:LearningReportScreen.kt$@Composable private fun SevenDayChart(days: List&lt;DailyLearning&gt;)</ID>
     <ID>FunctionNaming:QuizApp.kt$@Composable fun QuizApp()</ID>
-    <ID>FunctionNaming:QuizApp.kt$@Composable private fun AiAnalysisPanel( quiz: Quiz, score: Int, answers: AnswerBundle, isOnline: Boolean, defaultCollapsed: Boolean = false )</ID>
+    <ID>FunctionNaming:QuizApp.kt$@Composable private fun AiAnalysisPanel( quiz: Quiz, score: Int, answers: AnswerBundle, client: AiClient, scope: CoroutineScope, state: AiAnalysisState, )</ID>
     <ID>FunctionNaming:QuizApp.kt$@Composable private fun AiFormattedText(text: String)</ID>
     <ID>FunctionNaming:QuizApp.kt$@Composable private fun AppBottomBar( selected: Screen?, onHome: () -&gt; Unit, onLibrary: () -&gt; Unit, onWrongBook: () -&gt; Unit, onProfile: () -&gt; Unit )</ID>
     <ID>FunctionNaming:QuizApp.kt$@Composable private fun HeroMeta(icon: androidx.compose.ui.graphics.vector.ImageVector, text: String)</ID>
@@ -140,9 +139,9 @@
     <ID>FunctionNaming:QuizApp.kt$@Composable private fun Metric(label: String, value: String, modifier: Modifier = Modifier)</ID>
     <ID>FunctionNaming:QuizApp.kt$@Composable private fun PracticeRow(quiz: Quiz, index: Int, mastery: Int?, onClick: () -&gt; Unit)</ID>
     <ID>FunctionNaming:QuizApp.kt$@Composable private fun QuizAppContent(snackbarHostState: SnackbarHostState, colors: AppColors)</ID>
-    <ID>FunctionNaming:QuizApp.kt$@Composable private fun ResultScreen( quiz: Quiz, score: Int, answers: AnswerBundle, durationSeconds: Long, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, isOnline: Boolean, onHome: () -&gt; Unit, onRetry: () -&gt; Unit, onWrongBook: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:QuizApp.kt$@Composable private fun ResultScreen( quiz: Quiz, score: Int, answers: AnswerBundle, durationSeconds: Long, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, onHome: () -&gt; Unit, onRetry: () -&gt; Unit, onWrongBook: () -&gt; Unit, )</ID>
     <ID>FunctionNaming:QuizApp.kt$@Composable private fun ResultStat(label: String, value: String, modifier: Modifier = Modifier)</ID>
-    <ID>FunctionNaming:QuizApp.kt$@Composable private fun ReviewCard( number: Int, question: Question, answers: AnswerBundle, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, isOnline: Boolean, )</ID>
+    <ID>FunctionNaming:QuizApp.kt$@Composable private fun ReviewCard( number: Int, question: Question, answers: AnswerBundle, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, aiState: AiReviewState, onGenerateAi: () -&gt; Unit, )</ID>
     <ID>FunctionNaming:QuizApp.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun AnswerScreen( quiz: Quiz, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, onBack: () -&gt; Unit, onSubmit: (AnswerBundle, Long) -&gt; Unit )</ID>
     <ID>FunctionNaming:QuizApp.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun FavoritesScreen( quizzes: List&lt;Quiz&gt;, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, onHome: () -&gt; Unit, onLibrary: () -&gt; Unit, onWrongBook: () -&gt; Unit, onProfile: () -&gt; Unit, onPractice: (List&lt;Question&gt;) -&gt; Unit, )</ID>
     <ID>FunctionNaming:QuizApp.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun ProfileScreen( records: List&lt;LearningRecord&gt;, wrongItems: List&lt;WrongItem&gt;, quizCount: Int, questionCount: Int, lastSyncedAt: Long, isOnline: Boolean, onSync: suspend () -&gt; SyncResult, onSyncComplete: (SyncResult) -&gt; Unit, onSyncFailed: (String) -&gt; Unit, onHome: () -&gt; Unit, onLibrary: () -&gt; Unit, onWrongBook: () -&gt; Unit, onSettings: () -&gt; Unit, onLearningReport: () -&gt; Unit, )</ID>
@@ -163,18 +162,18 @@
     <ID>ImportOrdering:QuizEngineTest.kt$import com.xuzheng.tiyuengine.data.Question import com.xuzheng.tiyuengine.data.AnswerBundle import com.xuzheng.tiyuengine.data.QuizEngine import org.junit.Assert.assertEquals import org.junit.Test</ID>
     <ID>LongMethod:AiSettingsScreen.kt$@Composable internal fun AiSettingsScreen(onBack: () -&gt; Unit)</ID>
     <ID>LongMethod:BackupSettingsScreen.kt$@Composable internal fun BackupSettingsScreen(onBack: () -&gt; Unit, onDataImported: () -&gt; Unit)</ID>
-    <ID>LongMethod:QuizApp.kt$@Composable private fun AiAnalysisPanel( quiz: Quiz, score: Int, answers: AnswerBundle, isOnline: Boolean, defaultCollapsed: Boolean = false )</ID>
+    <ID>LongMethod:QuizApp.kt$@Composable private fun AiAnalysisPanel( quiz: Quiz, score: Int, answers: AnswerBundle, client: AiClient, scope: CoroutineScope, state: AiAnalysisState, )</ID>
     <ID>LongMethod:QuizApp.kt$@Composable private fun HomeScreen( wrongCount: Int, learningRecords: List&lt;LearningRecord&gt;, quizzes: List&lt;Quiz&gt;, recommendedQuiz: Quiz?, onStart: () -&gt; Unit, onLibrary: () -&gt; Unit, onWrongBook: () -&gt; Unit, onFavorites: () -&gt; Unit, onProfile: () -&gt; Unit, onQuizSelect: (Quiz) -&gt; Unit )</ID>
     <ID>LongMethod:QuizApp.kt$@Composable private fun QuizAppContent(snackbarHostState: SnackbarHostState, colors: AppColors)</ID>
-    <ID>LongMethod:QuizApp.kt$@Composable private fun ResultScreen( quiz: Quiz, score: Int, answers: AnswerBundle, durationSeconds: Long, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, isOnline: Boolean, onHome: () -&gt; Unit, onRetry: () -&gt; Unit, onWrongBook: () -&gt; Unit, )</ID>
-    <ID>LongMethod:QuizApp.kt$@Composable private fun ReviewCard( number: Int, question: Question, answers: AnswerBundle, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, isOnline: Boolean, )</ID>
+    <ID>LongMethod:QuizApp.kt$@Composable private fun ResultScreen( quiz: Quiz, score: Int, answers: AnswerBundle, durationSeconds: Long, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, onHome: () -&gt; Unit, onRetry: () -&gt; Unit, onWrongBook: () -&gt; Unit, )</ID>
+    <ID>LongMethod:QuizApp.kt$@Composable private fun ReviewCard( number: Int, question: Question, answers: AnswerBundle, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, aiState: AiReviewState, onGenerateAi: () -&gt; Unit, )</ID>
     <ID>LongMethod:QuizApp.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun AnswerScreen( quiz: Quiz, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, onBack: () -&gt; Unit, onSubmit: (AnswerBundle, Long) -&gt; Unit )</ID>
     <ID>LongMethod:QuizApp.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun FavoritesScreen( quizzes: List&lt;Quiz&gt;, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, onHome: () -&gt; Unit, onLibrary: () -&gt; Unit, onWrongBook: () -&gt; Unit, onProfile: () -&gt; Unit, onPractice: (List&lt;Question&gt;) -&gt; Unit, )</ID>
     <ID>LongMethod:QuizApp.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun ProfileScreen( records: List&lt;LearningRecord&gt;, wrongItems: List&lt;WrongItem&gt;, quizCount: Int, questionCount: Int, lastSyncedAt: Long, isOnline: Boolean, onSync: suspend () -&gt; SyncResult, onSyncComplete: (SyncResult) -&gt; Unit, onSyncFailed: (String) -&gt; Unit, onHome: () -&gt; Unit, onLibrary: () -&gt; Unit, onWrongBook: () -&gt; Unit, onSettings: () -&gt; Unit, onLearningReport: () -&gt; Unit, )</ID>
     <ID>LongMethod:QuizApp.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun QuizListScreen( quizzes: List&lt;Quiz&gt;, onHome: () -&gt; Unit, onWrongBook: () -&gt; Unit, onProfile: () -&gt; Unit, onSelect: (Quiz) -&gt; Unit, onOpenExamPack: (List&lt;Quiz&gt;) -&gt; Unit, )</ID>
     <ID>LongMethod:QuizApp.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun WrongBookScreen( quizzes: List&lt;Quiz&gt;, wrongItems: List&lt;WrongItem&gt;, onHome: () -&gt; Unit, onLibrary: () -&gt; Unit, onProfile: () -&gt; Unit, onPractice: (List&lt;Question&gt;) -&gt; Unit )</ID>
     <ID>LongMethod:UpdateSettingsScreen.kt$@Composable internal fun UpdateSettingsScreen(onBack: () -&gt; Unit)</ID>
-    <ID>LongParameterList:QuizApp.kt$( quiz: Quiz, score: Int, answers: AnswerBundle, durationSeconds: Long, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, isOnline: Boolean, onHome: () -&gt; Unit, onRetry: () -&gt; Unit, onWrongBook: () -&gt; Unit, )</ID>
+    <ID>LongParameterList:QuizApp.kt$( quiz: Quiz, score: Int, answers: AnswerBundle, durationSeconds: Long, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, onHome: () -&gt; Unit, onRetry: () -&gt; Unit, onWrongBook: () -&gt; Unit, )</ID>
     <ID>LongParameterList:QuizApp.kt$( quizzes: List&lt;Quiz&gt;, favoriteIds: Set&lt;String&gt;, onToggleFavorite: (String) -&gt; Unit, onHome: () -&gt; Unit, onLibrary: () -&gt; Unit, onWrongBook: () -&gt; Unit, onProfile: () -&gt; Unit, onPractice: (List&lt;Question&gt;) -&gt; Unit, )</ID>
     <ID>LongParameterList:QuizApp.kt$( records: List&lt;LearningRecord&gt;, wrongItems: List&lt;WrongItem&gt;, quizCount: Int, questionCount: Int, lastSyncedAt: Long, isOnline: Boolean, onSync: suspend () -&gt; SyncResult, onSyncComplete: (SyncResult) -&gt; Unit, onSyncFailed: (String) -&gt; Unit, onHome: () -&gt; Unit, onLibrary: () -&gt; Unit, onWrongBook: () -&gt; Unit, onSettings: () -&gt; Unit, onLearningReport: () -&gt; Unit, )</ID>
     <ID>LongParameterList:QuizApp.kt$( wrongCount: Int, learningRecords: List&lt;LearningRecord&gt;, quizzes: List&lt;Quiz&gt;, recommendedQuiz: Quiz?, onStart: () -&gt; Unit, onLibrary: () -&gt; Unit, onWrongBook: () -&gt; Unit, onFavorites: () -&gt; Unit, onProfile: () -&gt; Unit, onQuizSelect: (Quiz) -&gt; Unit )</ID>
@@ -210,11 +209,7 @@
     <ID>MaximumLineLength:WrongBookStore.kt$WrongBookStore$ </ID>
     <ID>MultiLineIfElse:AiClient.kt$AiPromptBuilder$buildString { appendLine("你是专业学情分析师。根据测验数据写深度复盘报告（400–550字，必须完整收束）。") appendLine("用加粗小标题分为：整体表现、知识盲区、典型错因、记忆锦囊。按知识簇归纳，不要逐题流水账，不要提供复习日程。") appendLine("测验：${quiz.title}") appendLine("客观题得分：$score/${objective.size}（得分率 $rate%）") appendLine(if (wrong.isEmpty()) "客观题全部答对。" else "错题明细：\n${wrong.joinToString("\n")}") }</ID>
     <ID>MultiLineIfElse:QuizApp.kt$"%.1f".format( Locale.CHINA, score )</ID>
-    <ID>MultiLineIfElse:QuizApp.kt$IconButton(onClick = { collapsed = !collapsed }) { Icon( if (collapsed) Icons.Default.ExpandMore else Icons.Default.ExpandLess, if (collapsed) "展开" else "收起" ) }</ID>
-    <ID>MultiLineIfElse:QuizApp.kt$Row(verticalAlignment = Alignment.CenterVertically) { CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp); Text(" 正在分析学情，通常需要 10–30 秒…", color = colors.textSecondary, fontSize = 13.sp) }</ID>
-    <ID>MultiLineIfElse:QuizApp.kt$Row(verticalAlignment = Alignment.CenterVertically) { CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp); Text(" 正在生成解析…", color = colors.textSecondary, fontSize = 13.sp) }</ID>
     <ID>MultiLineIfElse:QuizApp.kt$Text( "根据本次作答总结薄弱知识点、典型错因和记忆方法。", color = colors.textSecondary, lineHeight = 21.sp )</ID>
-    <ID>MultiLineIfElse:QuizApp.kt$Text( aiError, color = if (aiError.contains("冷却")) colors.warning else colors.danger, fontSize = 13.sp )</ID>
     <ID>MultiLineIfElse:QuizApp.kt$item { Text( "共 ${filteredItems.size} 题", modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp), color = colors.textSecondary, fontSize = 13.sp ) }</ID>
     <ID>MultiLineIfElse:QuizApp.kt$item { Text( syncMessage, modifier = Modifier.padding(horizontal = 24.dp), color = colors.textSecondary, fontSize = 12.sp ) }</ID>
     <ID>MultiLineIfElse:QuizApp.kt$onLibrary()</ID>
@@ -233,7 +228,6 @@
     <ID>NoSemicolons:QuizApp.kt$;</ID>
     <ID>NoSemicolons:QuizAppShell.kt$;</ID>
     <ID>NoWildcardImports:ExampleInstrumentedTest.kt$import org.junit.Assert.*</ID>
-    <ID>PropertyWrapping:AiClient.kt$AiClient$val raw = complete(settings, settingsStore.apiKey(), prompt, if (full) 4096 else 768, if (full) 0.6 else 0.5, full, onPartial)</ID>
     <ID>ReturnCount:LearningStore.kt$LearningStats$fun masteryPercent( records: List&lt;LearningRecord&gt;, quizId: String, objectiveQuestionCount: Int? = null, ): Int?</ID>
     <ID>ReturnCount:NetworkMonitor.kt$NetworkMonitor$fun isOnline(context: Context): Boolean</ID>
     <ID>ReturnCount:QuizRepository.kt$QuizRepository$private fun answerLetters(answer: String, options: List&lt;String&gt;): Set&lt;Int&gt;</ID>
@@ -273,7 +267,6 @@
     <ID>Wrapping:QuizApp.kt$(onClick = { quizMenuOpen = true }, color = colors.surface, shape = RoundedCornerShape( 14.dp ), border = BorderStroke( 1.dp, colors.border ), modifier = Modifier.fillMaxWidth().height(52.dp))</ID>
     <ID>Wrapping:QuizApp.kt$(onClick = { typeMenuOpen = true }, color = colors.surface, shape = RoundedCornerShape( 14.dp ), border = BorderStroke( 1.dp, colors.border ), modifier = Modifier.fillMaxWidth().height(52.dp))</ID>
     <ID>Wrapping:QuizApp.kt$-&gt;</ID>
-    <ID>Wrapping:QuizApp.kt$Icon( if (collapsed) Icons.Default.ExpandMore else Icons.Default.ExpandLess, if (collapsed) "展开" else "收起" )</ID>
     <ID>Wrapping:QuizApp.kt$if (entries.isEmpty()) onLibrary() else { quizFilter = "全部"; typeFilter = "全部" }</ID>
     <ID>Wrapping:QuizData.kt$QuizEngine$it.equals(input, ignoreCase = true)</ID>
     <ID>Wrapping:QuizRepository.kt$QuizRepository$"仓库缺少题库：$fileName"</ID>

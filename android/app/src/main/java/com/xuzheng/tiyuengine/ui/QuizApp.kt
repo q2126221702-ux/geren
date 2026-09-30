@@ -117,6 +117,7 @@ import com.xuzheng.tiyuengine.data.ReviewStatus
 import com.xuzheng.tiyuengine.data.SyncResult
 import com.xuzheng.tiyuengine.data.WrongBookStore
 import com.xuzheng.tiyuengine.data.WrongItem
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -326,7 +327,6 @@ private fun QuizAppContent(snackbarHostState: SnackbarHostState, colors: AppColo
                     durationSeconds = lastDurationSeconds,
                     favoriteIds = favoriteIds,
                     onToggleFavorite = { questionId -> favoriteIds = favoriteStore.toggle(questionId) },
-                    isOnline = isOnline,
                     onHome = { leaveQuizFlow() },
                     onRetry = { screen = Screen.ANSWER },
                     onWrongBook = {
@@ -1155,6 +1155,22 @@ private fun AnswerScreen(
     }
 }
 
+private class AiAnalysisState(defaultCollapsed: Boolean) {
+    var text by mutableStateOf("")
+    var info by mutableStateOf("")
+    var loading by mutableStateOf(false)
+    var collapsed by mutableStateOf(defaultCollapsed)
+    var lastGeneratedAt by mutableStateOf(0L)
+}
+
+private class AiReviewState {
+    var result by mutableStateOf<AiQuestionResult?>(null)
+    var text by mutableStateOf("")
+    var error by mutableStateOf("")
+    var loading by mutableStateOf(false)
+    var expanded by mutableStateOf(false)
+}
+
 @Composable
 private fun ResultScreen(
     quiz: Quiz,
@@ -1163,15 +1179,21 @@ private fun ResultScreen(
     durationSeconds: Long,
     favoriteIds: Set<String>,
     onToggleFavorite: (String) -> Unit,
-    isOnline: Boolean,
     onHome: () -> Unit,
     onRetry: () -> Unit,
     onWrongBook: () -> Unit,
 ) {
     val colors = appColors()
+    val context = LocalContext.current
+    val client = remember(context) { AiClient(context) }
+    val scope = rememberCoroutineScope()
     val objectiveCount = quiz.questions.count { it.type != QuestionType.ESSAY }
     val wrongCount = (objectiveCount - score).coerceAtLeast(0)
     val rate = if (objectiveCount > 0) score * 100 / objectiveCount else 0
+    val analysisState = remember(quiz.id, answers) { AiAnalysisState(wrongCount > 0) }
+    val reviewStates = remember(quiz.id, answers) {
+        quiz.questions.associate { it.id to AiReviewState() }
+    }
     var reviewFilter by remember { mutableStateOf("需要巩固") }
     val reviewQuestions = if (reviewFilter == "全部") quiz.questions else quiz.questions.filter {
         it.type != QuestionType.ESSAY && !QuizEngine.isCorrect(it, answers)
@@ -1292,7 +1314,7 @@ private fun ResultScreen(
                 }
             }
         }
-        item { AiAnalysisPanel(quiz, score, answers, isOnline, defaultCollapsed = wrongCount > 0) }
+        item { AiAnalysisPanel(quiz, score, answers, client, scope, analysisState) }
         item {
             Row(
                 Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
@@ -1331,6 +1353,7 @@ private fun ResultScreen(
             }
         }
         items(reviewQuestions) { question ->
+            val aiState = reviewStates.getValue(question.id)
             Box(Modifier.padding(horizontal = 16.dp, vertical = 7.dp)) {
                 ReviewCard(
                     quiz.questions.indexOf(question) + 1,
@@ -1338,7 +1361,24 @@ private fun ResultScreen(
                     answers,
                     favoriteIds,
                     onToggleFavorite,
-                    isOnline
+                    aiState,
+                    onGenerateAi = {
+                        if (!aiState.loading) {
+                            aiState.loading = true
+                            aiState.error = ""
+                            aiState.text = ""
+                            aiState.result = null
+                            scope.launch {
+                                runCatching { client.explain(question, answers) { partial -> aiState.text = partial } }
+                                    .onSuccess { result ->
+                                        aiState.result = result
+                                        aiState.text = result.text
+                                    }
+                                    .onFailure { aiState.error = it.message ?: "AI 解析失败，请检查网络后重试" }
+                                aiState.loading = false
+                            }
+                        }
+                    }
                 )
             }
         }
@@ -1374,18 +1414,11 @@ private fun ReviewCard(
     answers: AnswerBundle,
     favoriteIds: Set<String>,
     onToggleFavorite: (String) -> Unit,
-    isOnline: Boolean,
+    aiState: AiReviewState,
+    onGenerateAi: () -> Unit,
 ) {
     val colors = appColors()
     val messenger = LocalAppMessenger.current
-    val context = LocalContext.current
-    val client = remember(context) { AiClient(context) }
-    val scope = rememberCoroutineScope()
-    var aiResult by remember(question.id) { mutableStateOf<AiQuestionResult?>(null) }
-    var aiText by remember(question.id) { mutableStateOf("") }
-    var aiError by remember(question.id) { mutableStateOf("") }
-    var aiLoading by remember(question.id) { mutableStateOf(false) }
-    var expanded by remember(question.id) { mutableStateOf(false) }
     val correct = QuizEngine.isCorrect(question, answers)
     val answerText = when (question.type) {
         QuestionType.SINGLE, QuestionType.MULTIPLE, QuestionType.TRUE_FALSE -> question.answerIndices.sorted().joinToString(
@@ -1483,18 +1516,18 @@ private fun ReviewCard(
                     lineHeight = 21.sp
                 )
             }
-            TextButton(onClick = { expanded = !expanded }, modifier = Modifier.fillMaxWidth()) {
+            TextButton(onClick = { aiState.expanded = !aiState.expanded }, modifier = Modifier.fillMaxWidth()) {
                 Icon(
-                    if (expanded) Icons.Default.ExpandLess else Icons.Default.Description,
+                    if (aiState.expanded) Icons.Default.ExpandLess else Icons.Default.Description,
                     null,
                     tint = colors.primary,
                     modifier = Modifier.size(18.dp)
                 )
-                Text(if (expanded) " 收起解析" else " 查看解析", color = colors.primary, fontWeight = FontWeight.Bold)
+                Text(if (aiState.expanded) " 收起解析" else " 查看解析", color = colors.primary, fontWeight = FontWeight.Bold)
             }
-            if (expanded) {
+            if (aiState.expanded) {
                 Text(question.explanation, color = colors.textSecondary, fontSize = 14.sp, lineHeight = 22.sp)
-                if (aiText.isNotBlank() || aiError.isNotBlank() || aiLoading) {
+                if (aiState.text.isNotBlank() || aiState.error.isNotBlank() || aiState.loading) {
                     Surface(color = colors.violetSoft, shape = RoundedCornerShape(14.dp)) {
                         Column(
                             Modifier.fillMaxWidth().padding(14.dp),
@@ -1509,47 +1542,33 @@ private fun ReviewCard(
                                 );
                                 Text(" AI 深度解析", color = colors.textPrimary, fontWeight = FontWeight.Bold)
                             }
-                            aiResult?.score?.let {
+                            aiState.result?.score?.let {
                                 Text(
-                                    "AI 评分：${formatAiScore(it)} / ${aiResult?.maxScore ?: 10}",
+                                    "AI 评分：${formatAiScore(it)} / ${aiState.result?.maxScore ?: 10}",
                                     color = colors.success,
                                     fontWeight = FontWeight.Bold
                                 )
                             }
-                            if (aiText.isNotBlank()) AiFormattedText(aiText)
-                            if (aiError.isNotBlank()) Text(
-                                aiError,
-                                color = if (aiError.contains("冷却")) colors.warning else colors.danger,
-                                fontSize = 13.sp
-                            )
-                            if (aiLoading && aiText.isBlank()) Row(verticalAlignment = Alignment.CenterVertically) {
-                                CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp);
-                                Text(" 正在生成解析…", color = colors.textSecondary, fontSize = 13.sp)
+                            if (aiState.text.isNotBlank()) AiFormattedText(aiState.text)
+                            if (aiState.error.isNotBlank()) {
+                                Text(
+                                    aiState.error,
+                                    color = if (aiState.error.contains("冷却")) colors.warning else colors.danger,
+                                    fontSize = 13.sp
+                                )
+                            }
+                            if (aiState.loading && aiState.text.isBlank()) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp);
+                                    Text(" 正在生成解析…", color = colors.textSecondary, fontSize = 13.sp)
+                                }
                             }
                         }
                     }
                 }
                 OutlinedButton(
-                    enabled = !aiLoading,
-                    onClick = {
-                        if (!isOnline) {
-                            aiError = "当前无网络，无法使用 AI 解析"
-                            return@OutlinedButton
-                        }
-                        aiLoading = true
-                        aiError = ""
-                        aiText = ""
-                        aiResult = null
-                        scope.launch {
-                            runCatching { client.explain(question, answers) { partial -> aiText = partial } }
-                                .onSuccess { result ->
-                                    aiResult = result;
-                                    aiText = result.text
-                                }
-                                .onFailure { aiError = it.message ?: "AI 解析失败，请检查网络后重试" }
-                            aiLoading = false
-                        }
-                    },
+                    enabled = !aiState.loading,
+                    onClick = onGenerateAi,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp),
                     border = BorderStroke(1.dp, colors.violet),
@@ -1558,7 +1577,13 @@ private fun ReviewCard(
                     ),
                 ) {
                     Icon(Icons.Default.AutoAwesome, null, modifier = Modifier.size(17.dp));
-                    Text(if (aiResult == null) " AI 深度解析" else " 重新生成解析")
+                    Text(
+                        when {
+                            aiState.loading -> " 正在生成解析…"
+                            aiState.result == null -> " AI 深度解析"
+                            else -> " 重新生成解析"
+                        }
+                    )
                 }
             }
         }
@@ -1570,25 +1595,19 @@ private fun AiAnalysisPanel(
     quiz: Quiz,
     score: Int,
     answers: AnswerBundle,
-    isOnline: Boolean,
-    defaultCollapsed: Boolean = false
+    client: AiClient,
+    scope: CoroutineScope,
+    state: AiAnalysisState,
 ) {
     val colors = appColors()
     val context = LocalContext.current
-    val client = remember(context) { AiClient(context) }
     val settingsStore = remember(context) { AiSettingsStore(context) }
-    val scope = rememberCoroutineScope()
-    var text by remember(quiz.id, answers) { mutableStateOf("") }
-    var info by remember(quiz.id, answers) { mutableStateOf("") }
-    var loading by remember(quiz.id, answers) { mutableStateOf(false) }
-    var collapsed by remember(quiz.id, answers) { mutableStateOf(defaultCollapsed) }
-    var lastGeneratedAt by remember(quiz.id, answers) { mutableStateOf(0L) }
     var cooldownLeftMs by remember { mutableStateOf(0L) }
-    LaunchedEffect(lastGeneratedAt) {
+    LaunchedEffect(state.lastGeneratedAt) {
         while (true) {
             val settings = settingsStore.load()
-            cooldownLeftMs = if (settings.mode == AiMode.SHARED && lastGeneratedAt > 0) {
-                (120_000 - (System.currentTimeMillis() - lastGeneratedAt)).coerceAtLeast(0)
+            cooldownLeftMs = if (settings.mode == AiMode.SHARED && state.lastGeneratedAt > 0) {
+                (120_000 - (System.currentTimeMillis() - state.lastGeneratedAt)).coerceAtLeast(0)
             } else {
                 0L
             }
@@ -1623,49 +1642,57 @@ private fun AiAnalysisPanel(
                         )
                     }
                 }
-                if (text.isNotBlank()) IconButton(onClick = {
-                    collapsed = !collapsed
-                }) { Icon(
-                    if (collapsed) Icons.Default.ExpandMore else Icons.Default.ExpandLess,
-                    if (collapsed) "展开" else "收起"
-                ) }
+                if (state.text.isNotBlank()) {
+                    IconButton(onClick = {
+                        state.collapsed = !state.collapsed
+                    }) {
+                        Icon(
+                            if (state.collapsed) Icons.Default.ExpandMore else Icons.Default.ExpandLess,
+                            if (state.collapsed) "展开" else "收起"
+                        )
+                    }
+                }
             }
-            if (!collapsed) {
-                if (text.isBlank() && !loading && info.isBlank()) Text(
+            if (!state.collapsed) {
+                if (state.text.isBlank() && !state.loading && state.info.isBlank()) Text(
                     "根据本次作答总结薄弱知识点、典型错因和记忆方法。",
                     color = colors.textSecondary,
                     lineHeight = 21.sp
                 )
-                if (text.isNotBlank()) AiFormattedText(text)
-                if (loading && text.isBlank()) Row(verticalAlignment = Alignment.CenterVertically) {
-                    CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp);
-                    Text(" 正在分析学情，通常需要 10–30 秒…", color = colors.textSecondary, fontSize = 13.sp)
+                if (state.text.isNotBlank()) AiFormattedText(state.text)
+                if (state.loading && state.text.isBlank()) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp);
+                        Text(" 正在分析学情，请稍候，无需重复点击…", color = colors.textSecondary, fontSize = 13.sp)
+                    }
                 }
-                if (info.isNotBlank()) Text(info, color = colors.warning, fontSize = 13.sp)
+                if (state.info.isNotBlank()) Text(state.info, color = colors.warning, fontSize = 13.sp)
             }
             Button(
-                enabled = !loading && cooldownLeftMs == 0L,
+                enabled = !state.loading && cooldownLeftMs == 0L,
                 onClick = {
-                    if (!isOnline) {
-                        info = "当前无网络，无法生成学情分析"
-                        return@Button
-                    }
+                    if (state.loading) return@Button
                     val settings = settingsStore.load()
-                    if (settings.mode == AiMode.SHARED && lastGeneratedAt > 0 && cooldownLeftMs > 0) {
-                        info = "共享 AI 冷却中，约 ${cooldownLeftMs / 60_000 + 1} 分钟后可重新分析"
+                    val remainingMs = if (settings.mode == AiMode.SHARED && state.lastGeneratedAt > 0) {
+                        (120_000 - (System.currentTimeMillis() - state.lastGeneratedAt)).coerceAtLeast(0)
                     } else {
-                        loading = true
-                        collapsed = false
-                        info = ""
-                        text = ""
+                        0L
+                    }
+                    state.collapsed = false
+                    if (remainingMs > 0) {
+                        state.info = "共享 AI 冷却中，约 ${remainingMs / 60_000 + 1} 分钟后可重新分析"
+                    } else {
+                        state.loading = true
+                        state.info = ""
+                        state.text = ""
                         scope.launch {
-                            runCatching { client.analyze(quiz, score, answers) { partial -> text = partial } }
+                            runCatching { client.analyze(quiz, score, answers) { partial -> state.text = partial } }
                                 .onSuccess { result ->
-                                    text = result;
-                                    lastGeneratedAt = System.currentTimeMillis()
+                                    state.text = result;
+                                    state.lastGeneratedAt = System.currentTimeMillis()
                                 }
-                                .onFailure { info = it.message ?: "学情分析失败，请检查网络后重试" }
-                            loading = false
+                                .onFailure { state.info = it.message ?: "学情分析失败，请检查网络后重试" }
+                            state.loading = false
                         }
                     }
                 },
@@ -1679,11 +1706,11 @@ private fun AiAnalysisPanel(
                 Icon(Icons.Default.AutoAwesome, null, modifier = Modifier.size(17.dp))
                 Text(
                     when {
-                        loading -> " 正在分析…"
-                        cooldownLeftMs > 0 && text.isNotBlank() -> " 冷却中 ${cooldownLeftMs / 60_000}:${"%02d".format(
+                        state.loading -> " 正在分析…"
+                        cooldownLeftMs > 0 && state.text.isNotBlank() -> " 冷却中 ${cooldownLeftMs / 60_000}:${"%02d".format(
                             (cooldownLeftMs / 1000) % 60
                         )}"
-                        text.isBlank() -> " 生成学情分析"
+                        state.text.isBlank() -> " 生成学情分析"
                         else -> " 重新分析"
                     },
                 )
