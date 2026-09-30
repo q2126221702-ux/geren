@@ -1,6 +1,7 @@
 package com.xuzheng.tiyuengine.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -53,7 +54,7 @@ internal fun QuizAppShell(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = appColors().pageBackground,
     ) { padding ->
-        Box(Modifier.fillMaxSize().padding(padding)) {
+        Box(Modifier.fillMaxSize().padding(padding).consumeWindowInsets(padding)) {
             if (!isOnline) {
                 Surface(color = appColors().offlineBanner, modifier = Modifier.fillMaxWidth()) {
                     Text(
