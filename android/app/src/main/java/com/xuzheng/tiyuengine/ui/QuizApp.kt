@@ -117,6 +117,8 @@ import com.xuzheng.tiyuengine.data.ReviewStatus
 import com.xuzheng.tiyuengine.data.SyncResult
 import com.xuzheng.tiyuengine.data.WrongBookStore
 import com.xuzheng.tiyuengine.data.WrongItem
+import com.xuzheng.tiyuengine.data.aiFailureMessage
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -1374,7 +1376,10 @@ private fun ResultScreen(
                                         aiState.result = result
                                         aiState.text = result.text
                                     }
-                                    .onFailure { aiState.error = it.message ?: "AI 解析失败，请检查网络后重试" }
+                                    .onFailure {
+                                        if (it is CancellationException) throw it
+                                        aiState.error = aiFailureMessage(it, "AI 解析失败，请检查网络后重试")
+                                    }
                                 aiState.loading = false
                             }
                         }
@@ -1691,7 +1696,10 @@ private fun AiAnalysisPanel(
                                     state.text = result;
                                     state.lastGeneratedAt = System.currentTimeMillis()
                                 }
-                                .onFailure { state.info = it.message ?: "学情分析失败，请检查网络后重试" }
+                                .onFailure {
+                                    if (it is CancellationException) throw it
+                                    state.info = aiFailureMessage(it, "学情分析失败，请检查网络后重试")
+                                }
                             state.loading = false
                         }
                     }

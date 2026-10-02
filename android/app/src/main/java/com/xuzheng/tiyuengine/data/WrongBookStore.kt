@@ -21,10 +21,10 @@ data class WrongItem(
 
 enum class ReviewStatus { UNMASTERED, REVIEWING, MASTERED }
 
-class WrongBookStore(context: Context) {
+class WrongBookStore(private val context: Context) {
     private val preferences = context.getSharedPreferences("wrong_book", Context.MODE_PRIVATE)
 
-    fun loadItems(): List<WrongItem> {
+    fun loadItems(): List<WrongItem> = LearningBackupTransaction.withStableData(context) {
         val stored = runCatching {
             val array = JSONArray(preferences.getString(KEY_ITEMS, "[]"))
             buildList {
@@ -34,26 +34,31 @@ class WrongBookStore(context: Context) {
                 }
             }
         }.getOrDefault(emptyList())
-        if (stored.isNotEmpty()) return stored
+        if (stored.isNotEmpty()) return@withStableData stored
 
         val legacyIds = preferences.getStringSet(KEY_LEGACY_IDS, emptySet()).orEmpty()
-        if (legacyIds.isEmpty()) return emptyList()
+        if (legacyIds.isEmpty()) return@withStableData emptyList()
         val now = System.currentTimeMillis()
-        return legacyIds.map { WrongItem(it, 1, 0, now, 0, now) }.also(::save)
+        legacyIds.map { WrongItem(it, 1, 0, now, 0, now) }.also(::save)
     }
 
     fun loadIds(): Set<String> = loadItems().filter { it.status != ReviewStatus.MASTERED }.mapTo(mutableSetOf()) { it.questionId }
 
-    fun updateAfterSubmission(questions: List<Question>, answers: AnswerBundle, isReview: Boolean) {
+    fun updateAfterSubmission(
+        questions: List<Question>,
+        answers: AnswerBundle,
+        isReview: Boolean,
+    ) = LearningBackupTransaction.withStableData(context) {
         val now = System.currentTimeMillis()
         val items = loadItems().associateBy { it.questionId }.toMutableMap()
         questions.filter { it.type != QuestionType.ESSAY }.forEach { question ->
             val old = items[question.id]
             val correct = QuizEngine.isCorrect(question, answers)
             if (!correct) {
-                items[question.id] = WrongItem(question.id, (old?.wrongTimes ?: 0) + 1, 0, now, if (isReview) now else old?.lastReviewedAt ?: 0, now)
+                val wrongTimes = ((old?.wrongTimes ?: 0).toLong() + 1).coerceIn(1, Int.MAX_VALUE.toLong()).toInt()
+                items[question.id] = WrongItem(question.id, wrongTimes, 0, now, if (isReview) now else old?.lastReviewedAt ?: 0, now)
             } else if (isReview && old != null) {
-                val streak = (old.correctStreak + 1).coerceAtMost(3)
+                val streak = (old.correctStreak.toLong() + 1).coerceIn(1, 3).toInt()
                 val delayDays = when (streak) { 1 -> 1; 2 -> 3; else -> 7 }
                 items[question.id] = old.copy(correctStreak = streak, lastReviewedAt = now, nextReviewAt = now + delayDays * DAY_MILLIS)
             }

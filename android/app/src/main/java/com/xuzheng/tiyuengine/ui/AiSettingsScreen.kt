@@ -55,11 +55,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xuzheng.tiyuengine.data.AiClient
+import com.xuzheng.tiyuengine.data.AiKeyInfo
 import com.xuzheng.tiyuengine.data.AiMode
 import com.xuzheng.tiyuengine.data.AiProvider
 import com.xuzheng.tiyuengine.data.AiProviderCatalog
 import com.xuzheng.tiyuengine.data.AiSettings
 import com.xuzheng.tiyuengine.data.AiSettingsStore
+import com.xuzheng.tiyuengine.data.aiFailureMessage
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -84,10 +87,14 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
     var statusSuccess by remember { mutableStateOf<Boolean?>(null) }
     val colors = appColors()
     val provider = AiProviderCatalog.find(providerId)
-    val canClear = savedSettings.hasApiKey || savedSettings.model.isNotBlank() || savedSettings.mode != AiMode.SHARED
-    val keyReady = mode == AiMode.SHARED || apiKey.isNotBlank() || savedSettings.hasApiKey
+    val selectedKey = remember(providerId, savedSettings, mode) {
+        if (mode == AiMode.OWN_KEY) store.keyInfo(providerId) else AiKeyInfo(false, "")
+    }
+    val canClear = store.hasStoredCredentials() || savedSettings.model.isNotBlank() ||
+        savedSettings.mode != AiMode.SHARED
+    val keyReady = mode == AiMode.SHARED || apiKey.isNotBlank() || selectedKey.hasApiKey
 
-    fun draftSettings() = AiSettings(mode, providerId, model, savedSettings.hasApiKey, savedSettings.keyHint)
+    fun draftSettings() = AiSettings(mode, providerId, model, selectedKey.hasApiKey, selectedKey.keyHint)
 
     SettingsScaffold(
         title = "AI 设置",
@@ -103,11 +110,19 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
                 SettingsPrimaryButton(
                     text = "保存设置",
                     onClick = {
+                        val saveMode = mode
+                        val saveProviderId = providerId
+                        val saveModel = model
+                        val saveApiKey = apiKey
                         busy = true
                         status = "正在保存设置…"
                         statusSuccess = null
                         scope.launch {
-                            runCatching { withContext(Dispatchers.IO) { store.save(mode, providerId, model, apiKey) } }
+                            runCatching {
+                                withContext(Dispatchers.IO) {
+                                    store.save(saveMode, saveProviderId, saveModel, saveApiKey)
+                                }
+                            }
                                 .onSuccess {
                                     savedSettings = store.load()
                                     apiKey = ""
@@ -115,7 +130,8 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
                                     statusSuccess = true
                                 }
                                 .onFailure {
-                                    status = it.message ?: "保存失败，请检查填写内容";
+                                    if (it is CancellationException) throw it
+                                    status = "AI 设置保存失败，请重试";
                                     statusSuccess = false
                                 }
                             busy = false
@@ -127,17 +143,25 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
                 SettingsSecondaryButton(
                     text = if (busy) "请稍候…" else "测试连接",
                     onClick = {
+                        val testSettings = draftSettings()
+                        val testApiKey = apiKey
                         busy = true
                         status = "正在测试连接…"
                         statusSuccess = null
                         scope.launch {
-                            runCatching { client.test(draftSettings(), apiKey) }
+                            runCatching { client.test(testSettings, testApiKey) }
                                 .onSuccess {
-                                    status = "连接成功 · ${if (mode == AiMode.SHARED) "站点默认 AI" else provider.name}";
+                                    val serviceName = if (testSettings.mode == AiMode.SHARED) {
+                                        "站点默认 AI"
+                                    } else {
+                                        testSettings.provider.name
+                                    }
+                                    status = "连接成功 · $serviceName"
                                     statusSuccess = true
                                 }
                                 .onFailure {
-                                    status = it.message ?: "连接失败，请检查网络和 API Key";
+                                    if (it is CancellationException) throw it
+                                    status = aiFailureMessage(it, "连接失败，请检查网络和当前服务商的 API Key");
                                     statusSuccess = false
                                 }
                             busy = false
@@ -150,6 +174,13 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
         },
     ) {
         ConnectionStatus(savedSettings, status, statusSuccess)
+        if (savedSettings.needsApiKeyReentry) {
+            Text(
+                "旧版本 API Key 未绑定服务商，已停用。使用自带 Key 时，请重新填写当前服务商的 API Key。",
+                color = colors.warning,
+                fontSize = 13.sp,
+            )
+        }
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("AI 接入方式", color = colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -157,16 +188,20 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
                     "站点默认 AI",
                     "使用共享额度，开箱即用",
                     mode == AiMode.SHARED,
-                    Modifier.fillMaxWidth()
+                    Modifier.fillMaxWidth(),
+                    enabled = !busy,
                 ) {
                     mode = AiMode.SHARED;
+                    apiKey = ""
+                    keyVisible = false
                     status = ""
                 }
                 ModeOption(
                     "自带 API Key",
                     "使用自己的服务额度",
                     mode == AiMode.OWN_KEY,
-                    Modifier.fillMaxWidth()
+                    Modifier.fillMaxWidth(),
+                    enabled = !busy,
                 ) {
                     mode = AiMode.OWN_KEY;
                     status = ""
@@ -182,7 +217,7 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
         if (mode == AiMode.OWN_KEY) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text("配置参数", color = colors.textPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                ProviderRow(provider) { providerDialog = true }
+                ProviderRow(provider) { if (!busy) providerDialog = true }
                 Text(provider.hint, color = colors.textSecondary, fontSize = 13.sp)
                 TextButton(
                     onClick = { uriHandler.openUri(provider.keyUrl) },
@@ -197,13 +232,22 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
                     label = { Text("API Key") },
                     placeholder = {
                         Text(
-                            if (savedSettings.hasApiKey) "已安全保存 · ••••${savedSettings.keyHint}（留空不修改）" else "粘贴你的 API Key"
+                            if (selectedKey.hasApiKey) {
+                                "已保存当前服务商 Key · ••••${selectedKey.keyHint}（留空不修改）"
+                            } else {
+                                "粘贴当前服务商的 API Key"
+                            }
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
+                    enabled = !busy,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    visualTransformation = if (keyVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    visualTransformation = if (keyVisible) {
+                        VisualTransformation.None
+                    } else {
+                        PasswordVisualTransformation()
+                    },
                     trailingIcon = {
                         IconButton(
                             onClick = { keyVisible = !keyVisible }
@@ -232,6 +276,7 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
                     supportingText = { Text("推荐模型：${provider.defaultModel}") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
+                    enabled = !busy,
                     shape = RoundedCornerShape(16.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = colors.primary,
@@ -252,7 +297,7 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
                 )
             }
         }
-        TextButton(onClick = { clearDialog = true }, enabled = canClear) {
+        TextButton(onClick = { clearDialog = true }, enabled = canClear && !busy) {
             val dangerColor = if (canClear) colors.danger else colors.textSecondary
             Icon(Icons.Default.DeleteOutline, null, tint = dangerColor);
             Text(" 清除本机 AI 配置", color = dangerColor)
@@ -269,7 +314,9 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
                 ) {
                     AiProviderCatalog.providers.forEach { item ->
                         Row(
-                            Modifier.fillMaxWidth().clickable {
+                            Modifier.fillMaxWidth().clickable(enabled = !busy) {
+                                apiKey = ""
+                                keyVisible = false
                                 providerId = item.id;
                                 model = "";
                                 providerDialog = false
@@ -305,15 +352,23 @@ internal fun AiSettingsScreen(onBack: () -> Unit) {
             text = { Text("将删除已保存的 API Key、服务商和模型设置。此操作无法撤销。") },
             confirmButton = {
                 Button(
+                    enabled = !busy,
                     onClick = {
-                        store.clear();
-                        savedSettings = store.load();
-                        mode = savedSettings.mode;
-                        providerId = savedSettings.providerId;
-                        model = "";
-                        apiKey = "";
-                        status = "本机 AI 配置已清除";
-                        statusSuccess = true;
+                        runCatching { store.clear() }
+                            .onSuccess {
+                                savedSettings = store.load()
+                                mode = savedSettings.mode
+                                providerId = savedSettings.providerId
+                                model = ""
+                                apiKey = ""
+                                keyVisible = false
+                                status = "本机 AI 配置已清除"
+                                statusSuccess = true
+                            }
+                            .onFailure {
+                                status = "AI 配置清除失败，请重试"
+                                statusSuccess = false
+                            }
                         clearDialog = false
                     }
                 ) { Text("清除配置") }
@@ -369,10 +424,19 @@ private fun ConnectionStatus(settings: AiSettings, message: String, success: Boo
 }
 
 @Composable
-private fun ModeOption(label: String, subtitle: String, selected: Boolean, modifier: Modifier, onClick: () -> Unit) {
+@Suppress("FunctionNaming")
+private fun ModeOption(
+    label: String,
+    subtitle: String,
+    selected: Boolean,
+    modifier: Modifier,
+    enabled: Boolean,
+    onClick: () -> Unit,
+) {
     val colors = appColors()
     Surface(
         onClick = onClick,
+        enabled = enabled,
         modifier = modifier,
         color = if (selected) colors.primarySoft else colors.surface,
         shape = RoundedCornerShape(18.dp),

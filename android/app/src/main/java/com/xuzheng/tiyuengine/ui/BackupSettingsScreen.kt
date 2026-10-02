@@ -63,8 +63,9 @@ internal fun BackupSettingsScreen(onBack: () -> Unit, onDataImported: () -> Unit
             scope.launch {
                 runCatching {
                     withContext(Dispatchers.IO) {
+                        val json = learningBackup.exportJson()
                         context.contentResolver.openOutputStream(uri, "wt")?.bufferedWriter()?.use {
-                            it.write(learningBackup.exportJson())
+                            it.write(json)
                         } ?: error("无法写入所选文件")
                     }
                 }.onSuccess { snackbarHostState.showSnackbar("学习数据已导出") }
@@ -78,7 +79,7 @@ internal fun BackupSettingsScreen(onBack: () -> Unit, onDataImported: () -> Unit
             scope.launch {
                 runCatching {
                     withContext(Dispatchers.IO) {
-                        val json = context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+                        val json = context.contentResolver.openInputStream(uri)?.use { learningBackup.readJson(it) }
                             ?: error("无法读取所选文件")
                         json to learningBackup.preview(json)
                     }

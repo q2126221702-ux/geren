@@ -1,30 +1,22 @@
 package com.xuzheng.tiyuengine.data
 
 import android.content.Context
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.IOException
-import java.util.concurrent.TimeUnit
 
 data class AiQuestionResult(val text: String, val score: Double? = null, val maxScore: Int? = null)
 
-class AiClient(context: Context) {
-    private val settingsStore = AiSettingsStore(context)
-    private val client = OkHttpClient.Builder()
-        .connectTimeout(20, TimeUnit.SECONDS)
-        .readTimeout(120, TimeUnit.SECONDS)
-        .writeTimeout(30, TimeUnit.SECONDS)
-        .build()
+class AiClient internal constructor(
+    private val settingsStore: AiSettingsStore,
+    private val transport: AiHttpTransport,
+) {
+    constructor(context: Context) : this(AiSettingsStore(context), AiHttpTransport())
 
     suspend fun test(settings: AiSettings, draftApiKey: String): String = complete(
         settings = settings,
-        apiKey = if (settings.mode == AiMode.OWN_KEY) draftApiKey.ifBlank { settingsStore.apiKey() } else "",
+        apiKey = if (settings.mode == AiMode.OWN_KEY) {
+            draftApiKey.ifBlank { settingsStore.apiKey(settings.providerId) }
+        } else {
+            ""
+        },
         prompt = "请只回复：连接成功",
         maxTokens = 64,
         temperature = 0.0,
@@ -37,7 +29,7 @@ class AiClient(context: Context) {
         val prompt = AiPromptBuilder.question(question, answers, full)
         val raw = complete(
             settings,
-            if (full) settingsStore.apiKey() else "",
+            if (full) settingsStore.apiKey(settings.providerId) else "",
             prompt,
             if (full) 4096 else 768,
             if (full) 0.6 else 0.5,
@@ -58,7 +50,7 @@ class AiClient(context: Context) {
         val full = settings.mode == AiMode.OWN_KEY
         return complete(
             settings,
-            if (full) settingsStore.apiKey() else "",
+            if (full) settingsStore.apiKey(settings.providerId) else "",
             AiPromptBuilder.analysis(quiz, score, answers, full),
             if (full) 4096 else 512,
             if (full) 0.6 else 0.4,
@@ -75,70 +67,27 @@ class AiClient(context: Context) {
         temperature: Double,
         stream: Boolean,
         onPartial: suspend (String) -> Unit = {},
-    ): String = withContext(Dispatchers.IO) {
-        if (settings.mode == AiMode.OWN_KEY && apiKey.isBlank()) error("请先在 AI 设置中填写 API Key")
+    ): String {
+        if (settings.mode == AiMode.OWN_KEY && apiKey.isBlank()) error("请先填写当前服务商的 API Key")
         val baseUrl = if (settings.mode == AiMode.SHARED) SHARED_BASE_URL else settings.provider.baseUrl
         val model = if (settings.mode == AiMode.SHARED) SHARED_MODEL else settings.activeModel
-        val payload = JSONObject()
-            .put("model", model)
-            .put("messages", JSONArray().put(JSONObject().put("role", "user").put("content", prompt)))
-            .put("max_tokens", maxTokens)
-            .put("temperature", temperature)
-            .put("stream", stream)
-        val requestBuilder = Request.Builder()
-            .url("${baseUrl.trimEnd('/')}/chat/completions")
-            .post(payload.toString().toRequestBody(JSON_MEDIA_TYPE))
-            .header("Accept", if (stream) "text/event-stream" else "application/json")
-        if (settings.mode == AiMode.OWN_KEY && apiKey.isNotBlank()) {
-            requestBuilder.header("Authorization", "Bearer $apiKey")
-        }
-
-        client.newCall(requestBuilder.build()).execute().use { response ->
-            if (!response.isSuccessful) throw aiError(response.code, response.body?.string().orEmpty())
-            val body = response.body ?: error("AI 服务未返回内容")
-            if (!stream) {
-                val text = extractMessage(JSONObject(body.string()))
-                if (text.isBlank()) error("AI 服务返回了空内容，请重试")
-                return@withContext text
-            }
-            val output = StringBuilder()
-            while (true) {
-                val line = body.source().readUtf8Line() ?: break
-                if (!line.startsWith("data:")) continue
-                val data = line.removePrefix("data:").trim()
-                if (data == "[DONE]") break
-                val piece = runCatching {
-                    JSONObject(data).getJSONArray("choices").getJSONObject(0)
-                        .optJSONObject("delta")?.optString("content").orEmpty()
-                }.getOrDefault("")
-                if (piece.isNotEmpty()) {
-                    output.append(piece)
-                    withContext(Dispatchers.Main.immediate) { onPartial(output.toString()) }
-                }
-            }
-            output.toString().trim().ifBlank { error("AI 流式输出中断，请重试") }
-        }
-    }
-
-    private fun extractMessage(json: JSONObject): String = json.getJSONArray("choices").getJSONObject(0)
-        .getJSONObject("message").optString("content").trim()
-
-    private fun aiError(code: Int, body: String): IOException {
-        val detail = runCatching { JSONObject(body).optJSONObject("error")?.optString("message") }.getOrNull().orEmpty()
-        val message = when (code) {
-            401, 403 -> "API Key 无效或已过期，请检查 AI 设置"
-            404 -> "模型不存在，请检查模型名称"
-            429 -> "AI 服务请求过于频繁或额度不足，请稍后重试"
-            in 500..599 -> "AI 服务暂时不可用，请稍后重试"
-            else -> "AI 请求失败（$code）"
-        }
-        return IOException(if (detail.isBlank()) message else "$message：${detail.take(120)}")
+        return transport.complete(
+            AiCompletionRequest(
+                baseUrl,
+                model,
+                if (settings.mode == AiMode.OWN_KEY) apiKey else "",
+                prompt,
+                maxTokens,
+                temperature,
+                stream,
+            ),
+            onPartial,
+        )
     }
 
     private companion object {
         const val SHARED_BASE_URL = "https://ai.488227.xyz/v1"
         const val SHARED_MODEL = "glm-4-flash"
-        val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
         val SCORE_REGEX = Regex("【得分】\\s*([0-9]+(?:\\.[0-9]+)?)/10")
     }
 }

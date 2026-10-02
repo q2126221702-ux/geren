@@ -159,38 +159,40 @@ object LearningStats {
     }
 }
 
-class LearningStore(context: Context) {
+class LearningStore(private val context: Context) {
     private val preferences = context.getSharedPreferences("learning_history", Context.MODE_PRIVATE)
 
-    fun load(): List<LearningRecord> = runCatching {
-        val array = JSONArray(preferences.getString(KEY_RECORDS, "[]"))
-        buildList {
-            for (index in 0 until array.length()) {
-                val item = array.getJSONObject(index)
-                add(
-                    LearningRecord(
-                        quizId = item.getString("quizId"),
-                        quizTitle = item.getString("quizTitle"),
-                        score = item.getInt("score"),
-                        total = item.getInt("total"),
-                        questionCount = item.getInt("questionCount"),
-                        durationSeconds = item.getLong("durationSeconds"),
-                        submittedAt = item.getLong("submittedAt"),
-                        attempts = item.optJSONArray("attempts")?.let { attempts ->
-                            buildList {
-                                for (attemptIndex in 0 until attempts.length()) {
-                                    val attempt = attempts.getJSONObject(attemptIndex)
-                                    add(QuestionAttempt(attempt.getString("questionId"), QuestionType.valueOf(attempt.getString("type")), attempt.getBoolean("correct"), attempt.optString("userAnswer")))
+    fun load(): List<LearningRecord> = LearningBackupTransaction.withStableData(context) {
+        runCatching {
+            val array = JSONArray(preferences.getString(KEY_RECORDS, "[]"))
+            buildList {
+                for (index in 0 until array.length()) {
+                    val item = array.getJSONObject(index)
+                    add(
+                        LearningRecord(
+                            quizId = item.getString("quizId"),
+                            quizTitle = item.getString("quizTitle"),
+                            score = item.getInt("score"),
+                            total = item.getInt("total"),
+                            questionCount = item.getInt("questionCount"),
+                            durationSeconds = item.getLong("durationSeconds"),
+                            submittedAt = item.getLong("submittedAt"),
+                            attempts = item.optJSONArray("attempts")?.let { attempts ->
+                                buildList {
+                                    for (attemptIndex in 0 until attempts.length()) {
+                                        val attempt = attempts.getJSONObject(attemptIndex)
+                                        add(QuestionAttempt(attempt.getString("questionId"), QuestionType.valueOf(attempt.getString("type")), attempt.getBoolean("correct"), attempt.optString("userAnswer")))
+                                    }
                                 }
-                            }
-                        }.orEmpty(),
+                            }.orEmpty(),
+                        )
                     )
-                )
+                }
             }
-        }
-    }.getOrDefault(emptyList())
+        }.getOrDefault(emptyList())
+    }
 
-    fun add(record: LearningRecord) {
+    fun add(record: LearningRecord) = LearningBackupTransaction.withStableData(context) {
         val records = (load() + record).takeLast(200)
         val array = JSONArray()
         records.forEach { entry ->

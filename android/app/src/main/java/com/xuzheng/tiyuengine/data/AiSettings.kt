@@ -1,9 +1,11 @@
 package com.xuzheng.tiyuengine.data
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
+import java.io.IOException
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -43,43 +45,81 @@ data class AiSettings(
     val model: String = "",
     val hasApiKey: Boolean = false,
     val keyHint: String = "",
+    val needsApiKeyReentry: Boolean = false,
 ) {
     val provider: AiProvider get() = AiProviderCatalog.find(providerId)
     val activeModel: String get() = model.ifBlank { provider.defaultModel }
 }
 
-class AiSettingsStore(context: Context) {
-    private val preferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-    private val secretStore = AiSecretStore(context)
+data class AiKeyInfo(val hasApiKey: Boolean, val keyHint: String)
+
+internal interface AiCredentialStore {
+    fun hasKey(providerId: String): Boolean
+    fun hasAnyKey(): Boolean
+    fun read(providerId: String): String
+    fun write(providerId: String, value: String)
+    fun discardLegacyKey()
+    fun requiresKeyReentry(): Boolean
+    fun clear()
+}
+
+class AiSettingsStore internal constructor(
+    private val preferences: SharedPreferences,
+    private val secretStore: AiCredentialStore,
+) {
+    constructor(context: Context) : this(
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE),
+        AiSecretStore(context),
+    )
 
     fun load(): AiSettings {
-        val providerId = preferences.getString(KEY_PROVIDER, null) ?: AiProviderCatalog.providers.first().id
-        val hasKey = secretStore.hasKey()
+        secretStore.discardLegacyKey()
+        val providerId = preferences.getString(KEY_PROVIDER, null)
+            ?.takeIf { id -> AiProviderCatalog.providers.any { it.id == id } }
+            ?: AiProviderCatalog.providers.first().id
+        val mode = runCatching { AiMode.valueOf(preferences.getString(KEY_MODE, AiMode.SHARED.name)!!) }.getOrDefault(AiMode.SHARED)
+        val keyInfo = if (mode == AiMode.OWN_KEY) keyInfo(providerId) else AiKeyInfo(secretStore.hasKey(providerId), "")
         return AiSettings(
-            mode = runCatching { AiMode.valueOf(preferences.getString(KEY_MODE, AiMode.SHARED.name)!!) }.getOrDefault(AiMode.SHARED),
+            mode = mode,
             providerId = providerId,
             model = preferences.getString(KEY_MODEL, "").orEmpty(),
-            hasApiKey = hasKey,
-            keyHint = if (hasKey) secretStore.read().takeLast(4) else "",
+            hasApiKey = keyInfo.hasApiKey,
+            keyHint = keyInfo.keyHint,
+            needsApiKeyReentry = secretStore.requiresKeyReentry(),
         )
     }
 
     fun save(mode: AiMode, providerId: String, model: String, newApiKey: String) {
         require(AiProviderCatalog.providers.any { it.id == providerId }) { "不支持的 AI 服务商" }
-        if (newApiKey.isNotBlank()) secretStore.write(newApiKey.trim())
-        if (mode == AiMode.OWN_KEY && !secretStore.hasKey()) error("请填写 API Key")
-        preferences.edit()
+        secretStore.discardLegacyKey()
+        if (mode == AiMode.OWN_KEY) {
+            if (newApiKey.isNotBlank()) secretStore.write(providerId, newApiKey.trim())
+            if (secretStore.read(providerId).isBlank()) error("请填写当前服务商的 API Key")
+        }
+        val saved = preferences.edit()
             .putString(KEY_MODE, mode.name)
             .putString(KEY_PROVIDER, providerId)
             .putString(KEY_MODEL, model.trim())
-            .apply()
+            .commit()
+        if (!saved) throw IOException("AI 设置保存失败，请重试")
     }
 
-    fun apiKey(): String = secretStore.read()
+    fun apiKey(providerId: String): String {
+        require(AiProviderCatalog.providers.any { it.id == providerId }) { "不支持的 AI 服务商" }
+        secretStore.discardLegacyKey()
+        return secretStore.read(providerId)
+    }
+
+    fun keyInfo(providerId: String): AiKeyInfo {
+        val key = apiKey(providerId)
+        return AiKeyInfo(key.isNotBlank(), key.takeLast(4))
+    }
+
+    fun hasStoredCredentials(): Boolean = secretStore.hasAnyKey()
 
     fun clear() {
-        preferences.edit().clear().commit()
         secretStore.clear()
+        if (!preferences.edit().clear().commit()) throw IOException("AI 设置清除失败，请重试")
     }
 
     private companion object {
@@ -90,39 +130,64 @@ class AiSettingsStore(context: Context) {
     }
 }
 
-private class AiSecretStore(context: Context) {
+internal class AiSecretStore(context: Context) : AiCredentialStore {
     private val preferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
-    fun hasKey(): Boolean = preferences.contains(KEY_CIPHERTEXT) && preferences.contains(KEY_IV)
+    override fun hasKey(providerId: String): Boolean =
+        preferences.contains(ciphertextKey(providerId)) && preferences.contains(ivKey(providerId))
 
-    fun write(value: String) {
+    override fun hasAnyKey(): Boolean = preferences.all.keys.any { it.startsWith(KEY_CIPHERTEXT) }
+
+    override fun write(providerId: String, value: String) {
         val cipher = Cipher.getInstance(TRANSFORMATION)
         cipher.init(Cipher.ENCRYPT_MODE, secretKey())
-        preferences.edit()
-            .putString(KEY_IV, Base64.encodeToString(cipher.iv, Base64.NO_WRAP))
-            .putString(KEY_CIPHERTEXT, Base64.encodeToString(cipher.doFinal(value.toByteArray(Charsets.UTF_8)), Base64.NO_WRAP))
+        cipher.updateAAD(providerId.toByteArray(Charsets.UTF_8))
+        val ciphertext = cipher.doFinal(value.toByteArray(Charsets.UTF_8))
+        val saved = preferences.edit()
+            .putString(ivKey(providerId), Base64.encodeToString(cipher.iv, Base64.NO_WRAP))
+            .putString(ciphertextKey(providerId), Base64.encodeToString(ciphertext, Base64.NO_WRAP))
+            .remove(KEY_IV).remove(KEY_CIPHERTEXT)
+            .remove(KEY_REENTRY)
             .commit()
+        if (!saved) throw IOException("API Key 保存失败，请重试")
     }
 
-    fun read(): String {
-        if (!hasKey()) return ""
+    override fun read(providerId: String): String {
+        if (!hasKey(providerId)) return ""
         return runCatching {
             val cipher = Cipher.getInstance(TRANSFORMATION)
-            val iv = Base64.decode(preferences.getString(KEY_IV, ""), Base64.NO_WRAP)
+            val iv = Base64.decode(preferences.getString(ivKey(providerId), ""), Base64.NO_WRAP)
             cipher.init(Cipher.DECRYPT_MODE, secretKey(), GCMParameterSpec(128, iv))
-            val encrypted = Base64.decode(preferences.getString(KEY_CIPHERTEXT, ""), Base64.NO_WRAP)
+            cipher.updateAAD(providerId.toByteArray(Charsets.UTF_8))
+            val encrypted = Base64.decode(preferences.getString(ciphertextKey(providerId), ""), Base64.NO_WRAP)
             String(cipher.doFinal(encrypted), Charsets.UTF_8)
         }.getOrElse {
-            clear()
+            if (!preferences.edit().remove(ivKey(providerId)).remove(ciphertextKey(providerId)).commit()) {
+                throw IOException("API Key 读取失败，请清除配置后重试")
+            }
             ""
         }
     }
 
-    fun clear() {
-        preferences.edit().clear().commit()
+    override fun requiresKeyReentry(): Boolean = preferences.getBoolean(KEY_REENTRY, false)
+
+    override fun discardLegacyKey() {
+        if (!preferences.contains(KEY_CIPHERTEXT) && !preferences.contains(KEY_IV)) return
+        // Legacy preferences may already name a different provider than the key's real issuer.
+        // Do not guess that association or ever decrypt/send an unbound legacy credential.
+        if (!preferences.edit().remove(KEY_IV).remove(KEY_CIPHERTEXT).putBoolean(KEY_REENTRY, true).commit()) {
+            throw IOException("旧 API Key 停用失败，请重试")
+        }
+    }
+
+    override fun clear() {
         val keyStore = KeyStore.getInstance(KEYSTORE).apply { load(null) }
         if (keyStore.containsAlias(ALIAS)) keyStore.deleteEntry(ALIAS)
+        if (!preferences.edit().clear().commit()) throw IOException("API Key 清除失败，请重试")
     }
+
+    private fun ivKey(providerId: String): String = "${KEY_IV}_$providerId"
+    private fun ciphertextKey(providerId: String): String = "${KEY_CIPHERTEXT}_$providerId"
 
     private fun secretKey(): SecretKey {
         val keyStore = KeyStore.getInstance(KEYSTORE).apply { load(null) }
@@ -141,6 +206,7 @@ private class AiSecretStore(context: Context) {
         const val PREFS = "ai_secrets"
         const val KEY_IV = "api_key_iv"
         const val KEY_CIPHERTEXT = "api_key_ciphertext"
+        const val KEY_REENTRY = "legacy_key_requires_reentry"
         const val KEYSTORE = "AndroidKeyStore"
         const val ALIAS = "tiyuengine_ai_api_key"
         const val TRANSFORMATION = "AES/GCM/NoPadding"

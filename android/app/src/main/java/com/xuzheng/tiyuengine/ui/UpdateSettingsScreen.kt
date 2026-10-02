@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.xuzheng.tiyuengine.BuildConfig
 import com.xuzheng.tiyuengine.data.AppUpdater
 import com.xuzheng.tiyuengine.data.UpdateInfo
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -115,6 +116,7 @@ internal fun UpdateSettingsScreen(onBack: () -> Unit) {
                             }
                         }
                         .onFailure {
+                            if (it is CancellationException) throw it
                             updateStatus = "检查失败"
                             snackbarHostState.showSnackbar(it.message ?: "检查更新失败，请稍后重试")
                         }
@@ -185,10 +187,12 @@ internal fun UpdateSettingsScreen(onBack: () -> Unit) {
                     checkingUpdate = true
                     updateStatus = "正在下载安装包…"
                     scope.launch {
-                        runCatching { withContext(Dispatchers.IO) { appUpdater.download(update) } }
-                            .onSuccess { apk ->
-                                updateCacheBytes = apk.length()
-                                val installerOpened = appUpdater.install(apk)
+                        runCatching {
+                            val apk = withContext(Dispatchers.IO) { appUpdater.download(update) }
+                            updateCacheBytes = apk.length()
+                            appUpdater.install(apk)
+                        }
+                            .onSuccess { installerOpened ->
                                 updateStatus = if (installerOpened) {
                                     "安装包已下载"
                                 } else {
@@ -199,6 +203,7 @@ internal fun UpdateSettingsScreen(onBack: () -> Unit) {
                                 )
                             }
                             .onFailure {
+                                if (it is CancellationException) throw it
                                 updateStatus = "下载失败"
                                 snackbarHostState.showSnackbar(it.message ?: "更新下载失败，请稍后重试")
                             }
